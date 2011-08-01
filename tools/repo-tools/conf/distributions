@@ -1,0 +1,19 @@
+Origin: AureX
+Label: AureX
+Suite: lucid
+Codename: lucid
+Architectures: i386 source
+Components: main
+Description: AureX stable repository for Ubuntu 10.04 lucid
+Version: 10.04
+SignWith: A871704C
+
+Origin: AureX
+Label: AureX
+Suite: tau
+Codename: tau
+Architectures: i386 source
+Components: main
+Description: Testing AureX (tau) repository. Useat your own risk
+Version: 10.04
+SignWith: A871704C

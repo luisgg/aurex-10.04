@@ -1,0 +1,6 @@
+Name: incoming
+IncomingDir: incoming
+Cleanup: on_deny on_error
+Tempdir: incomingtmp
+Default: tau
+Allow: tau lucid unstable>tau UNRELEASED>tau
