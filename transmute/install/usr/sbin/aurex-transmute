@@ -1,0 +1,290 @@
+#!/bin/sh
+# -------
+# File:        aurex-trans
+# Description: Transmute plain Ubuntu into golden AureX
+# Author:      Luis Antonio Garcia Gisbert <luisgg@gmail.com> 
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+# vars
+# ----
+AUREX_RELEASE="10.04"
+UBUNTU_CODENAME="lucid"
+AUREX_CODENAME="lucid"
+UBUNTU_DEFMIRROR="http://archive.ubuntu.com/ubuntu/"
+AUREX_DEFMIRROR="file:///srv/aurex/"
+
+# . /etc/aurex/profile.sh
+
+# funcs
+# -----
+
+die(){
+	echo "$1" >&2
+	exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") [options] {test|transmute|untrasnmute} [{all|sources|files|preseed|packages|keys} ...]\n\
+       Options: --force\n\
+                 --no-sources --no-files --no-preseed --no-packages -no-keys"
+}
+
+
+test_release(){
+	LSB_RELEASE="/usr/bin/lsb_release"
+	if [ -x "$LSB_RELEASE" ] && [ "$($LSB_RELEASE -rs)" = "$AUREX_RELEASE" ] ; then
+		return 0
+	fi
+	return 1
+}
+
+test_id(){
+	[ $(id -u) -eq 0 ] || return 1
+	return 0
+}
+
+test_aurex_sources(){
+	grep -q "^deb[[:blank:]]\+[^[:blank:]]\+/aurex/\?[[:blank:]]\+$AUREX_CODENAME[[:blank:]]\+main" /etc/apt/sources.list || return 1
+	return 0
+}
+
+test_ubuntu_sources(){
+	for d in "" "-security" "-updates" "-proposed" "-backports" ; do
+		for c in main restricted universe multiverse ; do
+			if ! grep -q "^deb[[:blank:]]\+[^[:blank:]]\+[[:blank:]]\+$UBUNTU_CODENAME$d[[:blank:]]\+.*\b$c\($\|[[:blank:]]\)" /etc/apt/sources.list ; then
+				echo "$UBUNTU_CODENAME$d $c: not found" >&2
+				return 1
+			fi
+		done
+	done
+	if ! grep -q "^deb[[:blank:]]\+[^[:blank:]]\+[[:blank:]]\+$UBUNTU_CODENAME[[:blank:]]\+partner\($\|[[:blank:]]\)" /etc/apt/sources.list ; then
+		echo "$UBUNTU_CODENAME$d partner: not found"
+                return 1
+	fi
+	return 0
+}	
+
+test_onekey(){
+	if [ -r "$1" ]; then
+		F="$(basename "$1" ".gpg")"
+		KEY_ID="${F##*.}"
+		apt-key list |grep -q "/$KEY_ID[[:blank:]]" || return 1
+	fi
+	return 0
+}
+
+test_keys(){
+	PDIR="/usr/share/aurex/keys"
+	if [ -d "$PDIR" ]; then
+		for f in $PDIR/*.gpg ; do
+			test_onekey "$f" || return $?
+		done
+	fi
+	return 0
+}
+
+get_ubuntu_mirror(){
+	sed -ne "/^deb[[:blank:]]\+.*\.archive\.ubuntu\.com\/ubuntu\/\?[[:blank:]]\+$UBUNTU_CODENAME[[:blank:]]\+/{s%^deb[[:blank:]]\+%%;s%\(/ubuntu/\?\)[[:blank:]]\+$UBUNTU_CODENAME[[:blank:]]\+.*$%\1%;p}" /etc/apt/sources.list |head -1
+}
+
+trans_base_files(){
+	rsync -ax /usr/share/aurex/base-files/etc/ /etc/ 
+}
+
+untrans_base_files(){
+	( cd /usr/share/aurex/base-files/etc/ 2>/dev/null && find  -xtype f -exec  rm "/etc/{}" \; ; )
+}
+
+trans_sources(){
+	TMPFILE="$(tempfile)"
+	cp -a /etc/apt/sources.list "$TMPFILE"
+	UBUNTU_MIRROR="$(get_ubuntu_mirror)"
+	[ "$UBUNTU_MIRROR" ] || UBUNTU_MIRROR="$UBUNTU_DEFMIRROR"
+	UBUNTU_MIRROR=${UBUNTU_FORCEMIRROR:-$UBUNTU_MIRROR}
+	AUREX_MIRROR=${AUREX_FORCEMIRROR:-$AUREX_DEFMIRROR}
+	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/etc/apt/sources.list > "$TMPFILE"
+	TIMESTAMP="$(date "+%Y%m%d.%H%M%S")"
+	[ "$FORCE" ] || cp /etc/apt/sources.list.aurex.$TIMESTAMP
+	mv "$TMPFILE" /etc/apt/sources.list
+}
+
+untrans_sources(){
+	FIRST_SOURCES="$(ls -1 /etc/apt/sources.list.aurex.* 2>/dev/null |sort |head -1)"
+	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/templates/etc/apt/sources.list.ubuntu
+	cp "$FIRST_SOURCES" /etc/apt/sources.list
+}
+
+trans_preseed(){
+	PDIR="/usr/share/aurex/preseed"
+	if [ -d "$PDIR" ]; then
+		for f in $PDIR/*.cfg ; do
+			[ ! -r "$f" ] || debconf-set-selections "$f"
+		done
+	fi
+}
+
+trans_packages(){
+	PDIR="/usr/share/aurex/packages"
+	dpkg --clear-selections
+	if [ -d "$PDIR" ]; then
+		for f in $PDIR/*.pkg ; do
+			[ ! -r "$f" ] || dpkg --set-selections < "$f"
+		done
+	fi
+	apt-get update && apt-get -y dselect-upgrade || return $?
+}
+
+trans_keys(){
+	PDIR="/usr/share/aurex/keys"
+	if [ -d "$PDIR" ]; then
+		for f in $PDIR/*.gpg ; do
+			test_onekey "$f" || apt-key add "$f" >/dev/null 2>/dev/null || return $?
+		done
+	fi
+}
+
+untrans_keys(){
+	PDIR="/usr/share/aurex/keys"
+	if [ -d "$PDIR" ]; then
+		for f in $PDIR/*.gpg ; do
+			F="$(basename "$f" ".gpg")"
+			KEY_ID="${F##*.}"
+			apt-key del "$KEY_ID" >/dev/null 2>/dev/null || true
+		done
+	fi
+}
+
+do_transmute(){
+	test_id || die "Error: You must be root, my friend"
+	test_release || die "Error: Invalid Ubuntu release"
+	[ "$TSOURCES" = "N" ] || test_ubuntu_sources && test_aurex_sources || trans_sources || die "Error: Unable to fix sources.list"
+	[ "$TFILES" = "N" ] || trans_base_files || die "Error: Unable to install AureXbase-files"
+	[ "$TPRESEED" = "N" ] || trans_preseed || die "Error: Unable to load preseed"
+	[ "$TPACKAGES" = "N" ] || trans_packages || die "Error: Unable to install packages"
+	[ "$TKEYS" = "N" ] || test_keys && trans_packages || die "Error: Unable to install packages"
+}
+
+undo_transmute(){
+	test_id || die "Error: You must be root, my friend"
+	[ "$TSOURCES" = "N" ] || untrans_sources
+	[ "$TFILES" = "N" ] || untrans_base_files
+	[ "$TKEYS" = "N" ] || untrans_keys
+}
+
+do_test(){
+	test_rc=0
+	if ! test_release ; then
+		echo "Invalid Ubuntu release" >&2
+		test_rc=1
+	fi
+	if [ "$TSOURCES" = "Y" ] && ! test_ubuntu_sources ; then
+		echo "Invalid sources list: some Ubuntu components missing" >&2
+		test_rc=$(($test_rc + 2))
+	fi
+	if [ "$TSOURCES" = "Y" ] && ! test_aurex_sources ; then
+		echo "Invalid sources list: AureX component missing" >&2
+		test_rc=$(($test_rc + 4))
+	fi
+	if [ "$TFILES" = "Y" ] ; then
+		CURDIR="$(pwd)"
+		FILELIST=$(cd /usr/share/aurex/base-files/etc/ 2>/dev/null && find  -xtype f)
+		test_rc_files=0
+		for f in $FILELIST ; do
+			if [ ! -r "/etc/$f" ] ; then
+				echo "file: /etc/$f not installed" >&2
+				test_rc_files=8
+			fi
+		done
+		test_rc=$(($test_rc + $test_rc_files))
+	fi
+	if [ "$TKEYS" = "Y" ] && ! test_keys ; then
+		echo "gpg signin keys not installed" >&2
+		test_rc=$(($test_rc + 16))
+	fi
+	[ $test_rc -ne 0 ] || echo "All your base are belong to AureX"
+	return $test_rc
+}
+
+
+# main
+# ----
+
+[ "$1" ] || usage
+while [ -z "$END_PARAMETERS" ] ; do
+	case "$1" in 
+		--force)
+			FORCE="Y"
+			shift
+			;;
+		--no-sources)
+			TSOURCES="N"
+			shift
+			;;
+		 --no-files)
+			TFILES="N"
+			shift
+			;;
+		 --no-preseed)
+			TPRESEED="N"
+			shift
+			;;
+		 --no-packages)
+			TPACKAGES="N"
+			shift
+			;;
+		 --no-keys)
+			TKEYS="N"
+			shift
+			;;
+		*)
+			END_PARAMETERS="Y"
+			;;
+	esac
+done
+
+[ "$1" ] || usage
+ACTION="$1"
+shift
+SUBACTION="all"
+if [ "$1" ] ; then
+	SUBACTION="$1"
+	shift
+fi
+
+while [ "$SUBACTION" ] ; do
+	[ "$SUBACTION" = "sources" -o "$SUBACTION" = "all" ] && TSOURCES=${TSOURCES:-Y}
+	[ "$SUBACTION" = "files" -o "$SUBACTION" = "all" ] && TFILES=${TFILES:-Y}
+	[ "$SUBACTION" = "preseed" -o "$SUBACTION" = "all" ] && TPRESEED=${TPRESEED:-Y}
+	[ "$SUBACTION" = "packages" -o "$SUBACTION" = "all" ] && TPACKAGES=${TPACKAGES:-Y}
+	[ "$SUBACTION" = "keys" -o "$SUBACTION" = "all" ] && TKEYS=${TKEYS:-Y}
+	if [ "$1" ] ; then
+		SUBACTION="$1"
+		shift
+	else
+		SUBACTION=""
+	fi
+
+done
+echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS " |grep -q "Y" || usage
+
+echo "ACTION: $ACTION"
+echo "TSOURCES: $TSOURCES"
+echo "TFILES: $TFILES"
+echo "TPRESEED: $TPRESEED"
+echo "TPACKAGES: $TPACKAGES"
+echo "TKEYS: $TKEYS"
+

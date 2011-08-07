@@ -1,0 +1,8 @@
+/etc/aurex
+/etc/aurex/profile.d
+/usr/share/aurex
+/usr/share/aurex/base-files
+/usr/share/aurex/packages
+/usr/share/aurex/templates
+/usr/share/aurex/keys
+/usr/share/aurex/profile.d
