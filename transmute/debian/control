@@ -1,0 +1,13 @@
+Source: aurex-transmute
+Section: admin
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Uploaders: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+
+Package: aurex-transmute
+Architecture: all
+Depends: ${misc:Depends}, rsync, apt
+Description: Transmute plain Ubuntu into golden AureX
+ Utility to transmute Ubuntu into AureX
