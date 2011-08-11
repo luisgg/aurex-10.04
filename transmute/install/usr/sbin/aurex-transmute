@@ -117,7 +117,7 @@ trans_sources(){
 	AUREX_MIRROR=${AUREX_FORCEMIRROR:-$AUREX_DEFMIRROR}
 	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/etc/apt/sources.list > "$TMPFILE"
 	TIMESTAMP="$(date "+%Y%m%d.%H%M%S")"
-	[ "$FORCE" ] || cp /etc/apt/sources.list.aurex.$TIMESTAMP
+	[ "$FORCE" ] || cp /etc/apt/sources.list /etc/apt/sources.list.aurex.$TIMESTAMP
 	mv "$TMPFILE" /etc/apt/sources.list
 }
 
