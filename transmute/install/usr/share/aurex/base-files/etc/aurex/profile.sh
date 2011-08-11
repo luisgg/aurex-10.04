@@ -2,7 +2,7 @@
 
 for d in /usr/share/aurex/profile.d /etc/aurex/profile.d ; do
 	if [ -d "$d" ]; then
-		for f in /etc/profile.d/*.sh; do
+		for f in $d/*.sh; do
 			[ ! -r "$f" ] || . $f
 		done
 		unset f
