@@ -1,0 +1,11 @@
+Package: *
+Pin: origin lliurex.net
+Pin-Priority: 350
+
+Package: *
+Pin: origin arxiu.lliurex.net
+Pin-Priority: 350
+
+Package: *
+Pin: origin mirror.lliurex.net
+Pin-Priority: 350

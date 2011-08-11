@@ -1,0 +1,7 @@
+Package: *
+Pin: release a=lucid-proposed
+Pin-Priority: 450
+
+Package: *
+Pin: release a=lucid-backports
+Pin-Priority: 400
