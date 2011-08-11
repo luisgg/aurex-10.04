@@ -21,13 +21,12 @@
 
 # vars
 # ----
-AUREX_RELEASE="10.04"
-UBUNTU_CODENAME="lucid"
-AUREX_CODENAME="lucid"
-UBUNTU_DEFMIRROR="http://archive.ubuntu.com/ubuntu/"
-AUREX_DEFMIRROR="file:///srv/aurex/"
 
-# . /etc/aurex/profile.sh
+if [ -r /etc/aurex/profile.sh ] ; then
+	. /etc/aurex/profile.sh
+else
+	. /usr/share/aurex/base-files/etc/aurex/profile.sh
+fi
 
 # funcs
 # -----
@@ -171,11 +170,11 @@ untrans_keys(){
 do_transmute(){
 	test_id || die "Error: You must be root, my friend"
 	test_release || die "Error: Invalid Ubuntu release"
-	[ "$TSOURCES" = "N" ] || test_ubuntu_sources && test_aurex_sources || trans_sources || die "Error: Unable to fix sources.list"
 	[ "$TFILES" = "N" ] || trans_base_files || die "Error: Unable to install AureXbase-files"
+	[ "$TSOURCES" = "N" ] || test_ubuntu_sources && test_aurex_sources || trans_sources || die "Error: Unable to fix sources.list"
 	[ "$TPRESEED" = "N" ] || trans_preseed || die "Error: Unable to load preseed"
-	[ "$TPACKAGES" = "N" ] || trans_packages || die "Error: Unable to install packages"
 	[ "$TKEYS" = "N" ] || test_keys && trans_packages || die "Error: Unable to install packages"
+	[ "$TPACKAGES" = "N" ] || trans_packages || die "Error: Unable to install packages"
 }
 
 undo_transmute(){
@@ -281,10 +280,19 @@ while [ "$SUBACTION" ] ; do
 done
 echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS " |grep -q "Y" || usage
 
-echo "ACTION: $ACTION"
-echo "TSOURCES: $TSOURCES"
-echo "TFILES: $TFILES"
-echo "TPRESEED: $TPRESEED"
-echo "TPACKAGES: $TPACKAGES"
-echo "TKEYS: $TKEYS"
+case "$ACTION" in
+	test)
+		do_test || exit $?
+		;;
+	transmute)
+		do_transmute || exit $?
+		;;
+	untrasnmute)
+		undo_transmute || exit $?
+		;;
+	*)
+		usage
+		;;
+esac
 
+exit 0

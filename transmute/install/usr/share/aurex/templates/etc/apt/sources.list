@@ -1,0 +1,41 @@
+#deb cdrom:[Ubuntu 10.04.2 LTS _Lucid Lynx_ - Release i386 (20110211.1)]/ lucid main restricted
+# See http://help.ubuntu.com/community/UpgradeNotes for how to upgrade to
+# newer versions of the distribution.
+
+# -------------
+# AureX sources
+# -------------
+deb _@_AUREX_MIRROR_@_ lucid
+#deb-src _@_AUREX_MIRROR_@_ lucid
+
+# -------------
+# Ubuntu sources
+# -------------
+deb _@_UBUNTU_MIRROR_@_ lucid main restricted universe multiverse
+#deb-src _@_UBUNTU_MIRROR_@_ lucid main restricted universe multiverse
+
+# updates
+deb _@_UBUNTU_MIRROR_@_ lucid-updates main restricted universe multiverse
+#deb-src _@_UBUNTU_MIRROR_@_ lucid-updates main restricted universe multiverse
+
+# security
+deb _@_UBUNTU_MIRROR_@_ lucid-security main restricted universe multiverse
+#deb-src _@_UBUNTU_MIRROR_@_ lucid-security main restricted universe multiverse
+
+# proposed
+deb _@_UBUNTU_MIRROR_@_ lucid-proposed main restricted universe multiverse
+#deb-src _@_UBUNTU_MIRROR_@_ lucid-proposed main restricted universe multiverse
+
+# backports
+deb _@_UBUNTU_MIRROR_@_ lucid-backports main restricted universe multiverse
+#deb-src _@_UBUNTU_MIRROR_@_ lucid-backports main restricted universe multiverse
+
+# partner
+deb http://archive.canonical.com/ubuntu lucid partner
+# deb-src http://archive.canonical.com/ubuntu lucid partner
+
+# -------------
+# LliureX
+# -------------
+deb http://lliurex.net/marty llx1109 main restricted universe multiverse partner
+#deb-src http://lliurex.net/marty llx1109 main restricted universe multiverse partner
