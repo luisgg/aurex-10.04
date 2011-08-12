@@ -182,7 +182,7 @@ do_transmute(){
 		trans_preseed || die "Error: Unable to load preseed"
 	fi
 	if [ "$TKEYS" = "Y" ] ; then
-		if test_keys ||  "$FORCE" ] ; then
+		if test_keys || [ "$FORCE" ] ; then
 			trans_keys || die "Error: Unable to install gpg keys"
 		fi
 	fi
