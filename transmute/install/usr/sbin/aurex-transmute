@@ -174,13 +174,17 @@ do_transmute(){
 		trans_base_files || die "Error: Unable to install AureXbase-files"
 	fi
 	if [ "$TSOURCES" = "Y" ] ; then
-		test_ubuntu_sources && test_aurex_sources || trans_sources || die "Error: Unable to fix sources.list"
+		if test_ubuntu_sources && test_aurex_sources || [ "$FORCE" ] ; then
+			trans_sources || die "Error: Unable to fix sources.list"
+		fi
 	fi
 	if [ "$TPRESEED" = "Y" ] ; then
 		trans_preseed || die "Error: Unable to load preseed"
 	fi
 	if [ "$TKEYS" = "Y" ] ; then
-		test_keys && trans_keys || die "Error: Unable to install gpg keys"
+		if test_keys ||  "$FORCE" ] ; then
+			trans_keys || die "Error: Unable to install gpg keys"
+		fi
 	fi
 	if [ "$TPACKAGES" = "Y" ] ; then
 		 trans_packages || die "Error: Unable to install packages"
