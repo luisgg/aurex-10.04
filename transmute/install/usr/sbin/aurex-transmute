@@ -170,11 +170,21 @@ untrans_keys(){
 do_transmute(){
 	test_id || die "Error: You must be root, my friend"
 	test_release || die "Error: Invalid Ubuntu release"
-	[ "$TFILES" = "N" ] || trans_base_files || die "Error: Unable to install AureXbase-files"
-	[ "$TSOURCES" = "N" ] || test_ubuntu_sources && test_aurex_sources || trans_sources || die "Error: Unable to fix sources.list"
-	[ "$TPRESEED" = "N" ] || trans_preseed || die "Error: Unable to load preseed"
-	[ "$TKEYS" = "N" ] || test_keys && trans_packages || die "Error: Unable to install packages"
-	[ "$TPACKAGES" = "N" ] || trans_packages || die "Error: Unable to install packages"
+	if [ "$TFILES" = "Y" ] ; then
+		trans_base_files || die "Error: Unable to install AureXbase-files"
+	fi
+	if [ "$TSOURCES" = "Y" ] ; then
+		test_ubuntu_sources && test_aurex_sources || trans_sources || die "Error: Unable to fix sources.list"
+	fi
+	if [ "$TPRESEED" = "Y" ] ; then
+		trans_preseed || die "Error: Unable to load preseed"
+	fi
+	if [ "$TKEYS" = "Y" ] ; then
+		test_keys && trans_keys || die "Error: Unable to install gpg keys"
+	fi
+	if [ "$TPACKAGES" = "Y" ] ; then
+		 trans_packages || die "Error: Unable to install packages"
+	fi
 }
 
 undo_transmute(){
