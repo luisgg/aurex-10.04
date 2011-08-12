@@ -138,7 +138,7 @@ trans_preseed(){
 
 trans_packages(){
 	PDIR="/usr/share/aurex/packages"
-	dpkg --clear-selections
+#	dpkg --clear-selections
 	if [ -d "$PDIR" ]; then
 		for f in $PDIR/*.pkg ; do
 			[ ! -r "$f" ] || dpkg --set-selections < "$f"
