@@ -37,7 +37,7 @@ die(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") [options] {test|transmute|untrasnmute} [{all|sources|files|preseed|packages|keys} ...]\n\
+	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys} ...]\n\
        Options: --force\n\
                  --no-sources --no-files --no-preseed --no-packages -no-keys"
 }
@@ -174,7 +174,7 @@ do_transmute(){
 		trans_base_files || die "Error: Unable to install AureXbase-files"
 	fi
 	if [ "$TSOURCES" = "Y" ] ; then
-		if test_ubuntu_sources && test_aurex_sources || [ "$FORCE" ] ; then
+		if [ "$FORCE" ] || ! test_ubuntu_sources || ! test_aurex_sources  ; then
 			trans_sources || die "Error: Unable to fix sources.list"
 		fi
 	fi
@@ -182,7 +182,7 @@ do_transmute(){
 		trans_preseed || die "Error: Unable to load preseed"
 	fi
 	if [ "$TKEYS" = "Y" ] ; then
-		if test_keys || [ "$FORCE" ] ; then
+		if [ "$FORCE" ] || test_keys ; then
 			trans_keys || die "Error: Unable to install gpg keys"
 		fi
 	fi
@@ -301,7 +301,7 @@ case "$ACTION" in
 	transmute)
 		do_transmute || exit $?
 		;;
-	untrasnmute)
+	untransmute)
 		undo_transmute || exit $?
 		;;
 	*)
