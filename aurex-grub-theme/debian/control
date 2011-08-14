@@ -1,0 +1,12 @@
+Source: aurex-grub-theme
+Section: admin
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+
+Package: aurex-grub-theme
+Architecture: all
+Depends: ${misc:Depends}, aurex-transmute, grub-pc
+Description: AureX GRUB theme
+ AureX splashimage to be used with GRUB
