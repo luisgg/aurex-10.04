@@ -37,8 +37,9 @@ die(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys|diversions} ...]\n\
+	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys|diversions|reconfigure} ...]\n\
        Options: --force\n\
+                 --name=IDENTIFIER_NAME,...\n\
                  --no-sources --no-files --no-preseed --no-packages -no-keys --no-diversions"
 }
 
@@ -87,12 +88,15 @@ test_onekey(){
 }
 
 test_keys(){
-	PDIR="/usr/share/aurex/keys"
-	if [ -d "$PDIR" ]; then
-		for f in $PDIR/*.gpg ; do
-			test_onekey "$f" || return $?
-		done
-	fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/keys -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/keys/$pdir"
+		if [ -d "$PDIR" ]; then
+			for f in $PDIR/*.gpg ; do
+				test_onekey "$f" || return $?
+			done
+		fi
+	done
 	return 0
 }
 
@@ -101,116 +105,150 @@ get_ubuntu_mirror(){
 }
 
 trans_base_files(){
-	rsync -ax /usr/share/aurex/base-files/etc/ /etc/ 
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/base-files -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/base-files/$pdir/"
+		if [ -d "$PDIR" ]; then
+			rsync -ax "$PDIR" /
+		fi
+	done
 }
 
 untrans_base_files(){
-	( cd /usr/share/aurex/base-files/etc/ 2>/dev/null && find  -xtype f -exec  rm "/etc/{}" \; ; )
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/base-files -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/base-files/$pdir"
+		( cd "$PDIR" 2>/dev/null && find  -xtype f -exec  rm "/{}" \; ; )
+	done
 }
 
 trans_sources(){
+	[ -z "$BASE_NAME_LIST" ] || return 0
 	TMPFILE="$(tempfile)"
 	cp -a /etc/apt/sources.list "$TMPFILE"
 	UBUNTU_MIRROR="$(get_ubuntu_mirror)"
 	[ "$UBUNTU_MIRROR" ] || UBUNTU_MIRROR="$UBUNTU_DEFMIRROR"
 	UBUNTU_MIRROR=${UBUNTU_FORCEMIRROR:-$UBUNTU_MIRROR}
 	AUREX_MIRROR=${AUREX_FORCEMIRROR:-$AUREX_DEFMIRROR}
-	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/etc/apt/sources.list > "$TMPFILE"
+	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/transmute/etc/apt/sources.list > "$TMPFILE"
 	TIMESTAMP="$(date "+%Y%m%d.%H%M%S")"
 	[ "$FORCE" ] || cp /etc/apt/sources.list /etc/apt/sources.list.aurex.$TIMESTAMP
 	mv "$TMPFILE" /etc/apt/sources.list
 }
 
 untrans_sources(){
+	[ -z "$BASE_NAME_LIST" ] || return 0
 	FIRST_SOURCES="$(ls -1 /etc/apt/sources.list.aurex.* 2>/dev/null |sort |head -1)"
-	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/templates/etc/apt/sources.list.ubuntu
+	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/transmute/templates/etc/apt/sources.list.ubuntu
 	cp "$FIRST_SOURCES" /etc/apt/sources.list
 }
 
 trans_preseed(){
-	PDIR="/usr/share/aurex/preseed"
-	if [ -d "$PDIR" ]; then
-		for f in $PDIR/*.cfg ; do
-			[ ! -r "$f" ] || debconf-set-selections "$f"
-		done
-	fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/preseed -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/preseed/$pdir"
+		if [ -d "$PDIR" ]; then
+			for f in $PDIR/*.cfg ; do
+				[ ! -r "$f" ] || debconf-set-selections "$f"
+			done
+		fi
+	done
 }
 
 trans_packages(){
-	PDIR="/usr/share/aurex/packages"
-#	dpkg --clear-selections
-	if [ -d "$PDIR" ]; then
-		for f in $PDIR/*.pkg ; do
-			[ ! -r "$f" ] || dpkg --set-selections < "$f"
-		done
-	fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/packages -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/packages/$pdir"
+		if [ -d "$PDIR" ]; then
+			for f in $PDIR/*.pkg ; do
+				[ ! -r "$f" ] || dpkg --set-selections < "$f"
+			done
+		fi
+	done
 	apt-get update && apt-get -y dselect-upgrade || return $?
 }
 
 trans_keys(){
-	PDIR="/usr/share/aurex/keys"
-	if [ -d "$PDIR" ]; then
-		for f in $PDIR/*.gpg ; do
-			if ! test_onekey "$f" ; then
-				if apt-key add "$f" >/dev/null 2>/dev/null ; then
-					F="$(basename "$f")"
-					touch /var/lib/aurex/keys/$F
-				else
-					return $?
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/keys -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/keys/$pdir"
+		if [ -d "$PDIR" ]; then
+			for f in $PDIR/*.gpg ; do
+				if ! test_onekey "$f" ; then
+					if apt-key add "$f" >/dev/null 2>/dev/null ; then
+						F="$(basename "$f")"
+						mkdir -p /var/lib/aurex/keys/$pdir
+						touch /var/lib/aurex/keys/$pdir/$F
+					else
+						return $?
+					fi
 				fi
-			fi
-		done
-	fi
+			done
+		fi
+	done
 }
 
 untrans_keys(){
-	PDIR="/var/lib/aurex/keys"
-	if [ -d "$PDIR" ]; then
-		for f in $PDIR/*.gpg ; do
-			F="$(basename "$f" ".gpg")"
-			KEY_ID="${F##*.}"
-			apt-key del "$KEY_ID" >/dev/null 2>/dev/null || true
-			rm "$f"
-		done
-	fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /var/lib/aurex/keys -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/var/lib/aurex/keys/$pdir"
+		if [ -d "$PDIR" ]; then
+			for f in $PDIR/*.gpg ; do
+				F="$(basename "$f" ".gpg")"
+				KEY_ID="${F##*.}"
+				apt-key del "$KEY_ID" >/dev/null 2>/dev/null || true
+				rm "$f"
+			done
+		fi
+	done
 }
 
+
 trans_divert(){
-	PDIR="/usr/share/aurex/divert"
-	if [ -d "$PDIR" ] ; then
-		for f $(find "$PDIR" -xtype f -printf "/%P\n") ; do
-			if [ ! -e "${f}.aurex-divert" ] && dpkg-divert --package aurex-transmute --rename --quiet --add --divert ${f}.aurex-divert ${f} ; then
-				cp "${PDIR}${f}" "${f}"
-			fi
-		done
-	fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/divert -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/divert/$pdir"
+		if [ -d "$PDIR" ] ; then
+			for f $(find "$PDIR" -xtype f -printf "/%P\n") ; do
+				if [ ! -e "${f}.aurex-divert" ] && dpkg-divert --package aurex-transmute --rename --quiet --add --divert ${f}.aurex-divert ${f} ; then
+					cp "${PDIR}${f}" "${f}"
+				fi
+			done
+		fi
+	done
 	do_reconfigure
 }
 
 untrans_divert(){
-	PDIR="/usr/share/aurex/divert"
-	if [ -d "$PDIR" ] ; then
-		for f $(find "$PDIR" -xtype f -printf "/%P\n") ; do
-			if [ -e "${f}.aurex-divert" ] ; then
-				rm -f "$f"
-				dpkg-divert --package aurex-transmute --rename --quiet --remove ${f} || true
-			fi
-		done
-	fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/divert -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/divert/$pdir"
+		if [ -d "$PDIR" ] ; then
+			for f $(find "$PDIR" -xtype f -printf "/%P\n") ; do
+				if [ -e "${f}.aurex-divert" ] ; then
+					rm -f "$f"
+					dpkg-divert --package aurex-transmute --rename --quiet --remove ${f} || true
+				fi
+			done
+		fi
+	done
 	do_reconfigure
 }
 
 do_reconfigure(){
-	PDIR="/usr/share/aurex/reconfigure"
-	if [ -d "$PDIR" ]; then
-		for f in $PDIR/*.pkg ; do
-			for p in $(cat "$f") ; do
-				if [ -r "/var/lib/dpkg/info/${p}.postinst" ] ; then
-					dpkg-reconfigure --frontend noninteractive $p || true
-				fi
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/reconfigure -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	for pdir in $BASE_NAME_LIST ; do
+		PDIR="/usr/share/aurex/reconfigure/$pdir"
+		if [ -d "$PDIR" ]; then
+			for f in $PDIR/*.pkg ; do
+				for p in $(cat "$f") ; do
+					if [ -r "/var/lib/dpkg/info/${p}.postinst" ] ; then
+						dpkg-reconfigure --frontend noninteractive $p || true
+					fi
+				done
 			done
-		done
-	fi
+		fi
+	done
 }
 
 
@@ -330,6 +368,11 @@ while [ -z "$END_PARAMETERS" ] ; do
 			;;
 		 --no-diversions)
 			TDIVERT="N"
+			shift
+			;;
+		--name=*)
+			BASE_NAME_LIST="${1#--name=}"
+			BASE_NAME_LIST="$(echo "BASE_NAME_LIST" |tr "," " ")"
 			shift
 			;;
 		*)
