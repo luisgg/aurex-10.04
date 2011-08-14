@@ -37,9 +37,9 @@ die(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys} ...]\n\
+	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys|diversions} ...]\n\
        Options: --force\n\
-                 --no-sources --no-files --no-preseed --no-packages -no-keys"
+                 --no-sources --no-files --no-preseed --no-packages -no-keys --no-diversions"
 }
 
 
@@ -151,21 +151,68 @@ trans_keys(){
 	PDIR="/usr/share/aurex/keys"
 	if [ -d "$PDIR" ]; then
 		for f in $PDIR/*.gpg ; do
-			test_onekey "$f" || apt-key add "$f" >/dev/null 2>/dev/null || return $?
+			if ! test_onekey "$f" ; then
+				if apt-key add "$f" >/dev/null 2>/dev/null ; then
+					F="$(basename "$f")"
+					touch /var/lib/aurex/keys/$F
+				else
+					return $?
+				fi
+			fi
 		done
 	fi
 }
 
 untrans_keys(){
-	PDIR="/usr/share/aurex/keys"
+	PDIR="/var/lib/aurex/keys"
 	if [ -d "$PDIR" ]; then
 		for f in $PDIR/*.gpg ; do
 			F="$(basename "$f" ".gpg")"
 			KEY_ID="${F##*.}"
 			apt-key del "$KEY_ID" >/dev/null 2>/dev/null || true
+			rm "$f"
 		done
 	fi
 }
+
+trans_divert(){
+	PDIR="/usr/share/aurex/divert"
+	if [ -d "$PDIR" ] ; then
+		for f $(find "$PDIR" -xtype f -printf "/%P\n") ; do
+			if [ ! -e "${f}.aurex-divert" ] && dpkg-divert --package aurex-transmute --rename --quiet --add --divert ${f}.aurex-divert ${f} ; then
+				cp "${PDIR}${f}" "${f}"
+			fi
+		done
+	fi
+	do_reconfigure
+}
+
+untrans_divert(){
+	PDIR="/usr/share/aurex/divert"
+	if [ -d "$PDIR" ] ; then
+		for f $(find "$PDIR" -xtype f -printf "/%P\n") ; do
+			if [ -e "${f}.aurex-divert" ] ; then
+				rm -f "$f"
+				dpkg-divert --package aurex-transmute --rename --quiet --remove ${f} || true
+			fi
+		done
+	fi
+	do_reconfigure
+}
+
+do_reconfigure(){
+	PDIR="/usr/share/aurex/reconfigure"
+	if [ -d "$PDIR" ]; then
+		for f in $PDIR/*.pkg ; do
+			for p in $(cat "$f") ; do
+				if [ -r "/var/lib/dpkg/info/${p}.postinst" ] ; then
+					dpkg-reconfigure --frontend noninteractive $p || true
+				fi
+			done
+		done
+	fi
+}
+
 
 do_transmute(){
 	test_id || die "Error: You must be root, my friend"
@@ -188,6 +235,9 @@ do_transmute(){
 	fi
 	if [ "$TPACKAGES" = "Y" ] ; then
 		 trans_packages || die "Error: Unable to install packages"
+	fi
+	if [ "$TDIVERT" = "Y" ] ; then
+		 trans_divert || die "Error: Unable to divert files"
 	fi
 }
 
@@ -232,6 +282,21 @@ do_test(){
 	return $test_rc
 }
 
+force_fixvars(){
+	# when force is enabled, set required vars as dependencies
+	if [ "$TDIVERT" = "Y" ] ; then
+		TPACKAGES="Y"
+	fi
+
+	if [ "$TPACKAGES" = "Y" ] ; then
+		TSOURCES="Y"
+		TPRESEED="Y"
+	fi
+	if [ "$TSOURCES" = "Y" ] ; then
+		TKEYS="Y"
+		TFILES="Y"
+	fi
+}
 
 # main
 # ----
@@ -263,6 +328,10 @@ while [ -z "$END_PARAMETERS" ] ; do
 			TKEYS="N"
 			shift
 			;;
+		 --no-diversions)
+			TDIVERT="N"
+			shift
+			;;
 		*)
 			END_PARAMETERS="Y"
 			;;
@@ -284,6 +353,7 @@ while [ "$SUBACTION" ] ; do
 	[ "$SUBACTION" = "preseed" -o "$SUBACTION" = "all" ] && TPRESEED=${TPRESEED:-Y}
 	[ "$SUBACTION" = "packages" -o "$SUBACTION" = "all" ] && TPACKAGES=${TPACKAGES:-Y}
 	[ "$SUBACTION" = "keys" -o "$SUBACTION" = "all" ] && TKEYS=${TKEYS:-Y}
+	[ "$SUBACTION" = "diversions" -o "$SUBACTION" = "all" ] && TDIVERT=${TDIVERT:-Y}
 	if [ "$1" ] ; then
 		SUBACTION="$1"
 		shift
@@ -292,7 +362,9 @@ while [ "$SUBACTION" ] ; do
 	fi
 
 done
-echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS " |grep -q "Y" || usage
+echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS $DIVERT" |grep -q "Y" || usage
+
+[ -z "$FORCE" ] || force_fixvars
 
 case "$ACTION" in
 	test)
