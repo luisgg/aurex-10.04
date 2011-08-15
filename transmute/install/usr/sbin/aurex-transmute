@@ -156,16 +156,20 @@ trans_preseed(){
 }
 
 trans_packages(){
+	UPDATE_REQUIRED=""
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/packages -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="/usr/share/aurex/packages/$pdir"
 		if [ -d "$PDIR" ]; then
 			for f in $PDIR/*.pkg ; do
 				[ ! -r "$f" ] || dpkg --set-selections < "$f"
+				UPDATE_REQUIRED="Y"
 			done
 		fi
 	done
-	apt-get update && apt-get -y dselect-upgrade || return $?
+	if [ "$UPDATE_REQUIRED" ] ; then
+		apt-get update && apt-get -y dselect-upgrade || return $?
+	fi
 }
 
 trans_keys(){
