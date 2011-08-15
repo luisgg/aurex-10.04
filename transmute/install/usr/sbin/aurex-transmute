@@ -123,7 +123,7 @@ untrans_base_files(){
 }
 
 trans_sources(){
-	[ -z "$BASE_NAME_LIST" ] || return 0
+	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	TMPFILE="$(tempfile)"
 	cp -a /etc/apt/sources.list "$TMPFILE"
 	UBUNTU_MIRROR="$(get_ubuntu_mirror)"
@@ -137,7 +137,7 @@ trans_sources(){
 }
 
 untrans_sources(){
-	[ -z "$BASE_NAME_LIST" ] || return 0
+	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	FIRST_SOURCES="$(ls -1 /etc/apt/sources.list.aurex.* 2>/dev/null |sort |head -1)"
 	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/transmute/templates/etc/apt/sources.list.ubuntu
 	cp "$FIRST_SOURCES" /etc/apt/sources.list
@@ -258,9 +258,9 @@ do_transmute(){
 	test_id || die "Error: You must be root, my friend"
 	test_release || die "Error: Invalid Ubuntu release"
 	if [ "$TFILES" = "Y" ] ; then
-		trans_base_files || die "Error: Unable to install AureXbase-files"
+		trans_base_files || die "Error: Unable to install AureX base-files"
 	fi
-	if [ "$TSOURCES" = "Y" ] ; then
+	if [ "$TSOURCES" = "Y" ] && [ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] ; then
 		if [ "$FORCE" ] || ! test_ubuntu_sources || ! test_aurex_sources  ; then
 			trans_sources || die "Error: Unable to fix sources.list"
 		fi
