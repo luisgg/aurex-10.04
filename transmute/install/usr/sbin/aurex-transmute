@@ -374,6 +374,7 @@ while [ -z "$END_PARAMETERS" ] ; do
 		 --no-diversions)
 			TDIVERT="N"
 			shift
+			;;
 		 --no-reconfigure)
 			TRECONF="N"
 			shift
