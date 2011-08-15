@@ -40,7 +40,7 @@ usage(){
 	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys|diversions|reconfigure} ...]\n\
        Options: --force\n\
                  --name=IDENTIFIER_NAME,...\n\
-                 --no-sources --no-files --no-preseed --no-packages -no-keys --no-diversions"
+                 --no-sources --no-files --no-preseed --no-packages -no-keys --no-diversions --no-reconfigure"
 }
 
 
@@ -216,7 +216,6 @@ trans_divert(){
 			done
 		fi
 	done
-	do_reconfigure
 }
 
 untrans_divert(){
@@ -232,10 +231,9 @@ untrans_divert(){
 			done
 		fi
 	done
-	do_reconfigure
 }
 
-do_reconfigure(){
+trans_reconfigure(){
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/reconfigure -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="/usr/share/aurex/reconfigure/$pdir"
@@ -277,6 +275,11 @@ do_transmute(){
 	if [ "$TDIVERT" = "Y" ] ; then
 		 trans_divert || die "Error: Unable to divert files"
 	fi
+	if [ "$TRECONF" = "Y" ] ; then
+		 trans_reconfigure || die "Error: Unable to reconfigure packages"
+	fi
+
+
 }
 
 undo_transmute(){
@@ -284,6 +287,8 @@ undo_transmute(){
 	[ "$TSOURCES" = "N" ] || untrans_sources
 	[ "$TFILES" = "N" ] || untrans_base_files
 	[ "$TKEYS" = "N" ] || untrans_keys
+	[ "$TDIVERT" = "N" ] || untrans_divert
+	[ "$TRECONF" = "N" ] || trans_reconfigure
 }
 
 do_test(){
@@ -369,6 +374,9 @@ while [ -z "$END_PARAMETERS" ] ; do
 		 --no-diversions)
 			TDIVERT="N"
 			shift
+		 --no-reconfigure)
+			TRECONF="N"
+			shift
 			;;
 		--name=*)
 			BASE_NAME_LIST="${1#--name=}"
@@ -397,6 +405,7 @@ while [ "$SUBACTION" ] ; do
 	[ "$SUBACTION" = "packages" -o "$SUBACTION" = "all" ] && TPACKAGES=${TPACKAGES:-Y}
 	[ "$SUBACTION" = "keys" -o "$SUBACTION" = "all" ] && TKEYS=${TKEYS:-Y}
 	[ "$SUBACTION" = "diversions" -o "$SUBACTION" = "all" ] && TDIVERT=${TDIVERT:-Y}
+	[ "$SUBACTION" = "reconfigure" -o "$SUBACTION" = "all" ] && TRECONF=${TRECONF:-Y}
 	if [ "$1" ] ; then
 		SUBACTION="$1"
 		shift
@@ -405,7 +414,7 @@ while [ "$SUBACTION" ] ; do
 	fi
 
 done
-echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS $TDIVERT" |grep -q "Y" || usage
+echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS $TDIVERT $TRECONF" |grep -q "Y" || usage
 
 [ -z "$FORCE" ] || force_fixvars
 
