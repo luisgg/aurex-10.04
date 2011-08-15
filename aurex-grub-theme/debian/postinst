@@ -3,7 +3,6 @@
 case "$1" in
     configure)
 	aurex-transmute --name=grub-theme transmute || true
-	update-grub
 	;;
     abort-upgrade|abort-remove|abort-deconfigure)
     	;;

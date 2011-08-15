@@ -20,7 +20,6 @@ set -e
 case "$1" in
     remove)
 	aurex-transmute --name=grub-theme untransmute || true
-        update-grub
     ;;
     upgrade|deconfigure)
     ;;
