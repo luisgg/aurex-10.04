@@ -372,7 +372,7 @@ while [ -z "$END_PARAMETERS" ] ; do
 			;;
 		--name=*)
 			BASE_NAME_LIST="${1#--name=}"
-			BASE_NAME_LIST="$(echo "BASE_NAME_LIST" |tr "," " ")"
+			BASE_NAME_LIST="$(echo "$BASE_NAME_LIST" |tr "," " ")"
 			shift
 			;;
 		*)
@@ -405,7 +405,7 @@ while [ "$SUBACTION" ] ; do
 	fi
 
 done
-echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS $DIVERT" |grep -q "Y" || usage
+echo " $TSOURCES $TFILES $TPRESEED $TPACKAGES $TKEYS $TDIVERT" |grep -q "Y" || usage
 
 [ -z "$FORCE" ] || force_fixvars
 
