@@ -214,7 +214,7 @@ trans_divert(){
 		PDIR="/usr/share/aurex/divert/$pdir"
 		if [ -d "$PDIR" ] ; then
 			for f in $(find "$PDIR" -xtype f -printf "/%P\n") ; do
-				if [ ! -e "${f}.aurex-divert" ] && dpkg-divert --package aurex-transmute --rename --quiet --add --divert ${f}.aurex-divert ${f} ; then
+				if [ ! -e "${f}.aurex-divert" ] && dpkg-divert --package aurex-transmute --rename --quiet --add --divert ${f}.aurex-divert ${f} || [ "$FORCE" ] ; then
 					cp "${PDIR}${f}" "${f}"
 				fi
 			done
