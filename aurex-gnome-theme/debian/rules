@@ -31,6 +31,7 @@ build-stamp: configure-stamp
 	cat debian/wallpapers-top.xml > wallpapers/aurex-wallpapers.xml
 	for F in wallpapers/*.xcf ; do f=$${F%.xcf}; xcf2png $$F >$$f.png; basef=$${f##*/}; X=debian/$$basef.xml.in; [ -r "$$X" ] || X=debian/wallpaper.xml.in; sed -e "s%_@_basename_@_%$$basef%g;s%_@_filename_@_%$$basef.png%g" $$X >> wallpapers/aurex-wallpapers.xml; done
 	cat debian/wallpapers-bottom.xml >> wallpapers/aurex-wallpapers.xml
+	for F in grub/*.xcf ; do f=$${F%.xcf}; xcf2png $$F >$$f.png; done
 	touch build-stamp
 
 clean:
@@ -40,6 +41,7 @@ clean:
 	# Add here commands to clean up after the build process.
 	rm -f wallpapers/*.png
 	rm -f wallpapers/aurex-wallpapers.xml
+	rm -f grub/*.png
 	dh_clean
 
 install: build

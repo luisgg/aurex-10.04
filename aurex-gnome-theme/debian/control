@@ -29,3 +29,10 @@ Section: x11
 Depends: gdm
 Description: AureX 10.04 gdm configuration
  AureX 10.04 default gdm settings
+
+Package: aurex-grub-theme
+Architecture: all
+Depends: ${misc:Depends}, aurex-transmute, grub-pc
+Description: AureX GRUB theme
+ AureX splashimage to be used with GRUB
+
