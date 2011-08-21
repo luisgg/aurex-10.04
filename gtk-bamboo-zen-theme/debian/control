@@ -1,0 +1,13 @@
+Source: gtk-bamboo-zen-theme
+Section: x11
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+Homepage: http://www.bisigi-project.org/
+
+Package: gtk-aurex-bamboo-zen-theme
+Architecture: all
+Depends: ${misc:Depends}, aurex-transmute
+Description: Bamboo-zen GTK+ theme for Aurex
+ Aurex package for Bamboo-zen GTK+ theme
