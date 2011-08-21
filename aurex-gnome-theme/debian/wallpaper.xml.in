@@ -1,0 +1,9 @@
+ <wallpaper>
+    <name>_@_basename_@_</name>
+    <filename>/usr/share/backgrounds/_@_filename_@_</filename>
+    <options>zoom</options>
+    <pcolor>#000000</pcolor>
+    <scolor>#000000</scolor>
+    <shade_type>solid</shade_type>
+  </wallpaper>
+

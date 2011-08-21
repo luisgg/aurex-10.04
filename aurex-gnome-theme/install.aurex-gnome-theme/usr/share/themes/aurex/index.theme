@@ -1,0 +1,10 @@
+[X-GNOME-Metatheme]
+Name=aurex
+Encoding=UTF-8
+GtkTheme=bamboo-zen
+MetacityTheme=aquadreams
+IconTheme=aurex
+CursorTheme=DMZ-White
+CursorSize=18
+GtkColorScheme=fg_color:#101010,bg_color:#EDEDED,base_color:#fff,text_color:#1A1A1A,selected_bg_color:#b7c855,selected_fg_color:#1A1A1A,tooltip_bg_color:#F5F5B5,tooltip_fg_color:#000
+BackgroundImage=/usr/share/backgrounds/aurex-droplet-katosu.png

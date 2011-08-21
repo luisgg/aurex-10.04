@@ -1,0 +1,24 @@
+Source: aurex-gnome-theme
+Section: admin
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0), xcftools
+Standards-Version: 3.8.4
+
+Package: aurex-gnome-theme
+Architecture: all
+Depends: ${misc:Depends}, metacity-aquadrems-theme, gtk-bamboo-zen-theme, aurex-icon-theme, aurex-wallpaper-theme
+Description: AureX 10.04 theme
+ AureX full theme for GNOME
+
+Package: aurex-icon-theme
+Architecture: all
+Depends: ${misc:Depends}, aurex-transmute, faenza-icon-theme
+Description: AureX 10.04 icon theme
+ AureX icon theme based on Faenza
+
+Package: aurex-wallpaper-theme
+Architecture: all
+Depends: ${misc:Depends}
+Description: AureX 10.04 wallpaper theme
+ AureX wallpaper theme
