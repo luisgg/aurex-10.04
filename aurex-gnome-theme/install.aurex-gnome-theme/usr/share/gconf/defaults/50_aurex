@@ -1,0 +1,31 @@
+/apps/nautilus/desktop/trash_icon_visible	true
+/apps/nautilus/desktop/home_icon_visible	true
+/apps/nautilus/desktop/computer_icon_visible	true
+
+/apps/metacity/general/theme			aquadreams
+/apps/metacity/general/num_workspaces		4
+/desktop/gnome/interface/gtk_theme		bamboo-zen
+/desktop/gnome/interface/icon_theme		aurex
+/desktop/gnome/interface/menus_have_icons	true
+/desktop/gnome/interface/buttons_have_icons	true
+
+/desktop/gnome/background/picture_filename	/usr/share/backgrounds/aurex-droplet-katosu.png
+/desktop/gnome/background/picture_options	zoom
+/desktop/gnome/interface/font_name	"Ubuntu 10"
+/desktop/gnome/interface/document_font_name	"Ubuntu 10"
+/desktop/gnome/interface/monospace_font_name	"Inconsolata Medium 12"
+
+/apps/gnome-session/options/splash_image /usr/share/pixmaps/splash/aurex-splash.png
+/apps/gnome-session/options/show_splash_screen false
+
+/apps/gnome-terminal/profiles/Default/background_color #000000000000
+/apps/gnome-terminal/profiles/Default/foreground_color #9797C7C74747
+/apps/gnome-terminal/profiles/Default/use_theme_colors false
+
+/apps/gnome-screensaver/lock_enabled 	false
+/apps/gnome-screensaver/mode		single
+/apps/gnome-screensaver/themes		[aurex-floating]
+
+
+
+

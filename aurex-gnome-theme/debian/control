@@ -22,3 +22,10 @@ Architecture: all
 Depends: ${misc:Depends}
 Description: AureX 10.04 wallpaper theme
  AureX wallpaper theme
+
+Package: aurex-gdm-theme
+Architecture: all
+Section: x11
+Depends: gdm
+Description: AureX 10.04 gdm configuration
+ AureX 10.04 default gdm settings
