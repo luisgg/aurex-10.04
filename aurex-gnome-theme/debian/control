@@ -7,7 +7,7 @@ Standards-Version: 3.8.4
 
 Package: aurex-gnome-theme
 Architecture: all
-Depends: ${misc:Depends}, metacity-aquadrems-theme, gtk-bamboo-zen-theme, aurex-icon-theme, aurex-wallpaper-theme
+Depends: ${misc:Depends}, metacity-aquadrems-theme, gtk-bamboo-zen-theme, aurex-icon-theme, aurex-wallpaper-theme, gnome-screensaver
 Description: AureX 10.04 theme
  AureX full theme for GNOME
 
