@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=AureX Floaters
 Comment=Bubbles the AureX logo around the screen
-Exec=/usr/lib/gnome-screensaver/gnome-screensaver/floaters /usr/share/pixmaps/aurex-logo.svg
+Exec=/usr/lib/gnome-screensaver/gnome-screensaver/floaters /usr/share/pixmaps/aurex/aurex-logo.svg
 TryExec=/usr/lib/gnome-screensaver/gnome-screensaver/floaters
 StartupNotify=false
 Terminal=false
