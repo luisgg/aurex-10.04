@@ -1,3 +1,3 @@
-WALLPAPER="/usr/share/images/aurex/aurex-10.04-grub.png"
+WALLPAPER="/usr/share/pixmaps/aurex/aurex-10.04-grub.png"
 COLOR_NORMAL="white/black"
-COLOR_HIGHLIGHT="magenta/black"
+COLOR_HIGHLIGHT="black/yellow"
