@@ -18,10 +18,8 @@ set -e
 
 
 case "$1" in
-    remove)
+    remove|upgrade|deconfigure)
 	rm -fr /usr/share/icons/aurex
-    ;;
-    upgrade|deconfigure)
     ;;
 
     failed-upgrade)
