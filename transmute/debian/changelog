@@ -1,3 +1,9 @@
+aurex-transmute (0.2) lucid; urgency=low
+
+  * New command 'list' to show transmute available names
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 22 Aug 2011 22:17:20 +0200
+
 aurex-transmute (0.1) unstable; urgency=low
 
   * Initial release.

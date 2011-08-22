@@ -37,7 +37,7 @@ die(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") [options] {test|transmute|untransmute} [{all|sources|files|preseed|packages|keys|diversions|reconfigure} ...]\n\
+	die "Usage: $(basename "$0") [options] {test|transmute|untransmute|list} [{all|sources|files|preseed|packages|keys|diversions|reconfigure} ...]\n\
        Options: --force\n\
                  --name=IDENTIFIER_NAME,...\n\
                  --no-sources --no-files --no-preseed --no-packages -no-keys --no-diversions --no-reconfigure"
@@ -253,6 +253,15 @@ trans_reconfigure(){
 	done
 }
 
+do_list(){
+	raw_list | sort -u
+}
+
+raw_list(){
+	for d in base-files  divert  keys  packages  preseed  reconfigure ; do
+		find /usr/share/aurex/$d -maxdepth 1 -mindepth 1 -xtype d -printf "%P\n"
+	done
+}
 
 do_transmute(){
 	test_id || die "Error: You must be root, my friend"
@@ -432,6 +441,9 @@ case "$ACTION" in
 		;;
 	untransmute)
 		undo_transmute || exit $?
+		;;
+	list)
+		do_list
 		;;
 	*)
 		usage
