@@ -9,7 +9,7 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-GTK_DIR = $(CURDIR)/debian/gtk-aurex-bamboo-zen-theme/usr/share/themes/aurex/gtk-2.0
+GTK_DIR = $(CURDIR)/debian/gtk-aurex-bamboo-zen-theme/usr/share/themes/aurex-bamboo-zen/gtk-2.0
 
 configure:configure-stamp
 
