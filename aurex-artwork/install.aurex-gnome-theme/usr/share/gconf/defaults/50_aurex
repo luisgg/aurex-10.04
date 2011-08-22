@@ -19,7 +19,7 @@
 /apps/gnome-session/options/show_splash_screen false
 
 /apps/gnome-terminal/profiles/Default/background_color #000000000000
-/apps/gnome-terminal/profiles/Default/foreground_color #9797C7C74747
+/apps/gnome-terminal/profiles/Default/foreground_color #B7B7C8C85555
 /apps/gnome-terminal/profiles/Default/use_theme_colors false
 
 /apps/gnome-screensaver/lock_enabled 	false
