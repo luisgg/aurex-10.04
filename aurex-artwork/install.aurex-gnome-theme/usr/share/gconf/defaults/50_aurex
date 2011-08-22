@@ -4,7 +4,7 @@
 
 /apps/metacity/general/theme			aquadreams
 /apps/metacity/general/num_workspaces		4
-/desktop/gnome/interface/gtk_theme		bamboo-zen
+/desktop/gnome/interface/gtk_theme		aurex-bamboo-zen
 /desktop/gnome/interface/icon_theme		aurex
 /desktop/gnome/interface/menus_have_icons	true
 /desktop/gnome/interface/buttons_have_icons	true
