@@ -24,7 +24,7 @@
 
 /apps/gnome-screensaver/lock_enabled 	false
 /apps/gnome-screensaver/mode		single
-/apps/gnome-screensaver/themes		[aurex-floating]
+/apps/gnome-screensaver/themes		[screensavers-aurex-floating]
 
 
 
