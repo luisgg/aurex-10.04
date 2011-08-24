@@ -1,6 +1,6 @@
 #!/bin/sh
 # -------
-# File:        aurex-trans
+# File:        aurex-transmute
 # Description: Transmute plain Ubuntu into golden AureX
 # Author:      Luis Antonio Garcia Gisbert <luisgg@gmail.com> 
 # 
@@ -21,6 +21,7 @@
 
 # vars
 # ----
+TR_BASE_DIR="/usr/share/aurex-transmute"
 
 if [ -r /etc/aurex/profile.sh ] ; then
 	. /etc/aurex/profile.sh
@@ -37,9 +38,9 @@ die(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") [options] {test|transmute|untransmute|list} [{all|sources|files|preseed|packages|keys|diversions|reconfigure} ...]\n\
+	die "Usage: $(basename "$0") [options] {test|transmute|untransmute|list-modules} [{all|sources|files|preseed|packages|keys|diversions|reconfigure} ...]\n\
        Options: --force\n\
-                 --name=IDENTIFIER_NAME,...\n\
+                 --module=IDENTIFIER_NAME,...\n\
                  --no-sources --no-files --no-preseed --no-packages -no-keys --no-diversions --no-reconfigure"
 }
 
@@ -87,10 +88,14 @@ test_onekey(){
 	return 0
 }
 
+list_modules(){
+	ls -1 $TR_BASE_DIR 2>/dev/null
+}
+
 test_keys(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/keys -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/keys/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/keys"
 		if [ -d "$PDIR" ]; then
 			for f in $PDIR/*.gpg ; do
 				test_onekey "$f" || return $?
@@ -105,9 +110,9 @@ get_ubuntu_mirror(){
 }
 
 trans_base_files(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/base-files -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/base-files/$pdir/"
+		PDIR="$TR_BASE_DIR/$pdir/base-files/"
 		if [ -d "$PDIR" ]; then
 			rsync -ax "$PDIR" /
 		fi
@@ -115,10 +120,10 @@ trans_base_files(){
 }
 
 untrans_base_files(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/base-files -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/base-files/$pdir"
-		( cd "$PDIR" 2>/dev/null && find  -xtype f -exec  rm "/{}" \; ; )
+		PDIR="$TR_BASE_DIR/$pdir/base-files/"
+		( cd "$PDIR" 2>/dev/null && find  -xtype f -exec  rm "/{}" \; || true ; )
 	done
 }
 
@@ -144,9 +149,9 @@ untrans_sources(){
 }
 
 trans_preseed(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/preseed -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/preseed/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/preseed"
 		if [ -d "$PDIR" ]; then
 			for f in $PDIR/*.cfg ; do
 				[ ! -r "$f" ] || debconf-set-selections "$f"
@@ -157,9 +162,9 @@ trans_preseed(){
 
 trans_packages(){
 	UPDATE_REQUIRED=""
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/packages -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/packages/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/packages"
 		if [ -d "$PDIR" ]; then
 			for f in $PDIR/*.pkg ; do
 				[ ! -r "$f" ] || dpkg --set-selections < "$f"
@@ -173,9 +178,9 @@ trans_packages(){
 }
 
 trans_keys(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/keys -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/keys/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/keys"
 		if [ -d "$PDIR" ]; then
 			for f in $PDIR/*.gpg ; do
 				if ! test_onekey "$f" ; then
@@ -193,7 +198,7 @@ trans_keys(){
 }
 
 untrans_keys(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /var/lib/aurex/keys -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="/var/lib/aurex/keys/$pdir"
 		if [ -d "$PDIR" ]; then
@@ -209,9 +214,9 @@ untrans_keys(){
 
 
 trans_divert(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/divert -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/divert/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/divert"
 		if [ -d "$PDIR" ] ; then
 			for f in $(find "$PDIR" -xtype f -printf "/%P\n") ; do
 				if [ ! -e "${f}.aurex-divert" ] && dpkg-divert --package aurex-transmute --rename --quiet --add --divert ${f}.aurex-divert ${f} || [ "$FORCE" ] ; then
@@ -223,9 +228,9 @@ trans_divert(){
 }
 
 untrans_divert(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/divert -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/divert/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/divert"
 		if [ -d "$PDIR" ] ; then
 			for f in $(find "$PDIR" -xtype f -printf "/%P\n") ; do
 				if [ -e "${f}.aurex-divert" ] ; then
@@ -238,9 +243,9 @@ untrans_divert(){
 }
 
 trans_reconfigure(){
-	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(find /usr/share/aurex/reconfigure -maxdepth 1 -mindepth 1 -xtype d -printf "%P ")"
+	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
-		PDIR="/usr/share/aurex/reconfigure/$pdir"
+		PDIR="$TR_BASE_DIR/$pdir/reconfigure"
 		if [ -d "$PDIR" ]; then
 			for f in $PDIR/*.pkg ; do
 				for p in $(cat "$f") ; do
@@ -250,16 +255,6 @@ trans_reconfigure(){
 				done
 			done
 		fi
-	done
-}
-
-do_list(){
-	raw_list | sort -u
-}
-
-raw_list(){
-	for d in base-files  divert  keys  packages  preseed  reconfigure ; do
-		find /usr/share/aurex/$d -maxdepth 1 -mindepth 1 -xtype d -printf "%P\n"
 	done
 }
 
@@ -392,8 +387,8 @@ while [ -z "$END_PARAMETERS" ] ; do
 			TRECONF="N"
 			shift
 			;;
-		--name=*)
-			BASE_NAME_LIST="${1#--name=}"
+		--module=*)
+			BASE_NAME_LIST="${1#--module=}"
 			BASE_NAME_LIST="$(echo "$BASE_NAME_LIST" |tr "," " ")"
 			shift
 			;;
@@ -442,8 +437,8 @@ case "$ACTION" in
 	untransmute)
 		undo_transmute || exit $?
 		;;
-	list)
-		do_list
+	list-modules)
+		list_modules
 		;;
 	*)
 		usage
