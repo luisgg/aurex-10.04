@@ -10,7 +10,6 @@ case "$1" in
 		rm -f install/*
 		;;
 	*)
-		mkdir -p "$PLYMOUTH_DIR"
 		for ID in $IDS ; do
 			$CMND --export-id-only --export-id=$ID --export-png=install/$ID.png
 		done
