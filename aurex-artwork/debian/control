@@ -30,7 +30,7 @@ Depends: ${misc:Depends}, gdm, aurex-wallpaper-theme
 Description: AureX 10.04 gdm configuration
  AureX 10.04 default gdm settings
 
-Package: aurex-grub-theme
+Package: aurex-boot-theme
 Architecture: all
 Depends: ${misc:Depends}, aurex-transmute, grub-pc
 Description: AureX GRUB theme
