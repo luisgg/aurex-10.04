@@ -8,6 +8,6 @@ Homepage: http://www.bisigi-project.org/
 
 Package: gtk-aurex-bamboo-zen-theme
 Architecture: all
-Depends: ${misc:Depends}, aurex-transmute
+Depends: ${misc:Depends}
 Description: Bamboo-zen GTK+ theme for Aurex
  Aurex package for Bamboo-zen GTK+ theme
