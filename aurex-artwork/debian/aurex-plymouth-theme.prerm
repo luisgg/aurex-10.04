@@ -21,6 +21,7 @@ case "$1" in
     remove|upgrade|deconfigure)
 	aurex-transmute --name=plymouth-theme untransmute || true
 	update-alternatives --remove default.plymouth /lib/plymouth/themes/aurex-sunrise/aurex-sunrise.plymouth
+	update-alternatives --remove text.plymouth /lib/plymouth/themes/aurex-text/text.plymouth
     ;;
 
     failed-upgrade)

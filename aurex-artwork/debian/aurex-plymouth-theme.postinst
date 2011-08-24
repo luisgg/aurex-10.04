@@ -4,6 +4,7 @@ case "$1" in
     configure)
 	aurex-transmute --name=plymouth-theme transmute || true
 	update-alternatives --install /lib/plymouth/themes/default.plymouth default.plymouth /lib/plymouth/themes/aurex-sunrise/aurex-sunrise.plymouth 200
+	update-alternatives --install /lib/plymouth/themes/text.plymouth text.plymouth /lib/plymouth/themes/aurex-text/text.plymouth 200
 	update-initramfs -u
 	;;
     abort-upgrade|abort-remove|abort-deconfigure)
