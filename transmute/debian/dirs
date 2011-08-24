@@ -1,12 +1,7 @@
 /etc/aurex
 /etc/aurex/profile.d
 /usr/share/aurex
-/usr/share/aurex/base-files
-/usr/share/aurex/packages
-/usr/share/aurex/preseed
-/usr/share/aurex/templates
-/usr/share/aurex/keys
 /usr/share/aurex/profile.d
-/usr/share/aurex/divert
-/usr/share/aurex/reconfigure
+/usr/share/aurex/templates
+/usr/share/aurex-transmute
 /var/lib/aurex/keys

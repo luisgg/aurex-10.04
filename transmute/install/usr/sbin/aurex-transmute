@@ -26,7 +26,7 @@ TR_BASE_DIR="/usr/share/aurex-transmute"
 if [ -r /etc/aurex/profile.sh ] ; then
 	. /etc/aurex/profile.sh
 else
-	. /usr/share/aurex/base-files/transmute/etc/aurex/profile.sh
+	. $TR_BASE_DIR/transmute/base-files/etc/aurex/profile.sh
 fi
 
 # funcs
