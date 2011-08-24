@@ -4,17 +4,18 @@ FNAME="aurex-logos/aurex-sunrise.svg"
 DPI="266.70"
 CMND="inkscape --without-gui --file=$FNAME --export-dpi=$DPI"
 IDS="sun_glow space_glow planet_black planet_glow distro_logo distro_name"
+WORK_DIR="$(dirname "$0")"
 
 case "$1" in
 	clean)
-		rm -f install/*
+		rm -f $WORK_DIR/install/*
 		;;
 	*)
 		for ID in $IDS ; do
-			$CMND --export-id-only --export-id=$ID --export-png=install/$ID.png
+			$CMND --export-id-only --export-id=$ID --export-png=$WORK_DIR/install/$ID.png
 		done
-		cp ../space-sunrise-logo.script install/space-sunrise.script
-		cp aurex-sunrise.plymouth install/
+		cp $WORK_DIR/../space-sunrise-logo.script $WORK_DIR/install/space-sunrise.script
+		cp $WORK_DIR/aurex-sunrise.plymouth $WORK_DIR/install/
 		;;
 esac
 
