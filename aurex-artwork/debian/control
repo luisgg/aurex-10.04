@@ -2,7 +2,7 @@ Source: aurex-artwork
 Section: admin
 Priority: optional
 Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
-Build-Depends: debhelper (>= 7.0), xcftools
+Build-Depends: debhelper (>= 7.0), xcftools, inkscape
 Standards-Version: 3.8.4
 
 Package: aurex-gnome-theme

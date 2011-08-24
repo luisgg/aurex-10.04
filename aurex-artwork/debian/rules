@@ -9,6 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
+ICON_SIZES = 16 22 24 32 48
+
 configure:configure-stamp
 
 configure-stamp:
@@ -28,11 +30,18 @@ build-stamp: configure-stamp
 	#docbook-to-man docs/$i  >  $i
 	#done
 	#touch $@
+
+	# generate backgrounds in png format
 	cat debian/wallpapers-top.xml > wallpapers/aurex-wallpapers.xml
 	for F in wallpapers/*.xcf ; do f=$${F%.xcf}; xcf2png $$F >$$f.png; basef=$${f##*/}; X=debian/$$basef.xml.in; [ -r "$$X" ] || X=debian/wallpaper.xml.in; sed -e "s%_@_basename_@_%$$basef%g;s%_@_filename_@_%$$basef.png%g" $$X >> wallpapers/aurex-wallpapers.xml; done
 	cat debian/wallpapers-bottom.xml >> wallpapers/aurex-wallpapers.xml
+
+	# generate grub splash
 	for F in grub/*.xcf ; do f=$${F%.xcf}; xcf2png $$F >$$f.png; done
 	touch build-stamp
+
+	# generate replacement icons
+	for D in aurex-logos/icons/* ; do d=install.aurex-icon-theme/icons/$${D##*/}; for F in $$D/*.svg; do fsvg=$${Ff##*/}; f=$${fsvg%.svg}; mkdir -p $$d/scalable; cp $$F $$d/scalable/$fsvg; for s in $(ICON_SIZES) ; do mkdir -p $$d/$$s ; inkscape --without-gui --file=$$F --export-width=$$s --export-height=$$s --export-png=$$d/$$s/$$f.png ; done; done; done
 
 clean:
 	dh_testdir
@@ -42,6 +51,7 @@ clean:
 	rm -f wallpapers/*.png
 	rm -f wallpapers/aurex-wallpapers.xml
 	rm -f grub/*.png
+	rm -f install.aurex-icon-theme/icons
 	dh_clean
 
 install: build
