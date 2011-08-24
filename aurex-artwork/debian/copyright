@@ -30,6 +30,18 @@ Files: bitmaps/little-green-planet-converted.jpg
 Copyright: Copyright 2010-2011 D Sharon Pruitt <pink@pinksherbet.com>
 License: Attribution 2.0 Generic (CC BY 2.0) 
 
+Files: space-sunrise/*
+Copyright: Copyright 2010-2011 Andre "Osku" Schmidt (https://gitorious.org/oskude/space-sunrise)
+License: Public domain
+
+Files: space-sunrise/space-sunrise-logo.script
+Copyright: Copyright 2010-2011 tj c (User: inameiname on gnome-look.org)
+License: GPL-3+
+
+Files: space-sunrise/aurex/*
+Copyright: Copyright 2011 Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+License: GPL-3+
+
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by

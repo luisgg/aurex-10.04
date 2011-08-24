@@ -1,0 +1,2 @@
+space-sunrise/aurex/aurex-splash	/usr/share/aurex/base-files/plymouth-theme/etc/initramfs-tools/conf.d/
+space-sunrise/aurex/install/*		/lib/plymouth/themes/aurex-sunrise/
