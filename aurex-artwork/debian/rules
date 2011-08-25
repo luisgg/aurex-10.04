@@ -41,7 +41,7 @@ build-stamp: configure-stamp
 	touch build-stamp
 
 	# generate replacement icons
-	for D in aurex-logos/icons/* ; do d=install.aurex-icon-theme/icons/$${D##*/}; for F in $$D/*.svg; do fsvg=$${F##*/}; f=$${fsvg%.svg}; mkdir -p $$d/scalable; cp $$F $$d/scalable/$fsvg; for s in $(ICON_SIZES) ; do mkdir -p $$d/$$s ; inkscape --without-gui --file=$$F --export-width=$$s --export-height=$$s --export-png=$$d/$$s/$$f.png ; done; done; done
+	for D in aurex-logos/icons/* ; do d=install.aurex-icon-theme/icons/$${D##*/}; for F in $$D/*.svg; do fsvg=$${F##*/}; f=$${fsvg%.svg}; mkdir -p $$d/scalable; cp $$F $$d/scalable/$$fsvg; for s in $(ICON_SIZES) ; do mkdir -p $$d/$$s ; inkscape --without-gui --file=$$F --export-width=$$s --export-height=$$s --export-png=$$d/$$s/$$f.png ; done; done; done
 
 	# build aurex-sunrise plymouth required files
 	space-sunrise/aurex/build-script build
