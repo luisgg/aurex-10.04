@@ -40,4 +40,4 @@ Package: aurex-plymouth-theme
 Architecture: all
 Depends: ${misc:Depends}, aurex-transmute, plymouth, plymouth-label, plymouth-theme-script, plymouth-theme-text
 Description: Aurex 10.04 plymouth theme
- This package installs aurex-sunrise plymouth thme, based based on space sunrise
+ This package installs aurex-sunrise plymouth theme, based on space sunrise
