@@ -10,7 +10,7 @@ case "$1" in
 	sed -i -e "s%^Name=.*$%Name=aurex%;s%^Comment=.*$%Comment=Aurex Faenza Icon theme%" $TMPFILE
 	mv -f $TMPFILE /usr/share/icons/aurex/index.theme
 	# Add/replace custom files
-	aurex-transmute --name=icon-theme transmute || true
+	aurex-transmute --module=icon-theme transmute || true
 	# link distributor-logo/start-here icons to aurex
 	PLACES_DIR="/usr/share/icons/aurex/places/"
 	for d in $(ls $PLACES_DIR 2>/dev/null) ; do

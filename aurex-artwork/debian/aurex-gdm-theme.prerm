@@ -19,7 +19,7 @@ set -e
 
 case "$1" in
     remove|upgrade|deconfigure)
-	aurex-transmute --name=gdm-theme untransmute || true
+	aurex-transmute --module=gdm-theme untransmute || true
     ;;
 
     failed-upgrade)

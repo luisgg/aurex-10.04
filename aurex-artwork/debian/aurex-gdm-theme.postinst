@@ -3,7 +3,7 @@
 case "$1" in
     configure)
 	# divert original gdm settings
-	aurex-transmute --name=gdm-theme transmute || true
+	aurex-transmute --module=gdm-theme transmute || true
 	;;
     abort-upgrade|abort-remove|abort-deconfigure)
     	;;
