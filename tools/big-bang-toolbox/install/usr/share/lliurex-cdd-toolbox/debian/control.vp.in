@@ -1,0 +1,6 @@
+Package: _@_DISTRIBUTOR_ID_@_-_@_SEED_@_
+Architecture: any
+Depends: lliurex-cdd (= ${Source-Version}), lliurex-common-utils, ${_@_DISTRIBUTOR_ID_@_-_@_SEED_@_:Depends}
+Description: LliureX Virtual Package for _@_SEED_@_
+ This package depends on multiple alternatives for
+ the _@_SEED_@_

@@ -1,0 +1,64 @@
+#!/bin/sh
+set -e
+
+# vars
+SEED_RELEASE="llx0809"
+
+# funcs
+question_message(){
+   printf "$1 (y/n):"
+   read a
+   [ "$a" = "y" -o "$a" = "Y" ] || return 1
+   return 0
+}
+
+# do some checks
+
+if ! dpkg-checkbuilddeps ; then
+	echo >&2 "please install build dependencies"
+	exit 1
+fi
+
+#exec germinate-update-metapackage --bzr
+
+# find new output seeds
+NEW_STUFF=""
+for s in $(lliurex-meta-pkg new-seed-list) ; do
+   NEW_STUFF="y"
+   if question_message "\n\nFound new output seed: \"$s\".\nDo you want to update debian/control (and required files)\n\
+to generate new metapackage \"lliurex-${s}\"?" ; then
+      SEED_BASENAME="${s#cdd-}"
+      echo "Updating debian files for \"lliurex-${s}\" ..."
+      lliurex-meta-pkg  gen-cdd-data "$SEED_BASENAME"
+      printf "Done.\n\n"
+   fi
+done
+[ -z "$NEW_STUFF" ] || lliurex-meta-pkg save-seed-list
+
+# find new vp
+NEW_STUFF=""
+for s in $(lliurex-meta-pkg new-vp-list) ; do
+   NEW_STUFF="y"
+   if question_message "\n\nFound new virtual package file: \"$s\".\nDo you want to update debian/control (and required files)\n\
+to generate new virtual metapackage \"lliurex-${s}\"?" ; then
+      SEED_BASENAME="${s#vp-}"
+      echo "Updating debian files for \"lliurex-${s}\" ..."
+      lliurex-meta-pkg gen-vp-data "$SEED_BASENAME"
+      printf "Done.\n\n"
+   fi
+done
+[ -z "$NEW_STUFF" ] || lliurex-meta-pkg save-vp-list
+
+# generate config files from templates
+lliurex-meta-pkg configure ${SEED_RELEASE}
+
+# merge seeds and tasks to populate final_seeds dir
+lliurex-meta-pkg sow ${SEED_RELEASE}
+
+# run germinate to update lists of packages
+# generate lists for LliureX virtual packages
+lliurex-meta-pkg germinate
+
+# search virtual packages lists in metapackages 
+SEED_LIST="$(lliurex-meta-pkg seed-list ${SEED_RELEASE})"
+lliurex-meta-pkg scan-vp ${SEED_LIST} || true

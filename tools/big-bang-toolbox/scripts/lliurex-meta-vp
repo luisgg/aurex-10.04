@@ -1,0 +1,187 @@
+#!/bin/sh
+# File:        lliurex-meta-vp
+# Description: simple helper to build vp metapackages
+# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+BASE_DIR="desc"
+VIRTUAL="virtual"
+VALID_ARCHS="i386"
+VP_PREFIX="vp"
+OLD_VP_LIST="${BASE_DIR}/../vp.last"
+
+vp_germinate(){
+   for f in $(vp_find_files) ; do
+      F="$(basename $f)"
+      TARGET=""
+      for a in $VALID_ARCHS ; do
+         if echo "$f" |grep -q ".*-${a}$" ; then
+            # arch specific, just copy it
+            TARGET="$F"
+         fi
+      done
+      if [ -z "$TARGET" ] ; then
+         for a in $VALID_ARCHS ; do
+            TARGET="$TARGET ${F}-${a}"
+         done
+      fi
+      for t in $TARGET ; do
+         # preserve current lists as '.old'
+         [ ! -f "$t" ] || mv -f "$t" "${t}.old"
+         # get only relevant lines
+         vp_filter_list "$f" > "$t"
+      done   
+   done
+   # check for changes
+   TMP_LOG="$(tempfile)"
+   TMPFILE="$(tempfile)"
+   for F in $(vp_list_virtual) ; do
+      for a in $VALID_ARCHS ; do
+         f="${F}-${a}"
+         if [ -f "${f}.old" ] ; then
+            if ! diff "$f" "${f}.old" > "$TMPFILE" ; then
+               sed -ne "/^</{s%<%Added%;s%$% to $f%p}" "$TMPFILE" >> "$TMP_LOG"
+               sed -ne "/^>/{s%>%Removed%;s%$% from $f%p}" "$TMPFILE" >> "$TMP_LOG"
+            fi
+         else
+            echo "New virtual package list $f" >> "$TMP_LOG"
+         fi
+      done
+   done
+   rm -f "$TMPFILE"
+   if [ -s "$TMP_LOG" ] ; then
+      cat "$TMP_LOG"
+      cat "$TMP_LOG" |while read l; do
+         dch "$l"
+      done
+   else
+      echo "No changes found in virtual packages"
+   fi
+   rm -f "$TMP_LOG"
+   return 0
+}
+
+vp_filter_list(){
+   # remove leading spaces and delete all but lines 
+   # beginning with some text (like a package name or a '('package name')')
+   sed -e 's%^[[:blank:]]*%%;s%[[:blank:]]*$%%;/^[[:alnum:](]\+/!d' "$1"
+}
+
+vp_find_files(){
+   find "${BASE_DIR}/${VIRTUAL}" -maxdepth 1 -xtype f -name "${VP_PREFIX}-*"
+}
+
+vp_bulk_list(){
+   for f in $(vp_find_files) ; do
+      F="$(basename $f)"
+      for a in $VALID_ARCHS ; do
+         echo "${F%-$a}"
+      done
+   done
+}
+
+vp_list_virtual(){
+   vp_bulk_list |sort -u
+}
+
+vp_verify_seeds(){
+   local rc
+   VIRTUAL_LIST="$(vp_list_virtual)"
+   rc=0
+   while [ "$1" ] ; do
+      for a in $VALID_ARCHS ; do
+         SEED_FILE="${1}-${a}"
+         if [ -r "$SEED_FILE" ] ; then
+            for v in $VIRTUAL_LIST ; do
+               VIRTUAL_FILE="${v}-${a}"
+               if [ -s "$VIRTUAL_FILE" ] ; then
+                  for p in $(sed "s%^(\(.*\))$%\1%" "$VIRTUAL_FILE") ; do
+                     if grep -q "^${p}$" "$SEED_FILE" ; then
+                        echo "* Warning: $SEED_FILE depends of ${p} instead of lliurex-${v}" >&2
+                        rc=1
+                     fi
+                  done
+               fi
+            done
+         fi
+      done
+      shift
+   done
+   return $rc
+}
+
+vp_test_package_name(){
+   [ -f "${BASE_DIR}/${VIRTUAL}/${VP_PREFIX}-${1}" ] || return 1
+   return 0
+}
+
+gen_pkg_data(){
+   PKG_CMD="$(dirname $0)/gen-pkg-data"
+   ${PKG_CMD} "$VP_PREFIX" "$1"
+}
+
+vp_new_list(){
+   TMPFILE="$(tempfile)"
+   vp_list_virtual > "$TMPFILE"
+   diff "$OLD_VP_LIST" "$TMPFILE" |sed -ne "/^> /s%^> %%p" |tr "\n" " "
+   rm -f "$TMPFILE"
+}
+
+usage(){
+   echo "$0 {germinate|list|new-list|save-list|verify-seeds SEED_LIST|gen-pkg-data VP_NAME_LIST}" >&2
+   return 1
+}
+
+# main
+
+rc=0
+case $1 in
+   germinate)
+      vp_germinate || rc=$?
+      ;;
+   list)
+      vp_list_virtual || rc=$?
+      ;;
+   new-list)
+      vp_new_list || rc=$?
+      ;;
+   save-list)
+      vp_list_virtual > "$OLD_VP_LIST"
+      ;;
+   verify-seeds)
+      shift
+      if [ -z "$1" ] ; then
+         usage || rc=$?
+      else
+         vp_verify_seeds "$@" || rc=$?
+      fi
+      ;;
+   gen-pkg-data)
+      shift
+      while [ "$1" ] ; do
+         if vp_test_package_name "$1" ; then
+            gen_pkg_data "$1"
+         fi
+         shift
+      done
+      ;;
+   *)
+      usage || rc=$?
+      ;;
+esac
+
+exit $rc

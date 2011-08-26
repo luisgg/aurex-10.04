@@ -1,0 +1,25 @@
+Bajar Semillas (wget -r)
+STRUCTURE de ubuntu.release tiene que tener un "#include" en vez de "include"
+cambiar las semillas que tienen el mismo nombre en la carpeta platform:
+	STRUCTURE  -> STRUCTURE.platform.lucid
+	blacklist  -> blacklist.platform.lucid
+
+Ahora la madre del cordero:
+
+	Desde la raiz del paquete lliurex-meta ejecutamos:
+
+		lliurex-meta-pkg populate
+	
+	se revisa  el fichero :
+		desc/update.cfg.in
+
+	para que el pool unico sea el que corresponde
+
+	ejecutamos
+	lliurex-meta-pkg configure
+
+	habrán aparecido dos ficheros en la raiz del paquete:
+		transgenic.conf
+		update.cfg
+
+		

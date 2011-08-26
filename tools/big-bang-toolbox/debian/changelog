@@ -1,0 +1,56 @@
+lliurex-cdd-toolbox (11.09.0.1) unstable; urgency=low
+
+  * New version for Marty
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Thu, 15 Jul 2010 08:59:06 +0200
+
+lliurex-cdd-toolbox (10.09.0.3) unstable; urgency=low
+
+  * Added debootstrap depends
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Fri, 04 Jun 2010 09:48:16 +0200
+
+lliurex-cdd-toolbox (10.09.0.2) unstable; urgency=low
+
+  * New Version for Leia 
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Tue, 09 Mar 2010 16:24:06 +0100
+
+lliurex-cdd-toolbox (10.09.0.1) unstable; urgency=low
+
+  * New Version for Krypton...the beginning of the end 
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Wed, 18 Nov 2009 09:03:13 +0100
+
+lliurex-cdd-toolbox (9.09.0.5) unstable; urgency=low
+
+  * Added 'verify' action
+  * Re-enabled processing of recommends in cdd-support (it was disabled long
+    time ago, before the creation of lliurex-cdd-toolbox. When the script was
+    included in lliurex-meta and named 'cdd_helper')
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Mon, 20 Jul 2009 19:40:02 +0200
+
+lliurex-cdd-toolbox (9.09.0.4) unstable; urgency=low
+
+  * Fixed lliurex-pool-data info generation
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Tue, 07 Jul 2009 11:45:53 +0200
+
+lliurex-cdd-toolbox (9.09.0.3) unstable; urgency=low
+
+  * Fixed package lists generation (for lliurex-pool-data)
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Tue, 05 May 2009 09:47:08 +0200
+
+lliurex-cdd-toolbox (9.09.0.2) unstable; urgency=low
+
+  * minor changes to avoid conflicts when working under svn
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Mon, 02 Mar 2009 10:16:25 +0100
+
+lliurex-cdd-toolbox (9.09.0.1) unstable; urgency=low
+
+  * First release.
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Sun, 15 Feb 2009 11:48:32 +0100

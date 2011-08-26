@@ -1,0 +1,6 @@
+# transgenic configuration file
+TG_SEED_DIRS="_@_SEEDS_DIR_LIST_@_"
+TG_SEED_DEFAULT_DIR="_@_BASE_DIR_@_/_@_RELEASE_SEEDS_@_/_@_DISTRIBUTOR_ID_@_"
+
+TG_INCLUDE_DIRS=""
+TG_FINAL_SEEDS="_@_BASE_DIR_@_/_@_FINAL_SEEDS_@_"

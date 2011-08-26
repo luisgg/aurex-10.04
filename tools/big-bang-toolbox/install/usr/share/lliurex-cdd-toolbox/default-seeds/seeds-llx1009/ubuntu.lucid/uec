@@ -1,0 +1,33 @@
+Task-Section: server
+Task-Description: Ubuntu Enterprise Cloud (instance)
+Task-Extended-Description: Packages included in UEC images.
+Task-Key: cloud-init
+
+= Libraries =
+
+See https://launchpad.net/bugs/427288 for why we need both of these (-i686 on UEC, -xen on EC2).
+
+ * libc6-i686 [i386]
+ * libc6-xen [i386]
+
+= System administration tools =
+
+ * patch
+ * byobu
+ * landscape-common
+ * vim
+ * apport # LP: #424051
+ * openssh-server
+ * curl
+
+= Documentation =
+
+ * w3m
+ * ubuntu-serverguide
+
+= EC2 =
+
+ * cloud-init
+ * cloud-utils
+# * ec2-ami-tools
+ * euca2ools

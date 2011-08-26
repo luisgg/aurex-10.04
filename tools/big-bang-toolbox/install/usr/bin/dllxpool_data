@@ -1,0 +1,78 @@
+#!/bin/bash
+# File:        dllxpool_data
+# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+# library file
+. "/usr/share/lliurex-cdd-toolbox/lliurex-cdd-toolbox-common" >/dev/null 2>&1 || exit 1
+
+dl_deb_test
+TARGET="debian"
+POOL_DATA_PACKAGE="$1"
+[ "$POOL_DATA_PACKAGE" ] || error_msg "Usage: $(basename $0) POOL_DATA_PACKAGE_NAME"
+
+# check if the binary package is in debian/control file or exit
+dl_list_binpkgs |grep -q "^${POOL_DATA_PACKAGE}$" || exit 0
+
+POOL_DATA_PATH="${TARGET}/${POOL_DATA_PACKAGE}/usr/share/${POOL_DATA_PACKAGE}"
+PACKAGE_ARCH="$(dpkg-architecture -qDEB_BUILD_ARCH)"
+
+mkdir -p "${POOL_DATA_PATH}/lists/meta"
+CDD_PACKAGE_LIST="$(cdd_pkg_list)"
+for p in $CDD_PACKAGE_LIST ; do
+   TASK_NAME="$(dl_get_taskname "$p")"
+   # add lliurex-version info
+   # provided cddversion names and numbers are manged by dllxh_install call in debian/rules, so ... skip it now
+   # add lliurex-pool-data info
+   POOL_DATA_FILE="${POOL_DATA_PATH}/lists/meta/$p"
+   echo "$p" > "${POOL_DATA_FILE}"
+   DEP_FILE="${CDD_PREFIX}-${TASK_NAME}-${PACKAGE_ARCH}"
+   [ ! -r "$DEP_FILE" ] || cat "$DEP_FILE" >> "${POOL_DATA_FILE}"
+   RECO_FILE="${CDD_PREFIX}-${TASK_NAME}-recommends-${PACKAGE_ARCH}"
+   [ ! -r "$RECO_FILE" ] || cat "$RECO_FILE" >> "${POOL_DATA_FILE}"
+done
+
+# process (cdd-)supported
+SUP_TASK="supported"
+SUP_FILE="${POOL_DATA_PATH}/lists/${SUP_TASK}/${CDD_PREFIX}-${SUP_TASK}"
+rm -f "$SUP_FILE"
+SUP_LIST="${CDD_PREFIX}-${SUP_TASK}-${PACKAGE_ARCH}"
+SUP_LIST="$SUP_LIST cdd-${SUP_TASK}-recommends-${PACKAGE_ARCH}"
+for f in $SUP_LIST ; do
+   if [ -r "$f" ] ; then
+      mkdir -p "${POOL_DATA_PATH}/lists/${SUP_TASK}"
+      cat "$f" >> "$SUP_FILE"
+   fi
+done
+
+mkdir -p "${POOL_DATA_PATH}/lists/virtual"
+#VP_PREFIX="lliurex-vp-"
+VP_PACKAGE_LIST="$(vp_pkg_list)"
+for p in $VP_PACKAGE_LIST ; do
+   VP_FILE="${p#$DISTRIBUTOR_ID-}-${PACKAGE_ARCH}"
+   # add lliurex-pool-data info
+   POOL_DATA_FILE="${POOL_DATA_PATH}/lists/virtual/$p"
+   echo "$p" > "${POOL_DATA_FILE}"
+   [ ! -r "$VP_FILE" ] || sed "/^(/d" "$VP_FILE" >> "$POOL_DATA_FILE"
+done
+
+# generate "mother of all the packages" list
+mkdir -p "${POOL_DATA_PATH}/all/"
+ALL_FILE="${POOL_DATA_PATH}/all/${POOL_DATA_PACKAGE}.list"
+find "${POOL_DATA_PATH}/lists" -xtype f -exec cat {} \; |sort -u > "$ALL_FILE"
+      
+exit 0

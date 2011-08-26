@@ -1,0 +1,611 @@
+#!/bin/bash
+# -------
+# File:        lliurex-meta-pkg
+# Description: LliureX "swiss army knife" to build cdd metapackages
+# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+do_populate(){
+   [ "$1" = "populate" ] || FORCE="y"
+   for f in $CONF_TEMPLATES_LIST ; do
+      source_f="${CONF_TEMPLATES_DIR}/$f"
+      target_f="$f"
+      if [ -r "$source_f" ] && [ "$FORCE" -o ! -e "$target_f" ]; then
+         cp -f "$source_f" "$target_f"
+      fi
+   done
+   
+   [ -r "$META_CONF" ] || error_msg "Error: Configuration file \"$META_CONF\" not found"
+   . "$META_CONF"
+   fill_debian_templates_lists
+   REQUIRED_DIR_LIST="$PERSISTENT_DIR"
+   [ -z "$BASE_DIR" ] || REQUIRED_DIR_LIST="$REQUIRED_DIR_LIST $BASE_DIR $BASE_DIR/$RELEASE_SEEDS $BASE_DIR/$FINAL_SEEDS $BASE_DIR/$VIRTUAL $BASE_DIR/$RELEASE_SEEDS/$DISTRIBUTOR_ID"
+   for d in $REQUIRED_DIR_LIST ; do
+      mkdir -p "$d"
+   done
+   for f in $BASE_TEMPLATES_LIST ; do
+      source_f="${BASE_TEMPLATES_DIR}/$f"
+      target_f="${BASE_DIR}/$f"
+      if [ -r "$source_f" ] && [ "$FORCE" -o ! -e "$target_f" ]; then
+         cp -f "$source_f" "$target_f"
+      fi
+   done
+   if [ "$OUTPUT_SEEDS_FILE" -a -r "${BASE_TEMPLATES_DIR}/$(basename "$OUTPUT_SEEDS_FILE")" ] ; then
+      cp "${BASE_TEMPLATES_DIR}/$(basename "$OUTPUT_SEEDS_FILE")" "$OUTPUT_SEEDS_FILE"
+   fi
+   for f in $DEBIAN_TEMPLATES_LIST $DEBIAN_TEMPLATES_OPTIONAL ; do
+      source_f="${DEBIAN_TEMPLATES_DIR}/$f"
+      target_f="${PKG_DIR}/$f"
+      if [ -r "$source_f" ] && [ "$FORCE" -o ! -e "$target_f" ]; then
+         cp -f "$source_f" "$target_f"
+      fi
+   done
+   # copy default seeds
+   DEF_SEEDS="${SEEDS_TEMPLATES_DIR}/$RELEASE_SEEDS"
+   if [ -d "$DEF_SEEDS" ] ; then
+      for source_f in $(find "${DEF_SEEDS}" -xtype f -printf "%P\n") ; do
+         target_f="$BASE_DIR/$RELEASE_SEEDS/$source_f"
+         mkdir -p "$(dirname "$target_f")"
+         if [ -r "${DEF_SEEDS}/$source_f" ] && [ "$FORCE" -o ! -e "$target_f" ]; then
+            cp -f "${DEF_SEEDS}/$source_f" "$target_f"
+         fi
+      done 
+   fi
+   touch $OLD_OUTPUT_SEEDS_FILE $OLD_VP_LIST
+}
+
+test_populate(){
+   for f in $BASE_TEMPLATES_LIST ; do
+      [ -r "${BASE_DIR}/$f" ] || error_msg "Error: missing template \"${BASE_DIR}/$f\". Run \"$(basename $0) populate\" to fix the problem"
+   done
+   for f in $DEBIAN_TEMPLATES_LIST ; do
+      [ -r "${PKG_DIR}/$f" ] || error_msg "Error: missing template \"${PKG_DIR}/$f\". Run \"$(basename $0) populate\" to fix the problem"
+   done
+   return 0
+}
+
+test_configure(){
+   CONFIG_LIST="${UPDATE_CFG} ${TG_CFG}"
+   for f in $CONFIG_LIST ; do
+      [ -r "$f" ] || error_msg "Error: missing configuration file \"$f\". Run \"$(basename $0) configure\" to fix the problem"
+   done
+   return 0
+}
+
+find_pkg_lists(){
+   for a in $VALID_ARCHS  ; do
+      for f in $(find ./ -maxdepth 1 -mindepth 1 -xtype f -name "*-$a" -printf "%P\n") ; do
+         f=${f%-$a}; f=${f%-recommends}
+         echo "$f"
+      done
+   done
+}
+
+test_pkg_lists(){
+   local RC
+   RC=0
+   echo "Verifying current package lists ..."
+   for f in $(find_pkg_lists |sort -u) ; do
+      # 1. verify if the list is an output seed
+      if ! grep -xFq "$f" "$OUTPUT_SEEDS_FILE" ; then
+         RC=1
+         echo "$f : ERROR. This list of depends/recommends is not an output seed" >&2
+      # 2. verify if the list has a binary package (only regular seeds, exclude special)
+      elif echo "$OUTPUT_REGULAR_SEEDS" |tr " " "\n"  |grep -xFq "$f" && ! dllxh_listpkgs |grep -xFq "$(get_pkg_name "$f")" ; then
+         RC=1
+         echo "$f : This list of depends/recommends is not a binary package" >&2
+      else
+         echo "$f : OK"
+      fi
+   done
+   return $RC
+}
+
+cdd_configure(){
+   replace_vars ${BASE_DIR}/${TG_CFG}.in > ${TG_CFG}
+   load_seeds
+   replace_vars ${BASE_DIR}/${UPDATE_CFG}.in > ${UPDATE_CFG}
+   return 0
+}
+
+replace_vars(){
+   sed -e "s%_@_BASE_DIR_@_%$BASE_DIR%g;s%_@_SEEDS_DIR_@_%$SEEDS_DIR%g;\
+s%_@_SEEDS_RELEASE_@_%$SEEDS_RELEASE%g;\
+s%_@_OUTPUT_SEEDS_@_%$OUTPUT_SEEDS%g;\
+s%_@_REGULAR_SEEDS_@_%$REGULAR_SEEDS%g;\
+s%_@_SEEDS_@_%$SEEDS%g;\
+s%_@_OUTPUT_REGULAR_SEEDS_@_%$OUTPUT_REGULAR_SEEDS%g;\
+s%_@_OUTPUT_SEEDS_FILE_@_%$OUTPUT_SEEDS_FILE%g;\
+s%_@_FINAL_SEEDS_@_%$FINAL_SEEDS%g;\
+s%_@_DISTRIBUTOR_ID_@_%$DISTRIBUTOR_ID%g;\
+s%_@_CDD_PREFIX_@_%$CDD_PREFIX%g;\
+s%_@_VP_PREFIX_@_%$VP_PREFIX%g;\
+s%_@_RELEASE_SEEDS_@_%$RELEASE_SEEDS%g;\
+s%_@_SEEDS_DIR_LIST_@_%$SEEDS_DIR_LIST%g;\
+s%_@_SEED_BASENAME_@_%$SEED_BASENAME%g;\
+s%_@_SEED_@_%$SEED%g" "$1"
+}
+
+cdd_clean(){
+#   rm -f ${UPDATE_CFG}
+#   rm -f ${TG_CFG}
+   $TG_CMD clean || true
+   return 0
+}
+
+cdd_sow(){
+   local rc
+   rc=0
+   $TG_CMD sow-all || rc=$?
+   if [ $rc -eq 0 ] ; then
+      TMP_FILE="$(tempfile)"
+      replace_vars "${BASE_DIR}/${FINAL_SEEDS}/STRUCTURE" > "$TMP_FILE"
+      cat "$TMP_FILE" > "${BASE_DIR}/${FINAL_SEEDS}/STRUCTURE"
+      rm -f "$TMP_FILE"
+   fi
+   return $rc
+}
+
+cdd_seed_list(){
+   echo "$OUTPUT_SEEDS"
+#   sed -ne "/\[${SEEDS_RELEASE}\]/,/^\[/{/^output_seeds:/s%^output_seeds: \(.*\)%\1%p}" ${BASE_DIR}/${UPDATE_CFG}.in
+   return 0
+}
+
+cdd_new_seed_list(){
+   diff "$OLD_OUTPUT_SEEDS_FILE" "$OUTPUT_SEEDS_FILE" |sed -ne "/^> /s%^> %%p" |tr "\n" " "
+}
+
+cdd_regular_seeds(){
+   SED_CMD=""
+   for s in $SPECIAL_SEEDS ; do
+      SED_CMD="${SED_CMD}/^${s}\b/d;"
+   done
+   SED_CMD="${SED_CMD}s%:.*$%%"
+   sed -e "${SED_CMD}" "$1" |tr "\n" " "
+   return 0
+}
+
+get_template(){
+   PREFIX="$1"
+   shift
+   TEMPLATE="${PKG_DIR}/${1}.${2}.in"
+   if [ ! -r "$TEMPLATE" ] ; then
+      TEMPLATE="${PKG_DIR}/${1}.${PREFIX}.in"
+   fi
+   echo "$TEMPLATE"
+}
+
+expand_template(){
+   export SEED="$2"
+   replace_vars "$1"
+}
+
+get_pkg_name(){
+   # $1=seed_name
+   echo "${DISTRIBUTOR_ID}-${1}"
+}
+
+gen_pkg_data(){
+#   PKG_CMD="$(dirname $0)/gen-pkg-data"
+#   ${PKG_CMD} "$CDD_PREFIX" "$1"
+   PREFIX="$1"
+   SEED_NAME="$2"
+   export SEED_BASENAME
+   SEED_BASENAME="${SEED_NAME#$PREFIX-}"
+   [ -f "$CONTROL_FILE" ] || return 0
+   # generate control
+   TEMPLATE="$(get_template "$PREFIX" "control" "$SEED_NAME")"
+   [ -f "$TEMPLATE" ] || return 0
+   TMP_FILE="$(tempfile)"
+   echo "" > "$TMP_FILE"
+   expand_template "$TEMPLATE" "$SEED_NAME" >> "$TMP_FILE"
+
+   # skip if package exists in control
+   PKG_NAME_LINE="$(sed -ne "/^Package:/p" "$TMP_FILE" |head -1)"
+   if ! grep -q "^${PKG_NAME_LINE}$" "$CONTROL_FILE" ; then
+      cat "$TMP_FILE" >> "$CONTROL_FILE"
+   fi
+   rm -f "$TMP_FILE"
+
+   # generate scripts
+   for s in postinst preinst postrm prerm ; do
+      TEMPLATE="$(get_template "$PREFIX" "$s" "$SEED_NAME")"
+      if [ -r "$TEMPLATE" ] ; then
+         SCRIPT_FILE="${PKG_DIR}/$(get_pkg_name "${SEED_NAME}").${s}"
+         # skip if SCRIPT_FILE exists
+         if [ ! -f "$SCRIPT_FILE" ] ; then
+            expand_template "$TEMPLATE" "$SEED_NAME" > "$SCRIPT_FILE"
+            chmod +x "$SCRIPT_FILE"
+         fi
+      fi
+   done
+
+   return 0
+}
+
+cdd_test_package_name(){
+   if grep -q "${1}" "$OUTPUT_SEEDS_FILE" ; then
+      return 0
+   fi
+   return 1
+}
+
+cdd_save_seed_list(){
+   rc=0
+   cp "$OUTPUT_SEEDS_FILE" "$OLD_OUTPUT_SEEDS_FILE"
+   cdd_new_seed_list || rc=$?
+   return $rc
+}
+
+vp_germinate(){
+   for f in $(vp_find_files) ; do
+      F="$(basename $f)"
+      TARGET=""
+      for a in $VALID_ARCHS ; do
+         if echo "$f" |grep -q ".*-${a}$" ; then
+            # arch specific, just copy it
+            TARGET="$F"
+         fi
+      done
+      if [ -z "$TARGET" ] ; then
+         for a in $VALID_ARCHS ; do
+            TARGET="$TARGET ${F}-${a}"
+         done
+      fi
+      for t in $TARGET ; do
+         # preserve current lists as '.old'
+         [ ! -f "$t" ] || mv -f "$t" "${t}.old"
+         # get only relevant lines
+         filter_list "$f" > "$t"
+      done
+   done
+   # check for changes
+   TMP_LOG="$(tempfile)"
+   TMPFILE="$(tempfile)"
+   for F in $(vp_list_virtual) ; do
+      for a in $VALID_ARCHS ; do
+         f="${F}-${a}"
+         if [ -f "${f}.old" ] ; then
+            if ! diff "$f" "${f}.old" > "$TMPFILE" ; then
+               sed -ne "/^</{s%<%Added%;s%$% to $f%p}" "$TMPFILE" >> "$TMP_LOG"
+               sed -ne "/^>/{s%>%Removed%;s%$% from $f%p}" "$TMPFILE" >> "$TMP_LOG"
+            fi
+         else
+            echo "New virtual package list $f" >> "$TMP_LOG"
+         fi
+      done
+   done
+   rm -f "$TMPFILE"
+   if [ -s "$TMP_LOG" ] ; then
+      cat "$TMP_LOG"
+      cat "$TMP_LOG" |while read l; do
+         dch "$l"
+      done
+   else
+      echo "No changes found in virtual packages"
+   fi
+   rm -f "$TMP_LOG"
+   return 0
+}
+
+vp_filter_list(){
+   # remove leading spaces and delete all but lines
+   # beginning with some text (like a package name or a '('package name')')
+   sed -e 's%^[[:blank:]]*%%;s%[[:blank:]]*$%%;/^[[:alnum:](]\+/!d' "$1"
+}
+
+vp_find_files(){
+   find "${BASE_DIR}/${VIRTUAL}" -maxdepth 1 -xtype f -name "${VP_PREFIX}-*"
+}
+
+vp_bulk_list(){
+   for f in $(vp_find_files) ; do
+      F="$(basename $f)"
+      for a in $VALID_ARCHS ; do
+         echo "${F%-$a}"
+      done
+   done
+}
+
+vp_list_virtual(){
+   vp_bulk_list |sort -u
+}
+
+vp_scan_seeds(){
+   local rc
+   VIRTUAL_LIST="$(vp_list_virtual)"
+   rc=0
+   while [ "$1" ] ; do
+      for a in $VALID_ARCHS ; do
+         SEED_FILE="${1}-${a}"
+         if [ -r "$SEED_FILE" ] ; then
+            for v in $VIRTUAL_LIST ; do
+               VIRTUAL_FILE="${v}-${a}"
+               if [ -s "$VIRTUAL_FILE" ] ; then
+                  for p in $(sed "s%^(\(.*\))$%\1%" "$VIRTUAL_FILE") ; do
+                     if grep -q "^${p}$" "$SEED_FILE" ; then
+                        echo "* Warning: $SEED_FILE depends of ${p} instead of lliurex-${v}" >&2
+                        rc=1
+                     fi
+                  done
+               fi
+            done
+         fi
+      done
+      shift
+   done
+   return $rc
+}
+
+vp_test_package_name(){
+   [ -f "${BASE_DIR}/${VIRTUAL}/${1}" ] || return 1
+   return 0
+}
+
+vp_new_list(){
+   TMPFILE="$(tempfile)"
+   vp_list_virtual > "$TMPFILE"
+   diff "$OLD_VP_LIST" "$TMPFILE" |sed -ne "/^> /s%^> %%p" |tr "\n" " "
+   rm -f "$TMPFILE"
+}
+
+vp_save_seed_list(){
+   vp_list_virtual > "$OLD_VP_LIST"
+   return 0
+}
+
+fill_debian_templates_lists(){
+   DEBIAN_TEMPLATES_LIST="control.$CDD_PREFIX.in control.$VP_PREFIX.in"
+   for p in $CDD_PREFIX $VP_PREFIX ; do
+      for f in postinst preinst postrm prerm ; do
+         DEBIAN_TEMPLATES_OPTIONAL="$DEBIAN_TEMPLATES_OPTIONAL ${f}.${p}.in"
+      done
+   done
+}
+
+load_seeds(){
+   if [ -r "$TG_CFG" ] ; then
+      SEEDS="$($TG_CMD -s list |tr "\n" " ")"
+      REGULAR_SEEDS="$($TG_CMD -s list |cdd_regular_seeds "-")"
+      OUTPUT_REGULAR_SEEDS="$(cdd_regular_seeds "$OUTPUT_SEEDS_FILE")"
+   fi
+}
+
+question_message(){
+   printf "$1 (y/n):"
+   read a
+   [ "$a" = "y" -o "$a" = "Y" ] || return 1
+   return 0
+}
+
+do_new_cdd(){
+   # find new output seeds
+   NEW_STUFF=""
+   for s in $(cdd_new_seed_list) ; do
+      NEW_STUFF="y"
+      if question_message "\n\nFound new output seed: \"$s\".\nDo you want to update debian/control (and required files)\n\
+to generate new metapackage \"$DISTRIBUTOR_ID-${s}\"?" ; then
+         echo "Updating debian files for \"$DISTRIBUTOR_ID-${s}\" ..."
+         gen_pkg_data "$CDD_PREFIX" "$s"
+         printf "Done.\n\n"
+      fi
+   done
+   [ -z "$NEW_STUFF" ] || cdd_save_seed_list
+   return 0
+}
+
+do_new_vp(){
+   # find new vp
+   NEW_STUFF=""
+   for s in $(vp_new_list) ; do
+      NEW_STUFF="y"
+      if question_message "\n\nFound new virtual package file: \"$s\".\nDo you want to update debian/control (and required files)\n\
+to generate new virtual metapackage \"lliurex-${s}\"?" ; then
+         echo "Updating debian files for \"$DISTRIBUTOR_ID-${s}\" ..."
+         gen_pkg_data "$VP_PREFIX" "$s"
+         printf "Done.\n\n"
+      fi
+   done
+   [ -z "$NEW_STUFF" ] || vp_save_seed_list
+   return 0
+}
+
+usage(){
+      error_msg "Usage: $0 {populate|force-populate|configure|sow|clean|seed-list|vp-list|germinate|verify}" \
+                "       $0 {scan-vp} SEED_LIST" \
+                "       $0 {new-seed-list|save-seed-list|new-vp-list|save-vp-list|update}"  \
+                "       $0 gen-cdd-data SEED_LIST" \
+                "       $0 {gen-vp-data} VP_LIST" \
+                "       $0 pkg-name SEED_NAME|VP_NAME"
+}
+
+# main
+# variables and checks
+
+UPDATE_CFG="update.cfg"
+TG_CFG="transgenic.conf"
+TG_CMD="tg -c $TG_CFG"
+# from gen-pkg-data
+PKG_DIR="debian"
+CONTROL_FILE="${PKG_DIR}/control"
+PERSISTENT_DIR="persistent-data"
+OLD_OUTPUT_SEEDS_FILE="${PERSISTENT_DIR}/output_seeds.last"
+# from vp tool
+OLD_VP_LIST="${PERSISTENT_DIR}/vp.last"
+
+# source lib file, the alternative method ...
+# To whom it may concern:
+#    Please notice that this is a simple way to source a file with a minimal "error handling".
+#    This way is a bit more cryptic that the (commonly used in the past) "LIB_FILE variable" method,
+#    but the big advantage is that avoids the "apparently terrible torture of writing three times
+#    the LIB_FILE variable" (in fact, there is no need of any variable at all ...)
+#    I had made a resolution to give up this bad programming practice and I want to apologize for
+#    any problems that I may have caused to padawans, rebels, jedis, siths and other members of the
+#    LliureX development team in the past due to the use of the deprecated "LIB_FILE variable" way
+#
+# PD: "Ya os vale a todos" :-)
+
+. "/usr/share/lliurex-cdd-toolbox/lliurex-cdd-toolbox-common" >/dev/null 2>&1 || { echo "Error: file \"$_\" not found" >&2 ; exit 1 ; }
+# (the previous file also sources the lliurex-meta configuration file and llxcfg-dev.sh)
+
+# more vars
+BASE_TEMPLATES_LIST="${UPDATE_CFG}.in ${TG_CFG}.in ${UPDATE_CFG}.in"
+TOOLBOX_DIR="/usr/share/lliurex-cdd-toolbox"
+BASE_TEMPLATES_DIR="$TOOLBOX_DIR/base"
+DEBIAN_TEMPLATES_DIR="$TOOLBOX_DIR/debian"
+CONF_TEMPLATES_DIR="$TOOLBOX_DIR/conf"
+SEEDS_TEMPLATES_DIR="$TOOLBOX_DIR/default-seeds"
+DEBIAN_TEMPLATES_LIST=""
+DEBIAN_TEMPLATES_OPTIONAL=""
+CONF_TEMPLATES_LIST="$META_CONF"
+
+[ "$1" ] || usage
+dl_deb_test
+if [ "$1" = "populate" -o "$1" = "force-populate" ] ; then
+   do_populate "$1"
+   exit 0
+fi
+test_meta_conf_file || error_msg "Error: Missing configuration file \"$META_CONF\" not found. Write your own file or run \"$(basename $0) populate\" to get a default one"
+
+fill_debian_templates_lists
+[ "$SEEDS_RELEASE" ] || error_msg "Error: Empty value for SEEDS_RELEASE variable"
+[ "$BASE_DIR" ] || error_msg "Error: Empty value for BASE_DIR variable"
+SEEDS_DIR="$(readlink -f $BASE_DIR)"
+[ "$BASE_DIR" -a -d "$BASE_DIR" ] || error_msg "Error: Invalid value for BASE_DIR=\"$BASE_DIR\""
+[ "$RELEASE_SEEDS" -a -d "$BASE_DIR/$RELEASE_SEEDS" ] || error_msg "Error: Invalid value for RELEASE_SEEDS=\"$RELEASE_SEEDS\""
+[ "$FINAL_SEEDS" -a -d "$BASE_DIR/$FINAL_SEEDS" ] || error_msg "Error: Invalid value for FINAL_SEEDS=\"$FINAL_SEEDS\""
+[ "$OUTPUT_SEEDS_FILE" -a -s "$OUTPUT_SEEDS_FILE" ] || error_msg "Error: Invalid value for OUTPUT_SEEDS_FILE=\"$OUTPUT_SEEDS_FILE\" or empty file"
+[ "$CDD_PREFIX" ] || error_msg "Error: Empty value for CDD_PREFIX variable"
+[ "$SPECIAL_SEEDS" ] || error_msg "Error: Empty value for SPECIAL_SEEDS variable"
+
+[ "$VIRTUAL" -a -d "${BASE_DIR}/${VIRTUAL}" ] || error_msg "Error: Invalid value for VIRTUAL=\"$VIRTUAL\""
+[ "$VALID_ARCHS" ] || error_msg "Error: Empty value for VALID_ARCHS variable"
+[ "$VP_PREFIX" ] || error_msg "Error: Empty value for VP_PREFIX variable"
+
+OUTPUT_SEEDS="$(cat "$OUTPUT_SEEDS_FILE" |tr "\n" " ")"
+
+test_populate
+
+SEEDS=""
+REGULAR_SEEDS=""
+OUTPUT_REGULAR_SEEDS=""
+
+SEEDS_DIR_LIST="$(find "$BASE_DIR/$RELEASE_SEEDS" -mindepth 1 -maxdepth 1 -xtype d |grep -v ".svn" |tr "\n" " ")"
+# configure required vars
+load_seeds
+
+rc=0
+case $1 in
+   seeds-release)
+      echo "SEEDS_RELEASE"
+      ;;
+   configure)
+      cdd_configure || rc=$?
+      ;;
+   clean)
+      cdd_clean || rc=$?
+      ;;
+   sow)
+      test_configure 
+      cdd_sow || rc=$?
+      ;;
+   pkg-name)
+      shift
+      if [ -z "$1" ] ; then
+         usage || rc=$?
+      else
+         get_pkg_name "$1"
+      fi
+      ;;
+   seed-list)
+      cdd_seed_list || rc=$?
+      ;;
+   vp-list)
+      vp_list_virtual || rc=$?
+      ;;
+   cdd-pkg-list)
+      cdd_pkg_list
+      ;;
+   vp-pkg-list)
+      vp_pkg_list
+      ;;
+   new-seed-list)
+      cdd_new_seed_list || rc=$?
+      ;;
+   new-vp-list)
+      vp_new_list || rc=$?
+      ;;
+   save-seed-list)
+      cdd_save_seed_list || rc=$?
+      ;;
+   save-vp-list)
+      vp_save_seed_list || rc=$?
+      vp_list_virtual > "$OLD_VP_LIST" || rc=$?
+      ;;
+   scan-vp)
+      shift
+      if [ -z "$1" ] ; then
+         usage || rc=$?
+      else
+         vp_scan_seeds "$@" || rc=$?
+      fi
+      ;;
+   gen-cdd-data)
+      test_configure 
+      shift
+      while [ "$1" ] ; do
+         if cdd_test_package_name "$1" ; then
+            gen_pkg_data "$CDD_PREFIX" "$1"
+         fi
+         shift
+      done
+      ;;
+   gen-vp-data)
+      test_configure 
+      shift
+      while [ "$1" ] ; do
+         if vp_test_package_name "$1" ; then
+            gen_pkg_data "$VP_PREFIX" "$1"
+         fi
+         shift
+      done
+      ;;
+   germinate)
+      test_configure 
+      germinate-update-metapackage || true
+      vp_germinate || rc=$?
+      ;;
+   update)
+      dpkg-checkbuilddeps || error_msg "Please install build dependencies"
+      do_new_cdd
+      do_new_vp
+      cdd_configure
+      cdd_sow
+      germinate-update-metapackage || true
+      vp_germinate
+      vp_scan_seeds $(cdd_seed_list)
+      ;;
+   verify)
+      test_pkg_lists || rc=$?
+      ;;
+   *)
+      usage
+      ;;
+esac
+exit $rc
+

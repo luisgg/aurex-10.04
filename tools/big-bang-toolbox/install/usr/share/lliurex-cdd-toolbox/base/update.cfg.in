@@ -1,0 +1,55 @@
+[DEFAULT]
+dist: _@_SEEDS_RELEASE_@_
+
+[feisty.orig]
+seeds: minimal standard desktop server
+output_seeds: desktop server
+architectures: i386 
+seed_base: http://people.ubuntu.com/~cjwatson/seeds/
+seed_dist: edubuntu-%(dist)s
+archive_base/default: http://archive.ubuntu.com/ubuntu/
+archive_base/ports: http://ports.ubuntu.com/ubuntu-ports/
+archive_base/hppa: %(archive_base/ports)s
+archive_base/ia64: %(archive_base/ports)s
+components: main restricted
+
+[feisty/bzr]
+seed_base: sftp://bazaar.launchpad.net/~ubuntu-core-dev/ubuntu-seeds/
+seed_dist: edubuntu.%(dist)s
+
+[llx0711]
+seeds: _@_SEEDS_@_
+output_seeds: _@_OUTPUT_SEEDS_@_
+architectures: i386
+seed_base: file://_@_SEEDS_DIR_@_
+seed_dist: final_seeds
+archive_base/default: http://cuddy/unico/
+components: main restricted universe multiverse
+
+[llx0809]
+seeds: _@_SEEDS_@_
+output_seeds: _@_OUTPUT_SEEDS_@_
+architectures: i386
+seed_base: file://_@_SEEDS_DIR_@_
+seed_dist: final_seeds
+archive_base/default: http://cuddy/llx0809-unico/
+components: main restricted universe multiverse
+
+[llx0909]
+seeds: _@_SEEDS_@_
+output_seeds: _@_OUTPUT_SEEDS_@_
+architectures: i386
+seed_base: file://_@_SEEDS_DIR_@_
+seed_dist: _@_FINAL_SEEDS_@_
+archive_base/default: http://cuddy/_@_SEEDS_RELEASE_@_-unico/
+components: main restricted universe multiverse
+
+
+[llx1009]
+seeds: _@_SEEDS_@_
+output_seeds: _@_OUTPUT_SEEDS_@_
+architectures: i386
+seed_base: file://_@_SEEDS_DIR_@_
+seed_dist: _@_FINAL_SEEDS_@_
+archive_base/default: http://cuddy/_@_SEEDS_RELEASE_@_-unico/
+components: main restricted universe multiverse

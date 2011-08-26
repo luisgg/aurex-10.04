@@ -1,0 +1,51 @@
+Task-Per-Derivative: 1
+Task-Section: user
+Task-Description: Ubuntu live CD
+Task-Extended-Description: This task provides the extra packages installed on the Ubuntu live CD. It is neither useful nor recommended to install this task in other environments.
+Task-Relevance: 2
+Task-Key: ubiquity-frontend-gtk
+Task-Test-new-install: skip show
+
+ * Languages: en
+ * language-pack-${Languages}
+ * language-pack-gnome-${Languages}
+ * language-support-${Languages}
+
+Enough room on amd64 armel i386, not enough on ia64 powerpc:
+ * Languages: es xh pt
+ * language-pack-${Languages} [!ia64 !powerpc]
+ * language-pack-gnome-${Languages} [!ia64 !powerpc]
+
+Enough room on i386, not enough on amd64:
+ * Languages: de bn
+ * language-pack-${Languages} [i386]
+ * language-pack-gnome-${Languages} [i386]
+
+We should have enough space to include all langpacks on the 1 GB armel desktop
+live images:
+ * /^language-pack-[^-]+$/ [armel]
+ * /^language-pack-gnome-[^-]+$/ [armel]
+
+ * ntfsprogs
+
+ * gparted
+
+== Ubiquity components ==
+
+These packages make up the Ubiquity live installer.
+
+ * ubiquity-frontend-gtk
+ * ubiquity-ubuntu-artwork
+ * ubiquity-slideshow-ubuntu
+ * python-webkit # Needed by ubiquity-frontend-gtk for ubiquity-slideshow.
+
+Ubiquity needs full filesystem support for the partitioner.
+
+ * xfsprogs
+ * jfsutils
+ * hfsplus [powerpc]  # ColinWatson
+ * reiserfsprogs
+
+== Germinate workarounds ==
+
+ * wamerican  # iamerican Depends: ispell Recommends: wordlist, but wamerican isn't spotted in time so germinate arbitrarily picks miscfiles instead

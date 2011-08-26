@@ -1,0 +1,7 @@
+Source: lliurex-meta
+Section: metapackages
+Priority: optional
+Maintainer: Equipo LliureX <lliurex@cult.gva.es>
+Uploaders: Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>, Elvira Mifsud Talon <mifsud_elv@gva.es>, Francisco Javier Estelles Dasi <estelles_fradas@gva.es>, Pablo Marquez Soler <marquez_pab@gva.es>, Raul Juncos Castillo <juncos_rau@gva.es>, Fco Javier Lopez Perez <lopez_frajav@gva.es>, Victor Sevilla Marquina <sevilla_vic@gva.es>, Miguel Gea Milvaques <gea_mig@gva.es>
+Standards-Version: 3.8.3
+Build-Depends: debhelper (>= 4), germinate (>= 0.21ubuntu1)

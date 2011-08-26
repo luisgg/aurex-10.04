@@ -1,0 +1,8 @@
+Package: _@_DISTRIBUTOR_ID_@_-_@_SEED_@_
+Architecture: any
+Depends: lliurex-cdd (= ${binary:Version}), lliurex-common-utils, ${_@_DISTRIBUTOR_ID_@_-_@_SEED_@_:Depends}
+Recommends: ${_@_DISTRIBUTOR_ID_@_-_@_SEED_@_:Recommends}
+XBSC-CDDVersion: _@_SEED_BASENAME_@_
+Description: The LliureX _@_SEED_@_ system
+ This package depends on all of the packages in the LliureX
+ _@_SEED_@_ system.

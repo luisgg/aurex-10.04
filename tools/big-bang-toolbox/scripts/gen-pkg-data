@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# vars
+PREFIX="$1"
+SEED_NAME="$2"
+PKG_DIR="debian"
+CONTROL_FILE="${PKG_DIR}/control"
+
+# funcs
+get_template(){
+   TEMPLATE="${PKG_DIR}/${1}.${PREFIX}-${2}.in"
+   if [ ! -r "$TEMPLATE" ] ; then
+      TEMPLATE="${PKG_DIR}/${1}.${PREFIX}.in"
+   fi
+   echo "$TEMPLATE"
+}
+
+expand_template(){
+   sed -e "s%_@_SEED_@_%${SEED_NAME}%g" "$1"
+}
+
+# test
+[ -z "$PREFIX" -o -z "$SEED_NAME" ] && exit 0
+[ -f "$CONTROL_FILE" ] || exit 0
+
+# generate control
+TEMPLATE="$(get_template "control" "$SEED_NAME")"
+[ -f "$TEMPLATE" ] || exit 0
+TMP_FILE="$(tempfile)"
+echo "" > "$TMP_FILE"
+expand_template "$TEMPLATE" >> "$TMP_FILE"
+
+# skip if package exists in control
+PKG_NAME_LINE="$(sed -ne "/^Package:/p" "$TMP_FILE" |head -1)"
+if ! grep -q "^${PKG_NAME_LINE}$" "$CONTROL_FILE" ; then
+   cat "$TMP_FILE" >> "$CONTROL_FILE"
+fi
+rm -f "$TMP_FILE"
+
+# generate scripts
+for s in postinst preinst postrm prerm ; do
+   TEMPLATE="$(get_template "$s" "$SEED_NAME")"
+   if [ -r "$TEMPLATE" ] ; then
+      SCRIPT_FILE="${PKG_DIR}/lliurex-${PREFIX}-${SEED_NAME}.${s}"
+      # skip if SCRIPT_FILE exists
+      if [ ! -f "$SCRIPT_FILE" ] ; then 
+         expand_template "$TEMPLATE" > "$SCRIPT_FILE"
+         chmod +x "$SCRIPT_FILE"
+      fi
+   fi
+done
+
+exit 0
