@@ -1,5 +1,6 @@
-# File:        lliurex-cdd-toolbox-common
-# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+# File:			big-bang-toolbox-common
+# ORIGINAL-File:	lliurex-cdd-toolbox-common
+# Author:		Luis Garcia Gisbert <luisgg@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -17,11 +18,12 @@
 # --------
 
 # vars
-META_CONF="lliurex-meta.conf"
+META_CONF="packages-meta.conf"
 META_CONF_LOADED=""
 
+# remove explicit lliurex stuff ...
 # llxcfg-dev lib file
-. "/usr/share/lliurex/llxcfg-dev/llxcfg-dev.sh"  >/dev/null 2>&1 || { echo "Error: file \"$_\" not found" >&2 ; exit 1 ; }
+# . "/usr/share/lliurex/llxcfg-dev/llxcfg-dev.sh"  >/dev/null 2>&1 || { echo "Error: file \"$_\" not found" >&2 ; exit 1 ; }
 
 # try to load conf file
 if [ -r "$META_CONF" ] ; then

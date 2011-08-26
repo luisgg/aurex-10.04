@@ -1,8 +1,9 @@
 #!/bin/bash
 # -------
-# File:        lliurex-meta-pkg
-# Description: LliureX "swiss army knife" to build cdd metapackages
-# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+# File:			bb-tool
+# ORIGINAL_Filename:	lliurex-meta-pkg
+# Description: 		"swiss army knife" to build cdd metapackages
+# Author:		Luis Garcia Gisbert <luisgg@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -95,6 +96,11 @@ find_pkg_lists(){
    done
 }
 
+bin_pkg_list(){
+	REG_EXP="^Package:"
+	[ -f "debian/control" ] && sed -ne "/${REG_EXP}/s%${REG_EXP}[[:space:]]*%%p" "debian/control"
+}
+
 test_pkg_lists(){
    local RC
    RC=0
@@ -105,7 +111,7 @@ test_pkg_lists(){
          RC=1
          echo "$f : ERROR. This list of depends/recommends is not an output seed" >&2
       # 2. verify if the list has a binary package (only regular seeds, exclude special)
-      elif echo "$OUTPUT_REGULAR_SEEDS" |tr " " "\n"  |grep -xFq "$f" && ! dllxh_listpkgs |grep -xFq "$(get_pkg_name "$f")" ; then
+      elif echo "$OUTPUT_REGULAR_SEEDS" |tr " " "\n"  |grep -xFq "$f" && ! bin_pkg_list |grep -xFq "$(get_pkg_name "$f")" ; then
          RC=1
          echo "$f : This list of depends/recommends is not a binary package" >&2
       else
@@ -415,7 +421,7 @@ do_new_vp(){
    for s in $(vp_new_list) ; do
       NEW_STUFF="y"
       if question_message "\n\nFound new virtual package file: \"$s\".\nDo you want to update debian/control (and required files)\n\
-to generate new virtual metapackage \"lliurex-${s}\"?" ; then
+to generate new virtual metapackage \"${DISTRIBUTOR_ID}-${s}\"?" ; then
          echo "Updating debian files for \"$DISTRIBUTOR_ID-${s}\" ..."
          gen_pkg_data "$VP_PREFIX" "$s"
          printf "Done.\n\n"
@@ -460,12 +466,12 @@ OLD_VP_LIST="${PERSISTENT_DIR}/vp.last"
 #
 # PD: "Ya os vale a todos" :-)
 
-. "/usr/share/lliurex-cdd-toolbox/lliurex-cdd-toolbox-common" >/dev/null 2>&1 || { echo "Error: file \"$_\" not found" >&2 ; exit 1 ; }
-# (the previous file also sources the lliurex-meta configuration file and llxcfg-dev.sh)
+. "/usr/share/big-bang-toolbox/big-bang-toolbox-common" >/dev/null 2>&1 || { echo "Error: file \"$_\" not found" >&2 ; exit 1 ; }
+# (the previous file also sources the packages-meta.conf configuration file)
 
 # more vars
 BASE_TEMPLATES_LIST="${UPDATE_CFG}.in ${TG_CFG}.in ${UPDATE_CFG}.in"
-TOOLBOX_DIR="/usr/share/lliurex-cdd-toolbox"
+TOOLBOX_DIR="/usr/share/big-bang-toolbox"
 BASE_TEMPLATES_DIR="$TOOLBOX_DIR/base"
 DEBIAN_TEMPLATES_DIR="$TOOLBOX_DIR/debian"
 CONF_TEMPLATES_DIR="$TOOLBOX_DIR/conf"
