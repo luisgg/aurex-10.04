@@ -1,21 +1,22 @@
-Source: lliurex-cdd-toolbox
+Source: big-bang-toolbox
 Section: base 
 Priority: optional
 Maintainer: Equipo LliureX <lliurex@gva.es>
-Uploaders:Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>, Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>, Javier Garcia Escribano <garcia_javesc@gva.es>, Maria Teresa Llorca Llaser <llorca_mte@gva.es>, Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>, Alfons Lloret Sananton <lliurex_devel5@edu.gva.es>, Enrique Medina Gremaldos <lliurex_devel4@edu.gva.es>, David Montalva Furio <dmontalf@gmail.com>
+Uploaders:Luis Antonio Garcia Gisbert <luisgg@gmail.com>
 Build-Depends: cdbs, debhelper (>= 7.3)
 Standards-Version: 3.8.4
 
-Package: lliurex-cdd-toolbox
+Package: big-bang-toolbox
 Architecture: all
 Depends: transgenic, germinate, llxcfg-dev (>= 0.70), ${misc:Depends}, debootstrap
 Description: LliureX "swiss army knife" to build cdd metapackages
- lliurex-cdd-toolbox uses transgenic, germinate and some custom
- scripts to generate Lliurex cdd and vp metapackages.
+ big-bang-toolbox uses transgenic, germinate and some custom
+ scripts to generate metapackages for Ubuntu derivatives and
+ add-ons.
  It includes the required scripts, some templates, default seed
  files and samples for debian/rules and configuration files.
- The package installs lliurex-meta-pkg, a multipurpose command-line
- script to create and develop 'cdd' and 'vp' metapackages from
- "genetically enhanced" transgenic seed files. A debian/rules helper
+ The package installs bb-tool, a multipurpose command-line
+ script to create and develop metapackages from  "genetically enhanced"
+ transgenic seed files. A debian/rules helper
  'dllxpool_data' is also included to automate the build process of
  package lists for pool or live-cds generation.

@@ -1,3 +1,13 @@
+big-bang-toolbox (0.1) lucid; urgency=low
+
+  * Uhhm ... I'm not sure how to explain this ... "source package renamed"?
+    "just a fork of my own package"? "forking for clues" ? Well, I just need
+    a (lliurex aware) new name for the package. Big Bang is my modest tribute
+    to Sheldon Cooper ("the way to go" in this days ...) and fits perfectly
+    with the nature of this application.
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 26 Aug 2011 19:19:33 +0200
+
 lliurex-cdd-toolbox (11.09.0.1) unstable; urgency=low
 
   * New version for Marty
