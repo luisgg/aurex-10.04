@@ -1,0 +1,125 @@
+transgenic (0.20) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Mon, 07 Feb 2011 08:18:48 +0100
+
+transgenic (0.19) unstable; urgency=low
+
+  * Added tg autocompletion for bash developers
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Thu, 07 Oct 2010 09:02:38 +0200
+
+transgenic (0.18) unstable; urgency=low
+
+  * Added nano to list of editors
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Wed, 16 Jun 2010 12:14:12 +0200
+
+transgenic (0.17) unstable; urgency=low
+
+  * Removed testing package
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Wed, 16 Jun 2010 12:12:50 +0200
+
+transgenic (0.16) unstable; urgency=low
+
+  * Testing package zarafa
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Mon, 22 Mar 2010 13:59:58 +0100
+
+transgenic (0.14) unstable; urgency=low
+
+  [ Luis Antonio Garcia Gisbert ]
+  * Added options expand-packages & test
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Mon, 22 Mar 2010 13:57:23 +0100
+
+transgenic (0.13) unstable; urgency=low
+
+  * Removed bash 4.1 incompatible use of (( operator
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Thu, 11 Mar 2010 12:19:16 +0100
+
+transgenic (0.12) unstable; urgency=low
+
+  * New New release for Leia
+  * Fixed some control fields 
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Tue, 09 Mar 2010 19:20:11 +0100
+
+transgenic (0.11) unstable; urgency=low
+
+  * Modified tg option "list"
+    instead of a unreadable column of seeds 
+    the result is a simple sorted columns
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Wed, 18 Nov 2009 09:24:05 +0100
+
+transgenic (0.10) unstable; urgency=low
+
+  * New Version for Krypton
+
+ -- Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>  Wed, 18 Nov 2009 09:11:44 +0100
+
+transgenic (0.9) unstable; urgency=low
+
+  * Fixed tg verbosity in "include and uninclude" action
+
+ -- Angel Berlanas Vicente <aberlanas.gva@gmail.com>  Mon, 04 May 2009 17:57:31 +0200
+
+transgenic (0.8) unstable; urgency=low
+
+  * new actions: include, uninclude, version
+  * 'clean' fixed
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Tue, 31 Mar 2009 20:13:23 +0200
+
+transgenic (0.7) unstable; urgency=low
+
+  * Fixed a bug in the sections/seeds processing. Thanks to my inconditionals
+    users for the intensive testing and bug report.
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Mon, 30 Mar 2009 12:27:26 +0200
+
+transgenic (0.6) unstable; urgency=low
+
+  * Support to specify a section when adding packages appending a % symbol to
+    the seed name in the form: seed%section.
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Sun, 29 Mar 2009 00:24:49 +0100
+
+transgenic (0.5) unstable; urgency=low
+
+  * Fixed a little bug (one echo on the wrong place) 
+
+ -- Angel Berlanas Vicente <aberlanas.gva@gmail.com>  Tue, 03 Mar 2009 14:00:23 +0100
+
+transgenic (0.4) unstable; urgency=low
+
+  * new actions: erase, plist, quick-list
+  * short listing by default (-s option is now deprecated)
+  * interactive and 'very visual' confirmation of dangerous operations
+  * new options -l (long listing) and -y (assume yes)
+  * lots of fixes
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Mon, 02 Mar 2009 17:32:30 +0100
+
+transgenic (0.3) unstable; urgency=low
+
+  * New actions: readlink, pager, exec
+  * Minor fixes
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Mon, 02 Mar 2009 17:31:14 +0100
+
+transgenic (0.2) unstable; urgency=low
+
+  * New actions: add, padd, rm, prm, mkdir, rmdir, mv
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Mon, 02 Mar 2009 10:56:02 +0100
+
+transgenic (0.1) unstable; urgency=low
+
+  * First release.
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Wed, 11 Feb 2009 07:40:35 +0100

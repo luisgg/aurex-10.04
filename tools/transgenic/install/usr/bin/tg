@@ -1,0 +1,1039 @@
+#!/bin/bash
+# -------
+# File:        tg (transgenic tool)
+# Description: tool to manage (genetically) enhanced seeds
+# Author:      (c) 2009 Luis Garcia Gisbert <garcia_luigis@gva.es> 
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+set -e
+
+PATH="/usr/sbin:/usr/bin:/sbin:/bin"
+
+# variables
+ACTION=""
+CONF_FILE="transgenic.conf"
+TG_INCLUDE_DIRS="include inc"
+TG_FINAL_SEEDS="final_seeds"
+#TG_OUTPUT_SEEDS_LIST="output_seeds.list"
+TG_SEED_DIRS="seeds"
+TG_MAINSEED="main"
+TG_INCLSEED="incl"
+TG_STRUCTURE="STRUCTURE"
+TG_EXCLUDE_SEEDS_LIST="^${TG_STRUCTURE}$ ^${TG_STRUCTURE}\..*$"
+TG_SEED_DEFAULT_DIR=""
+TG_BASE_DIR=""
+SHORT_OUTPUT="y"
+ASSUME_YES=""
+TG_EDITOR=""
+TG_PAGER=""
+TG_COWSAY="/usr/games/cowsay -f eyes"
+TG_DEFAULT_SECTION="Other"
+TG_VERSION_FILE="/usr/share/transgenic/version"
+declare -a SEEDS_NAME SEEDS_PATH SEEDS_DIRS SEEDS_TYPE
+XARG_REGEXP="^\([-[:alnum:]_]/\)?"
+SIMPLE_NAME_REGEXP="^[-[:alnum:]_\.+]\+$"
+RECOMMENDS_REGEXP="^([-[:alnum:]_\.]\+)$"
+NAME_END_REGEXP="\([^-[:alnum:]_\.+]\|$\)"
+GPP_CMD="gpp --nostdinc"
+
+PKG_LISTS_DIR="/var/lib/apt/lists/"
+#parameters management (Dir,Seed,Section,Pkgs)
+DARG=""
+SARG=""
+SECARG=""
+declare -a PARG
+
+# to store non-opt arguments
+declare -a ARGV
+# Bash arrays are 0-based, but we like ARGC to be equal to the number of non-option arguments.
+# To solve this issue, we use a "C-like" ARGV vector by setting ARGV[0] with the name of script
+# ('basename' of script for arbitrary cosmetic reasons), so real arguments begin with index 1
+# the array will be ARGC+1 elements
+ARGC=0
+ARGV[0]="$(basename "$0")"
+
+#functions
+
+get_confirmation(){
+   a="$ASSUME_YES"
+   while ! echo " y n " |grep -q " $a " ; do
+      $TG_COWSAY "$1 (y/n)"
+      read a
+   done
+   [ "$a" = "y" ] || return 1
+   return 0
+}
+
+do_conf_update(){
+   # read configuration file
+   if [ "$CONF_FILE" -a -r "$CONF_FILE" ] ; then
+      . $CONF_FILE
+   fi
+   # some safe defaults
+   [ "$TG_SEED_DIRS" ] || TG_SEED_DIRS="./"
+   [ "$TG_SEED_DEFAULT_DIR" ] || TG_SEED_DEFAULT_DIR="${TG_SEED_DIRS%% *}"
+   [ "$TG_BASE_DIR" ] || TG_BASE_DIR="$(dirname "$TG_SEED_DEFAULT_DIR")"
+   [ "$TG_EDITOR" ] || TG_EDITOR="editor"
+   [ "$TG_PAGER" ] || TG_PAGER="pager"
+   # prepare GPP command
+   GPP_CMD="gpp --nostdinc"
+   # we can include files from seed an include dirs ...
+   for d in $TG_SEED_DIRS $TG_INCLUDE_DIRS ; do
+      GPP_CMD="$GPP_CMD -I${d}"
+   done
+   add_seeds_from_dirs
+   return 0
+}
+
+find_seed_realpath(){
+   NUM_FILES=0
+   FULL_PATH=""
+   for d in $TG_SEED_DIRS $TG_INCLUDE_DIRS ; do
+      FULL_PATH="$d/$1"
+      if [ -r "$FULL_PATH" ] ; then
+         echo "$FULL_PATH"
+         NUM_FILES=$(($NUM_FILES + 1))
+      fi
+   done
+   [ $NUM_FILES -eq 1 ] || return 1
+   return 0
+}
+
+do_find_seeds(){
+   [ -d "$1" ] || return 0
+   find "$1" -xtype f -printf "%P\n" |sed -e "/\/\{0,1\}\./d"
+}
+
+show_quick_list(){
+   for d in $TG_SEED_DIRS $TG_INCLUDE_DIRS ; do
+      do_find_seeds "$d"
+   done
+   return 0
+}
+
+add_seeds_from_dirs(){
+   i=0
+   SEEDS_NAME=()
+   SEEDS_PATH=()
+   SEEDS_TYPE=()
+   for d in $TG_SEED_DIRS $TG_INCLUDE_DIRS ; do
+      #exclude hidden dirs and files
+      for f in $(do_find_seeds "$d") ; do
+         rc=0
+         f_path="$(find_seed_realpath "$f")" || rc=$?
+         [ $rc -eq 0 ] || die "Duplicated seed file: $f\n$f_path"
+         # fill the arrays
+         SEEDS_NAME[$i]="$f"
+         SEEDS_PATH[$i]="$f_path"
+         if echo " $TG_SEED_DIRS " |grep -q " $(dirname "$f_path") " ; then
+            SEEDS_TYPE[$i]="$TG_MAINSEED"
+         else
+            SEEDS_TYPE[$i]="$TG_INCLSEED"
+         fi
+         i=$(($i + 1))
+      done
+   done
+   return 0
+}
+
+get_seed_index(){
+   i=0
+   ret=""
+   while [ $i -lt ${#SEEDS_NAME[@]} ] ; do
+      if [ "${SEEDS_NAME[$i]}" = "$1" ] ; then
+         ret=$i
+         break
+      fi
+      i=$(($i + 1))
+   done
+   [ "$ret" ] || return 1
+   echo $ret
+   return 0
+}
+
+get_seed_file(){
+   f_path=""
+   i=$(get_seed_index "$1") || return 1
+   echo "${SEEDS_PATH[$i]}"
+   return 0
+}
+
+is_regular_seed(){
+   rc=0
+   for r in $TG_EXCLUDE_SEEDS_LIST ; do
+      if echo "$1" |grep -q "$r" ; then
+         # the seed matches an excluded regexp/value
+         rc=1
+         break
+      fi
+   done
+   return $rc
+}
+
+list_seeds(){
+   i=0
+   while [ $i -lt ${#SEEDS_NAME[@]} ] ; do
+      s="${SEEDS_NAME[$i]}"
+      if is_regular_seed "$s" ; then
+         if [ "$SHORT_OUTPUT" ] ; then
+            echo "$s"
+         else
+            echo "TGSEED:$s FILE:${SEEDS_PATH[$i]}"
+         fi
+      fi
+      i=$(($i + 1))
+   done
+   return 0
+}
+
+seed_name_error(){
+   die "Error, unknown seed name \"$1\""
+}
+
+expand_seed(){
+   SEED_FILE="$(get_seed_file "$1")" || seed_name_error "$1"
+   rc=0
+   $GPP_CMD "$SEED_FILE" || rc=$?
+   [ $rc -eq 0 ] || die "Error expanding file \"$SEED_FILE\""
+   return 0
+}
+
+say_line(){
+   STR="=="
+   n=1
+   while [ $n -le $1 ] ; do
+      STR="$STR="
+      n=$(($n + 1))
+   done
+   SEED_FILE=" FILE: $(get_seed_file "$2")" || SEED_FILE=""
+   if [ "$SHORT_OUTPUT" ] ; then
+      echo -n "$STR$STR" |tr "=" " "
+      echo "$2"
+   else
+      echo "# $STR TGSEED: $2$SEED_FILE $STR"
+   fi
+   return 0
+}
+
+show_depends(){
+   TMP_FILE="$(tempfile)"
+   SEED_FILE="$(get_seed_file "$1")" || seed_name_error "$1"
+   $GPP_CMD --includemarker "===LINE:%===FILE: % ===MODE: %" "$SEED_FILE" |sed -ne "/===LINE:.*===MODE: .$/{s%^.*===FILE:[[:blank:]]*%%;s%[[:blank:]]===MODE:[[:blank:]]% %;p}" > "$TMP_FILE"
+   INC_LEVEL=0
+   say_line $INC_LEVEL "$1"
+   cat "$TMP_FILE" | while read f m; do
+      case $m in
+         1)
+            INC_LEVEL=$(($INC_LEVEL + 1))
+            say_line $INC_LEVEL $f
+            ;;
+         2)
+            INC_LEVEL=$(($INC_LEVEL - 1))
+            ;;
+         *)
+            say_line $INC_LEVEL $f
+            ;;
+      esac
+   done
+   rm -f "$TMP_FILE"
+   return 0
+}
+
+clear_final_seeds(){
+   if [ -d "$TG_FINAL_SEEDS" ] ; then
+      find "$TG_FINAL_SEEDS" -maxdepth 1 -xtype f -exec rm {} \;
+   fi
+   return 0
+}
+
+write_final_seed(){
+   TG="$1"
+   n=$(get_seed_index "$TG") || die "Invalid seed \"$TG\" in output seeds list"
+   if [ "${SEEDS_TYPE[$n]}" = "$TG_MAINSEED" ] ; then
+      printf "."
+      if [ "$2" ] ; then
+         OUT_FILE="$2"
+      else
+         OUT_FILE="$TG_FINAL_SEEDS/${SEEDS_NAME[$n]}"
+      fi
+      mkdir -p "$(dirname ${OUT_FILE})"
+      expand_seed "${SEEDS_NAME[$n]}" > "$OUT_FILE"
+   fi
+   return 0
+}
+
+do_final_structure_file(){
+   TMP_FILE="$1"
+   TMP2_FILE="$(tempfile)"
+   # get "non-seed" options
+   sed -e "/^.*:/d" "$TMP_FILE" > "$TMP2_FILE"
+   # add missing STRUCTURE seeds
+   SHORT_OUTPUT="y"
+   for s in $(list_seeds) ; do
+      if ! grep -q "^${s}:" "$TMP_FILE" ; then
+         echo "${s}:" >> "$TMP2_FILE"
+      fi
+   done
+   # add the seed options
+   sed -ne "/^.*:/p" "$TMP_FILE" >> "$TMP2_FILE"
+   OUT_FILE="$TG_FINAL_SEEDS/$TG_STRUCTURE"
+   mkdir -p "$(dirname ${OUT_FILE})"
+   cat "$TMP2_FILE" > "${OUT_FILE}"
+   rm -f  "$TMP2_FILE"
+   return 0
+}
+
+open3(){
+   # asociate file descriptor 3 with TG_OUTPUT_SEEDS_LIST
+   exec 3< "$TG_OUTPUT_SEEDS_LIST"
+   return 0
+}
+
+close3(){
+   exec 3>&-
+   return 0
+}
+
+show_pkg_regexp(){
+   echo "^[[:blank:]]\*[[:blank:]]\+(\?${1}${NAME_END_REGEXP}"
+   return 0
+}
+
+show_pkg_line(){
+   echo " * $1"
+   return 0
+}
+
+get_pkg_seed_files(){
+   rc=0
+   rgrep --exclude-dir=".svn"  "$(show_pkg_regexp "${1}")" $TG_SEED_DIRS $TG_INCLUDE_DIRS |sed -e "s%^.*/%%;s% \* %%" || rc=$?
+   return $rc
+}
+
+test_pkg_in_file(){
+   grep -q "$(show_pkg_regexp "${1}")" "$2" || return 1
+   return 0
+}
+
+show_pkgs(){
+   if seedfile="$(test_seed_file)" ; then
+      if [ "$SHORT_OUTPUT" ] ; then
+         echo "${SARG}:"
+         sed -ne "/$(show_pkg_regexp '.*')/{s%^ \* %  %;p}" "$seedfile"
+      else
+         echo -n "${SARG}:"
+         sed -ne "/$(show_pkg_regexp '.*')/{s%^ \* %'%;s%$%'%;p}" "$seedfile" |tr "\n" "," |sed -e "s%,$%%"
+         echo ""
+      fi
+   fi
+   return 0
+}
+
+test_pkg_name(){
+   psearch="${1%)}"
+   psearch="${psearch#(}"
+   ! grep -q "^Package: $psearch$" $PKG_LISTS_FILES || return 0
+   show_warning "Unable to locate package \"$psearch\". Use at your own risk"
+   return 0
+}
+
+do_clear_arg(){
+   DARG=""
+   SARG=""
+   PARG=()
+   return 0
+}
+
+do_split_parg(){
+   do_split_arg "$1" "parg"
+   return 0
+}
+
+do_split_sarg(){
+   do_split_arg "$1"
+   return 0
+}
+
+do_split_darg(){
+   do_clear_arg
+   DARG="$1"
+   test_arg
+}
+
+is_simple_name(){
+   echo "$1" |grep -q "$SIMPLE_NAME_REGEXP" || return 1
+   return 0
+}
+
+is_recommends(){
+   echo "$1" |grep -q "$RECOMMENDS_REGEXP" || return 1
+   return 0
+}
+
+test_arg(){
+   if [ "$DARG" ] ; then
+      # trim any "/" or space at begin or end
+      DARG="$(echo "$DARG" |sed -e "s%^[[:blank:]]*/\?[[:blank:]]*%%;s%[[:blank:]]*/\?[[:blank:]]*$%%")"
+      is_simple_name "$DARG" || die "Invalid seed directory name: \"$DARG\""
+   fi
+   if [ "$SARG" ] ; then
+      is_simple_name "$SARG" || die "Invalid seed name: \"$DARG\""
+   fi
+   if [ ${#PARG[@]} -gt 0 ] ; then
+      i=0
+      while [ $i -lt ${#PARG[@]} ] ; do
+         is_simple_name "${PARG[$i]}" || is_recommends "${PARG[$i]}" || die "Invalid pkg name: \"${PARG[$i]}\""
+         test_pkg_name "${PARG[$i]}"
+         i=$(($i + 1))
+      done
+   fi
+   return 0
+}
+
+do_split_arg(){
+   BULK_ARG="$1"
+   do_clear_arg
+   # set value for DARG ONLY if there is a "/" in the seed name
+   if echo "$BULK_ARG" |grep -q "/" ; then
+      DARG="${BULK_ARG%%/*}"
+      BULK_ARG="${BULK_ARG#*/}"
+   fi
+   # set value for SARG if there is a ":"
+   if echo "$BULK_ARG" |grep -q ":" ; then
+      SARG="${BULK_ARG%%:*}"
+      BULK_ARG="${BULK_ARG#*:}"
+   elif [ -z "$2" ] && ! echo "$BULK_ARG" |grep -q "," ; then
+      # there is not a ":", the argument is not a comma separated list
+      # and we are called in "default" (seed) mode , not in "pkg" mode
+      # so the argument is trated as a seed
+      SARG="$BULK_ARG"
+      BULK_ARG=""
+   fi
+   # extract SECARG if SARG contains a % simbol
+   if echo "$SARG" |grep -q "%" ; then
+      SECARG="${SARG#*%}"
+      SARG="${SARG%%%*}"
+   else
+      SECARG="$TG_DEFAULT_SECTION"
+   fi
+
+   # ok, if BULK_ARG still contans data ... it will be considered as al list of pkgs
+   # and expanded as PARG array (commas are translated to spaces to get this)
+   PARG=( $(echo "${BULK_ARG}" |tr "," " ") )
+   test_arg
+   return 0
+}
+
+is_empty_seed_dir(){
+   test_seed_dir
+   [ -z "$(do_find_seeds "${TG_BASE_DIR}/${DARG}")" ] || return 1
+   return 0
+}
+
+test_seed_dir(){
+   tdir="${TG_BASE_DIR}/${DARG}"
+   [ -d "$tdir" ] || die "Invalid seed directory \"$tdir\""
+   return 0
+}
+
+test_seed_file(){
+   local rc
+   rc=0
+   # first, search for the seed name
+   sfile="$(get_seed_file "${SARG}")" || rc=1
+   if [ $rc -eq 1 -a "$DARG" ] ; then
+      sfile="${TG_BASE_DIR}/${DARG}/${SARG}"
+      rc=0
+   fi
+   if [ $rc -eq 0 -a -e "$sfile" ] ; then
+      echo "$sfile"
+      return 0
+   fi
+   return 1
+}
+
+show_section_regexp(){
+   SEC_NAME="$1"
+   [ "$SEC_NAME" ] || SEC_NAME=".*"
+   echo "^=\+[[:blank:]]$SEC_NAME[[:blank:]]="
+}
+
+show_section_header(){
+   echo "= $1 ="
+}
+
+do_add_pkg_to_file(){
+#   sed -i -e "\$a$(show_pkg_line "$1")" "$2"
+   if [ "$SECARG" ] ; then
+      # test if section exists
+      if [ -f "$2" ] && grep -q "$(show_section_regexp "$SECARG")" "$2" ; then
+         # ok, section exists in the seed file, so we need to insert the package in that section
+         TMP_FILE="$(tempfile)"
+         # show previous part of file:
+         sed -ne "1,/$(show_section_regexp "$SECARG")/{/$(show_section_regexp "$SECARG")/d;p}" "$2" > "$TMP_FILE"
+         # show section:
+         sed -ne "/$(show_section_regexp "$SECARG")/,/$(show_section_regexp)/{/$(show_section_regexp "$SECARG")/p;/$(show_section_regexp)/d;p}" "$2" >> "$TMP_FILE"
+         # print package
+         echo "$(show_pkg_line "$1")" >> "$TMP_FILE"
+         # show next section header (if any): sed -ne "/$(show_section_regexp "$SECARG")/,/$(show_section_regexp)/{/$(show_section_regexp "$SECARG")/d;/$(show_section_regexp)/p}" /tmp/kk
+   # show rest of file: sed -ne "/$(show_section_regexp "$SECARG")/,\${/$(show_section_regexp "$SECARG")/,/$(show_section_regexp)/d;p}"
+         # alternative, show rest of file including next header:
+         sed -ne "/$(show_section_regexp "$SECARG")/,\${/$(show_section_regexp "$SECARG")/,/$(show_section_regexp)/{/$(show_section_regexp "$SECARG")/d;/$(show_section_regexp)/p;d};p}" "$2" >> "$TMP_FILE"
+         cp "$TMP_FILE" "$2"
+         rm -f "$TMP_FILE"
+      else
+         show_section_header "$SECARG" >> "$2"
+         echo "$(show_pkg_line "$1")" >> "$2"
+      fi
+   else
+      echo "$(show_pkg_line "$1")" >> "$2"
+   fi
+   return 0
+}
+
+do_rm_pkg_from_file(){
+#   sed -i -e "\$a$(show_pkg_line "$1")" "$2"
+   sed -i -e "/$(show_pkg_regexp "$1")/d" "$2"
+   return 0
+}
+
+
+do_add_tdir(){
+   [ -e "$CONF_FILE" ] || return 0
+   tdir="${TG_BASE_DIR}/${1}"
+   sed -i -e "/^TG_SEED_DIRS=/s%^.*$%TG_SEED_DIRS=\"$TG_SEED_DIRS $tdir\"%" "$CONF_FILE"
+   if ! grep -q "^TG_SEED_DIRS=" "$CONF_FILE" ; then
+      echo "TG_SEED_DIRS=\"$TG_SEED_DIRS $tdir\"" >> "$CONF_FILE"
+   fi
+   return 0
+}
+
+do_rm_tdir(){
+   [ -e "$CONF_FILE" ] || return 0
+   tdir="${TG_BASE_DIR}/${1}"
+   TG_SEED_DIRS="$(echo "$TG_SEED_DIRS" |sed -e "s%$tdir%%g")"
+   sed -i -e "/^TG_SEED_DIRS=/s%^.*$%TG_SEED_DIRS=\"$TG_SEED_DIRS\"%" "$CONF_FILE"
+   if ! grep -q "^TG_SEED_DIRS=" "$CONF_FILE" ; then
+      echo "TG_SEED_DIRS=\"$TG_SEED_DIRS\"" >> "$CONF_FILE"
+   fi
+   return 0
+}
+
+do_rm_dir(){
+   [ "$DARG" ] || return 0
+   target="${TG_BASE_DIR}/${DARG}"
+   if [ -d "$target" ] ; then
+      rmdir "$target"
+      do_rm_tdir "$DARG"
+      do_conf_update
+      show_info "Deleted seed directory (${TG_BASE_DIR}/) ${DARG}"
+   fi
+   return 0
+}
+
+do_add_dir(){
+   [ "$DARG" ] || return 0
+   target="${TG_BASE_DIR}/${DARG}"
+   if [ ! -d "$target" ] ; then
+      mkdir -p "$target"
+      do_add_tdir "$DARG"
+      do_conf_update
+      show_info "Created new seed directory (${TG_BASE_DIR}/) ${DARG}"
+   fi
+   return 0
+}
+
+do_add_seed(){
+   [ "$SARG" ] || return 0
+   if ! seedfile="$(test_seed_file)" ; then
+      [ "$DARG" ] || DARG="$(basename "$TG_SEED_DEFAULT_DIR")"
+      tdir="${TG_BASE_DIR}/${DARG}"
+      target="$tdir/${SARG}"
+      test_seed_dir
+      touch "$target"
+      do_conf_update
+      show_info "Created new seed file (${TG_BASE_DIR}/${DARG}/) ${SARG}"
+   elif [ "$DARG" ] ; then
+      # verify supplied DARG
+      target="${TG_BASE_DIR}/${DARG}/${SARG}"
+      [ "$target" = "$seedfile" ] || die "There is a seed with the same name in other directory ($seedfile)"
+   fi
+   return 0
+}
+
+do_clear_seed(){
+   [ "$SARG" ] || return 0
+   seedfile="$(test_seed_file)" || return 0
+   if get_confirmation "Do you want to remove ALL pkgs from \"$SARG\"?" ; then
+      sed -i -e "/$(show_pkg_regexp '.*')/d" "$seedfile" 
+      show_info "Removed ALL pkgs from seed ${SARG}"
+   fi
+   return 0
+}
+
+is_empty_file(){
+   grep -q  "[^[:blank:]]" "$1" || return 0
+   return 1
+}
+
+do_rm_seed(){
+   [ "$SARG" ] || return 0
+   seedfile="$(test_seed_file)" || return 0
+   if ! is_empty_file "$seedfile" ; then
+      show_warning "$SARG is not empty and will be preserved"
+      return 0
+   fi
+   if get_confirmation "Do you want to ERASE seed \"$SARG\"?" ; then
+      rm -f "$seedfile"
+      show_info "Erased seed ${SARG}"
+      do_conf_update
+   fi
+   return 0
+}
+
+do_rm_pkgs(){
+   [ ${#PARG[@]} -gt 0 ] || return 0
+   [ "$SARG" ] || return 0
+   i=0
+   while [ $i -lt ${#PARG[@]} ] ; do
+      sfile="$(test_seed_file)" || die "Invalid seed file \"$sfile\""
+      if test_pkg_in_file "${PARG[$i]}" "$sfile" ; then 
+         do_rm_pkg_from_file "${PARG[$i]}" "$sfile"
+         show_info "Removed pkg \"${PARG[$i]}\" from seed \"$SARG\""
+      fi
+      i=$(($i + 1))
+   done
+   return 0
+}
+
+do_mv_pkgs(){
+   [ ${#PARG[@]} -gt 0 ] || return 0
+   [ "$SARG" ] || return 0
+   i=0
+   tfile="$1"
+   TMP_FILE="$(tempfile)"
+   while [ $i -lt ${#PARG[@]} ] ; do
+      sfile="$(test_seed_file)" || die "Invalid seed file \"$sfile\""
+      if grep "$(show_pkg_regexp "${PARG[$i]}")" "$sfile" > "$TMP_FILE" ; then
+         do_rm_pkg_from_file "${PARG[$i]}" "$tfile"
+         cat "$TMP_FILE" >> "$tfile"
+         do_rm_pkg_from_file "${PARG[$i]}" "$sfile"
+         show_info "Moved pkg \"${PARG[$i]}\" from seed $SARG to seed $(basename $tfile)"
+      fi
+      i=$(($i + 1))
+   done
+   return 0
+
+}
+
+do_add_pkgs(){
+   [ ${#PARG[@]} -gt 0 ] || return 0
+   [ "$SARG" ] || return 0
+   i=0
+   while [ $i -lt ${#PARG[@]} ] ; do
+      sfile="$(test_seed_file)" || die "Invalid seed file \"$sfile\""
+      if ! test_pkg_in_file "${PARG[$i]}" "$sfile" ; then 
+         do_add_pkg_to_file "${PARG[$i]}" "$sfile"
+         show_info "Added pkg \"${PARG[$i]}\" to seed \"$SARG\""
+      fi
+      i=$(($i + 1))
+   done
+   return 0
+}
+
+show_include_line(){
+   echo "#include $1"
+}
+
+do_include_seed_in_file(){
+   INCLUDE_REGEXP="^#include\b"
+   test_seed_file &>/dev/null || show_warning "Ignoring invalid seed name $SARG"
+   if ! grep -q "^$(show_include_line "$SARG")$" "$1" ; then
+      TMP_FILE="$(tempfile)"
+      { show_include_line "$SARG" ; cat "$1" ; } > "$TMP_FILE"
+      cp "$TMP_FILE" "$1"
+      rm -f "$TMP_FILE"
+   fi
+   return 0
+}
+
+do_uninclude_seed_in_file(){
+   sed -i -e "/^$(show_include_line "$SARG")$/d" "$1"
+   return 0
+}
+
+die(){
+   echo -e "$1" >&2
+   close3
+   exit 1
+}
+
+show_warning(){
+   while [ "$1" ] ; do
+      echo "tg Warning: $1" >&2
+      shift
+   done
+   return 0
+}
+
+show_info(){
+   while [ "$1" ] ; do
+      echo "tg: $1"
+      shift
+   done
+   return 0
+}
+
+expand_packages(){
+#               expand_seed "$SARG" |sed -ne "/$(show_pkg_regexp '.*')/{s%^ \* %%;s%(%%;s%)%%;s%[[:blank:]].*$%%;p}"
+   expand_seed "$SARG" |sed -ne "/$(show_pkg_regexp '[^\$]*')/{s%^ \* %%;s%[[:blank:]].*$%%;p}"
+}
+
+usage() {
+  CMD_NAME="$(basename "$0")"
+  die \
+"Usage: $CMD_NAME [options] {expand-all(sow-all)|list|clean|test|quick-list|version}\n\
+       $CMD_NAME [options] {expand(sow)|expand-packages|depends(tree)|add|del|rm|test|readlink|erase|plist} SEED_ID1 [SEED_ID2 ... SED_IDn]\n\
+       $CMD_NAME [options] mv SEED_ID1 SEED_ID2\n\
+       $CMD_NAME [options] {include|uninclude} SEED_ID1 [SEED_ID2 ... SEED_IDn] DEST_SEED_ID\n\
+       $CMD_NAME [options] {edit|vi|vim|pager|less|more|nano} SEED_ID\n\
+       $CMD_NAME [options] exec CMD SEED_ID\n\
+       $CMD_NAME [options] {mkdir|rmdir} SEED_DIR1 [SEED_DIR2 ... SEED_DIRn]\n\
+       $CMD_NAME [options] pgrep PKG_REGEXP\n\
+       $CMD_NAME [options] {pdel|prm|padd} PKG_ID1 [PKG_ID2 ... PKG_IDn]\n\
+       options: -c CONFFILE -s (short listing) -l (long listing) -y (assume yes)\n\
+       PKG_ID: PKG_NAME or SEED:PKG_NAME or SEED:PKG_NAME1,PKG_NAME2,...PKG_NAMEn"
+}
+
+
+# ----
+# main
+# ----
+
+# read commandline
+case "$1" in
+   quick-list)
+      do_conf_update
+      show_quick_list
+      exit 0
+      ;;
+   version)
+      [ ! -r "$TG_VERSION_FILE" ] || cat "$TG_VERSION_FILE"
+      exit 0
+      ;;
+esac
+
+while [ $# -ge 1 ] ; do
+   case "$1" in
+      expand|sow|expand-all|sow-all|list|tree|depends|clean|pgrep|add|del|rm|mv|edit|mkdir|rmdir|pdel|prm|padd|edit|vi|vim|readlink|pager|less|more|erase|plist|include|uninclude|ptest-dup|searchandshow|expand-packages|test|nano)
+         if [ -z "$ACTION" ] ; then
+            ACTION="$1"
+         else
+            # just an argument that equals to a action name
+            ARGC=$(( $ARGC + 1 ))
+            ARGV[$ARGC]="$1"
+         fi
+         ;;
+      exec)
+         if [ -z "$ACTION" ] ; then
+            ACTION="$1"
+            shift
+            CMD="$1"
+            if [ -z "$CMD" ] ; then
+               $TG_COWSAY 'Please, supply a command to execute !!!'
+               exit 1
+            fi
+         else
+            # just an argument that equals to a action name
+            ARGC=$(( $ARGC + 1 ))
+            ARGV[$ARGC]="$1"
+         fi
+         ;;
+      -c)
+         shift
+         [ "$1" ] || usage
+         CONF_FILE="$1"
+         ;;
+      -s)
+         SHORT_OUTPUT="Y"
+         ;;
+      -l)
+         SHORT_OUTPUT=""
+         ;;
+      -y)
+         ASSUME_YES="y"
+         ;;
+      -*)
+         # an invalid option -* or --* or a single -
+         usage
+         ;;
+        *)
+         ARGC=$(( $ARGC + 1 ))
+         ARGV[$ARGC]="$1"
+         ;;
+     esac
+     shift
+done
+
+do_conf_update
+
+# some checks
+[ "$ACTION" ] || usage
+#[ $ARGC -le 1 ] || usage
+for d in $TG_SEED_DIRS $TG_INCLUDE_DIRS ; do
+   [ -d "$d" ] || die "Error: seed directory \"$d\" not found"
+done
+#[ "$TG_OUTPUT_SEEDS_LIST" -a -f "$TG_OUTPUT_SEEDS_LIST" ] || die "Invalid value in TG_OUTPUT_SEEDS_LIST variable: TG_OUTPUT_SEEDS_LIST=\"$TG_OUTPUT_SEEDS_LIST\""
+#[ -s "$TG_OUTPUT_SEEDS_LIST" ] || die "No output seeds in \"$TG_OUTPUT_SEEDS_LIST\""
+
+#open3
+#while read TG <&3 ; do
+#   n=$(get_seed_index "$TG") || die "Invalid seed \"$TG\" in output seeds list"
+#   [ "${SEEDS_TYPE[$n]}" = "$TG_MAINSEED" ] || die "Output seed \"$TG\" is defined as an include file (${SEEDS_PATH[$n]})" 
+#done
+#close3
+PKG_LISTS_FILES="/var/lib/dpkg/available $(find "$PKG_LISTS_DIR" -xtype f -name "*_Packages" |tr "\n" " ")"
+
+rc=0
+
+do_split_sarg "${ARGV[1]}"
+#SEED_NAME="${ARGV[1]}"
+case "$ACTION" in
+   expand|sow|expand-packages|test)
+      [ $ARGC -gt 0 ] || usage
+      j=1
+      while [ "$SARG" ] ; do
+         if is_regular_seed "$SARG" ; then
+            case "$ACTION" in
+               expand-packages)
+                  expand_packages
+                  ;;
+               test)
+                  for p in $(expand_packages) ; do
+                      test_pkg_name "$p"
+                  done
+                  ;;
+               *)
+                  expand_seed "$SARG" || rc=$?
+                  ;;
+            esac
+         fi
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   expand-all|sow-all)
+      clear_final_seeds
+#     open3
+#      while read TG <&3 ; do
+      SHORT_OUTPUT="y"
+      for TG in $(list_seeds) ; do
+         write_final_seed "$TG"
+      done
+      TMP_FILE="$(tempfile)"
+      write_final_seed "$TG_STRUCTURE" "$TMP_FILE"
+      # check STRUCTURE coherency ...
+      do_final_structure_file "$TMP_FILE"
+      rm -f "$TMP_FILE"
+      echo ""
+#      close3
+      ;;
+   list)
+      list_seeds | sort | column || rc=$?
+      ;;
+   depends|tree)
+      [ $ARGC -gt 0 ] || usage
+      j=1
+      while [ "$SARG" ] ; do
+         show_depends "$SARG"
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   plist)
+      j=1
+      while [ "$SARG" ] ; do
+         show_pkgs
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   clean)
+      clear_final_seeds
+      ;;
+   mkdir)
+      j=1
+      do_split_darg "${ARGV[1]}"
+      while [ "$DARG" ] ; do
+         do_add_dir
+         j=$(($j + 1))
+         do_split_darg "${ARGV[$j]}"
+      done
+      ;;
+   rmdir)
+      j=1
+      do_split_darg "${ARGV[1]}"
+      while [ "$DARG" ] ; do
+         if is_empty_seed_dir ; then
+            do_rm_dir
+         else
+            show_warning "The directory \"$DARG\" is not empty and will be preserved"
+         fi
+         j=$(($j + 1))
+         do_split_darg "${ARGV[$j]}"
+      done
+      ;;
+   add)
+      j=1
+      while [ "$SARG" ] ; do
+         do_add_dir
+         do_add_seed
+         do_add_pkgs
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   padd)
+      j=1
+      do_split_parg "${ARGV[1]}"
+      while [ ${#PARG[@]} -gt 0 ] ; do
+         [ "$SARG" ] || die "Invalid seed name"
+         do_add_pkgs
+         j=$(($j + 1))
+         do_split_parg "${ARGV[$j]}"
+      done
+      ;;
+   rm)
+      j=1
+      while [ "$SARG" ] ; do
+         if [ ${#PARG[@]} -gt 0 ] ; then
+            do_rm_pkgs
+         else
+            do_clear_seed
+         fi
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   prm)
+      j=1
+      while [ ${#PARG[@]} -gt 0 ] ; do
+         do_rm_pkgs
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   about)
+      # uhmm ... at this point, all the tests has been passed so ...
+      # print a nice message and let $rc variable to do this work
+      echo -e "OK folks, everything is gonna be all right, but don't forget that ...\n\
+all your seeds are belong to us"
+      ;;
+   pgrep)
+      [ $ARGC -gt 0 ] || usage
+      get_pkg_seed_files "${ARGV[1]}" || rc=$?
+      ;;
+   edit|vi|vim|nano)
+      [ "$ACTION" = "edit" ] || TG_EDITOR="$ACTION"
+      if sfile="$(test_seed_file)" ; then
+         $TG_EDITOR "$sfile"
+      fi
+      ;;
+   pager|less|more)
+      [ "$ACTION" = "pager" ] || TG_PAGER="$ACTION"
+      j=1
+      while [ "$SARG" ] ; do
+         if sfile="$(test_seed_file)" ; then
+            $TG_PAGER "$sfile"
+         fi
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   erase)
+      j=1
+      while [ "$SARG" ] ; do
+         do_rm_seed
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   readlink)
+      j=1
+      while [ "$SARG" ] ; do
+         if sfile="$(test_seed_file)" ; then
+            readlink -f "$sfile"
+         fi
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   mv)
+      do_split_sarg "${ARGV[$ARGC]}"
+      DEST_SEED="$SARG"
+      target_file="$(test_seed_file)" || rc=$?
+      j=1
+      do_split_sarg "${ARGV[1]}"
+      while [ "$target_file" -a ${#PARG[@]} -gt 0 -a "$SARG" ] ; do
+         do_mv_pkgs "$target_file"
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      ;;
+   exec)
+      if target_file="$(test_seed_file)" ; then
+         exec $CMD "$target_file"
+      fi
+      ;;
+   include)
+      [ $ARGC -gt 1 ] || usage
+      do_split_sarg "${ARGV[$ARGC]}"
+      DEST_SEED="$SARG"
+      target_file="$(test_seed_file)" || die "Invalid destination seed: $SARG"
+      j=1
+      do_split_sarg "${ARGV[1]}"
+      while [ "$SARG" -a $j -lt $ARGC ] ; do
+         do_include_seed_in_file "$target_file"
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      echo "Seeded included in $SARG"
+      ;;
+   uninclude)
+      [ $ARGC -gt 1 ] || usage
+      do_split_sarg "${ARGV[$ARGC]}"
+      DEST_SEED="$SARG"
+      target_file="$(test_seed_file)" || die "Invalid destination seed: $SARG"
+      j=1
+      do_split_sarg "${ARGV[1]}"
+      while [ "$SARG" -a $j -lt $ARGC ] ; do
+         do_uninclude_seed_in_file "$target_file"
+         j=$(($j + 1))
+         do_split_sarg "${ARGV[$j]}"
+      done
+      echo "Seeded removed at $SARG"
+      ;;
+      searchandshow)
+      for f in $(tg sow "$1" | grep " \* " | sed -e "s%(%%g" | sed -e "s%)%%g" | cut -d " " -f3) ; do if [ $( apt-cache search $f | wc -l ) -eq 0 ] ; then  echo "Not present: $f" ; fi ; done
+      ;;
+   *)
+      usage
+      ;;
+esac
+
+
+exit $rc

@@ -1,0 +1,17 @@
+Source: transgenic
+Section: base 
+Priority: optional
+Maintainer: Equipo LliureX <lliurex@gva.es>
+Uploaders:Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>, Angel Berlanas Vicente <lliurex_devel2@edu.gva.es>, Javier Garcia Escribano <garcia_javesc@gva.es>, Raul Rodrigo Segura <lliurex_devel3@edu.gva.es>, Alfons Lloret Sananton <lliurex_devel5@edu.gva.es>, Enrique Medina Gremaldos <lliurex_devel4@edu.gva.es>, David Montalva Furio <montalva_dav@gva.es>, Hector Garcia Huerta <lliurex_devel1@edu.gva.es>
+Build-Depends: cdbs, debhelper (>= 7.3)
+Standards-Version: 3.8.4
+
+Package: transgenic
+Architecture: all
+Depends: gpp, cowsay, ${misc:Depends}
+Recommends: germinate
+Description: management tool for genetically enhanced seeds
+ Transgenic uses gpp to enable preprocessor directives into seeds
+ lists files. The program takes this enhanced seeds as input and
+ generates plain seeds files that can be expanded with the standard
+ germinate tool.

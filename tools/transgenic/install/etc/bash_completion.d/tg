@@ -1,0 +1,31 @@
+have tg &&
+_tg()             
+{
+    local cur prev opts base
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    #
+    #  The basic options we'll complete.
+    #
+    opts="expand-all sow-all list clean test quick-list version expand sow expand-packages depends tree add del rm test readlink erase plist mv include uninclude edit vi vim pager less more nano exec mkdir rmdir pgrep pdel prm padd -c -s -l -y"
+
+
+    #
+    #  Complete the arguments to some of the basic commands.
+    #
+    case "${prev}" in
+        sow|tree|add|del|rm|test|readlink|erase|plist|mv|include|uninclude|edit|vi|vim|pager|less|more|nano|exec|mkdir|rmdir|pgrep|pdel|prm|padd)
+            local running=$( ls desc/seeds-llx1009/lliurex/ )
+            COMPREPLY=( $(compgen -W "${running}" -- ${cur}) )
+            return 0
+            ;;
+        *)
+        ;;
+    esac
+
+   COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+   return 0
+}
+[ "$have" ] && complete -F _tg tg
