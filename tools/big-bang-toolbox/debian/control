@@ -9,7 +9,7 @@ Standards-Version: 3.8.4
 Package: big-bang-toolbox
 Architecture: all
 Depends: transgenic, germinate, llxcfg-dev (>= 0.70), ${misc:Depends}, debootstrap
-Description: LliureX "swiss army knife" to build cdd metapackages
+Description: "swiss army knife" to build metapackages
  big-bang-toolbox uses transgenic, germinate and some custom
  scripts to generate metapackages for Ubuntu derivatives and
  add-ons.
