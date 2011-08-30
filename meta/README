@@ -38,13 +38,14 @@ You can supply a '.list' sources-list file or a '.list.in' template to generate 
 
 reprepro package lists
 ======================
-'update-list' script generates and updates ".pkg" files in 'lists' directory. The script generates a file for each 'sources' file, with the same name but with '.pkg' extension. The files are in the format of dpkg --get-selections, so they are suitable to use as filter with reprepro.
-In order to generate lists, 'update-list' simulates the installation of CURRENT metapackages in a debootstrap chroot environment to detect required packages from each source.
-The chroot contains an standard Ubuntu debootstrap. The required customization can be archieved AFTER debootstrap installation with some OPTIONALS variables in aurex-meta.conf:
- - CUSTOM_DEBOOTSTRAP_PKGLIST: filename of a list of packages to install/purge/hold in dpkg --get-selections format
+'update-lists' script generates and updates ".pkg" files in 'lists' directory. The script generates a file for each 'sources' file, with the same name but with '.pkg' extension. The files are in the format of dpkg --get-selections, so they are suitable to use as filter with reprepro.
+In order to generate lists, 'update-lists' simulates the installation of CURRENT metapackages in a debootstrap chroot environment to detect required packages from each source.
+The chroot contains an standard Ubuntu debootstrap. The required customization can be archieved AFTER debootstrap installation with some OPTIONALS variables in aurex-meta.conf. The variables and action order is:
+ - CUSTOM_DEBOOTSTRAP_SOURCESLIST: filename of sources.list file to replace /et(apt/sources.list in chroot
  - CUSTOM_DEBOOTSTRAP_COPY: (local) directory to copy (rsync) into root directory of debootstrap. You can use this option to override any file in chroot.
+ - CUSTOM_DEBOOTSTRAP_PKGLIST: filename of a list of packages to install/purge/hold in dpkg --get-selections format.
  - CUSTOM_DEBOOSTRAP_CMD: custom command to execute in the chroot after debootstrap, custom install and custom copy. The next step is just the simulated installation of metapackages.
-
+Note that 'update-lists' uses debootstrap and REQUIRES root privileges.
 
 update scripts and package building
 ===================================
