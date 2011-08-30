@@ -3,7 +3,7 @@ Section: metapackages
 Priority: optional
 Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
 Standards-Version: 3.8.3
-Build-Depends: debhelper (>= 7.0.8), germinate (>= 1.21-0aurex2), rsync, bzr
+Build-Depends: debhelper (>= 7.0.8), germinate (>= 1.21-0aurex2), rsync, bzr, debootstrap
 
 Package: ubuntu-minimal
 Architecture: any

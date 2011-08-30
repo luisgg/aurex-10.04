@@ -5,6 +5,7 @@ set -e
 # functions
 
 die(){
+	[ -z "$1" ] || echo "$1"
 	exit 1
 }
 
@@ -31,6 +32,118 @@ expand_variables(){
 	sed_rules |sed -f - "$1" > "$2"
 }
 
+expand_sources(){
+	TARGET_DIR=""
+	if [ "$1" ]; then
+		TARGET_DIR="${1%/}/"
+	fi
+	# expand sources.list
+	[ -d "$SOURCES_BASEDIR" ] || die
+
+	if [ "$1" = "clean" ] ; then
+		echo "clean sources.list templates"
+	else
+		echo "expand templates for sources.list"
+	fi
+	for f in $SOURCES_BASEDIR/*.in ; do
+		if [ -r $f ] ; then
+			F="$SOURCES_BASEDIR/$(basename "$f" ".in")"
+			if [ "$1" = "clean" ] ; then
+				rm -f "$F"
+			else
+				expand_variables "$f" "${TARGET_DIR}$F"
+			fi
+		fi
+	done
+}
+
+expand_update_cfg(){
+	# get mirror list and exceptions
+	echo "get mirrors, dists and components"
+	SOURCES_FILE="$(tempfile)"
+	sed -ne "/$SOURCES_REGEX/p" $SOURCES_BASEDIR/*.list |sort -u > $SOURCES_FILE
+	MIRROR_LIST="$(list_mirrors $SOURCES_FILE |sort -u)"
+	DIST_LIST="$(list_dists $SOURCES_FILE |sort -u)"
+	COMP_LIST="$(list_components $SOURCES_FILE |sort -u)"
+
+	echo "get exceptions"
+	EXCEPT_FILE="$(tempfile)"
+	for m in $MIRROR_LIST ; do
+		for d in $DIST_LIST ; do
+			reg_ex="^deb[[:blank:]]\+$m[[:blank:]]\+$d"
+			if grep -q "$reg_ex[[:blank:]]\+" $SOURCES_FILE; then
+				for c in $COMP_LIST ; do
+					if ! grep -q "${reg_ex}.*[[:blank:]]$c\([[:blank:]]\|$\)" "$SOURCES_FILE" ; then
+						echo "${m%/}/,$d,$c" >> $EXCEPT_FILE
+					fi
+				done
+			else
+				echo "${m%/}/,$d" >> $EXCEPT_FILE
+			fi
+		done
+	done
+	ARCHIVE_URL_LIST="$UBUNTU_MIRROR"
+	for m in $MIRROR_LIST; do
+		[ "$m" = "$UBUNTU_MIRROR" ] || ARCHIVE_URL_LIST="$ARCHIVE_URL_LIST,${m%/}/"
+	done
+
+	ARCHIVE_EXCEPTIONS="$(cat "$EXCEPT_FILE" |tr "\n" " ")"
+
+	rm $SOURCES_FILE $EXCEPT_FILE
+
+	echo "expand update.cfg"
+	expand_variables "update.cfg.in" "update.cfg"
+}
+
+update_seeds(){
+	TMP_DIR="$(mktemp -d)"
+	echo "Downloading seeds from launchpad ..."
+	bzr branch $BZR_DIST $TMP_DIR/bzr-ubuntu.$CURRENT_DIST
+	bzr branch $BZR_PLAT $TMP_DIR/bzr-platform.$CURRENT_DIST
+
+	TIME_STAMP="$(date "+%Y%m%d-%H%M%S")"
+	for d in ubuntu platform ; do
+		rsync -axC $TMP_DIR/bzr-$d.$CURRENT_DIST/ $TMP_DIR/$d.$CURRENT_DIST/
+		FIRST_TIME=""
+		if [ ! -d "seeds/$d.$CURRENT_DIST" ] ; then
+			mkdir -p "seeds/$d.$CURRENT_DIST"
+			FIRST_TIME=Y
+		fi
+		if ! diff -qr seeds/$d.$CURRENT_DIST $TMP_DIR/$d.$CURRENT_DIST  >/dev/null ; then
+			if [ "$FIRST_TIME" ] ; then
+				echo "$d.$CURRENT_DIST: No previous seeds found. Copying seeds for first time"
+			else
+				echo "$d.$CURRENT_DIST: Some changes detected. Updating local seeds ..."
+				mkdir -p seeds/$d.$CURRENT_DIST.$TIME_STAMP
+				rsync -axC seeds/$d.$CURRENT_DIST/ seeds/$d.$CURRENT_DIST.$TIME_STAMP/
+				echo "$d.$CURRENT_DIST: OLD seeds stored in $d.$CURRENT_DIST.$TIME_STAMP as backup."
+			fi
+			rsync -axC --delete $TMP_DIR/$d.$CURRENT_DIST/ seeds/$d.$CURRENT_DIST/
+			echo "$d.$CURRENT_DIST: updated."
+		else
+			echo "$d.$CURRENT_DIST: No changes found"
+		fi
+	done
+	rm -fr $TMP_DIR
+}
+
+configure_sources(){
+	expand_sources
+	expand_update_cfg
+}
+
+configure_chroot(){
+	TMP_DIR="$(mktemp -d)"
+	expand_sources "$TMP_DIR"
+	cat $TMP_DIR/ubuntu-sources.list > aurex-chroot/sources.list
+	cat $TMP_DIR/aurex-sources.list >> aurex-chroot/sources.list
+	rm -f "$TMP_DIR"
+}
+
+usage(){
+	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|configure-chroot|debootstrap|update-lists}"
+}
+
 # variables
 . ./aurex-meta.conf
 SOURCES_BASEDIR=./sources
@@ -38,52 +151,52 @@ SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\
 
 # main
 
-# expand sources.list
-[ -d "$SOURCES_BASEDIR" ] || die
+case "$2" in
+	--current-target=*)
+		CHROOT_DIR="${2#*=}"
+		;;
+esac
 
-echo "expand templates for sources.list"
-for f in $SOURCES_BASEDIR/*.in ; do
-	if [ -r $f ] ; then
-		F="$SOURCES_BASEDIR/$(basename "$f" ".in")"
-		expand_variables "$f" "$F"
-	fi
-done
-
-# get mirror list and exceptions
-echo "get mirrors, dists and components"
-SOURCES_FILE="$(tempfile)"
-sed -ne "/$SOURCES_REGEX/p" $SOURCES_BASEDIR/*.list |sort -u > $SOURCES_FILE
-MIRROR_LIST="$(list_mirrors $SOURCES_FILE |sort -u)"
-DIST_LIST="$(list_dists $SOURCES_FILE |sort -u)"
-COMP_LIST="$(list_components $SOURCES_FILE |sort -u)"
-
-echo "get exceptions"
-EXCEPT_FILE="$(tempfile)"
-for m in $MIRROR_LIST ; do
-	for d in $DIST_LIST ; do
-		reg_ex="^deb[[:blank:]]\+$m[[:blank:]]\+$d"
-		if grep -q "$reg_ex[[:blank:]]\+" $SOURCES_FILE; then
-			for c in $COMP_LIST ; do
-				if ! grep -q "${reg_ex}.*[[:blank:]]$c\([[:blank:]]\|$\)" "$SOURCES_FILE" ; then
-					echo "${m%/}/,$d,$c" >> $EXCEPT_FILE
-				fi
-			done
-		else
-			echo "${m%/}/,$d" >> $EXCEPT_FILE
+case "$1" in
+	configure-sources)
+		configure_sources
+		;;
+	clean-sources)
+		expand_sources clean
+		rm update.cfg
+		;;
+	update-seeds)
+		update_seeds
+		;;
+	configure-chroot)
+		configure_chroot
+		;;
+	update-metapackages)
+		configure_sources
+		germinate-update-metapackage --multiple-dists
+		;;
+	debootstrap)
+		[ "$CHROOT_DIR" ] || die "debootstrap requires --current-target=<DIRNAME> option"
+		[ $(id -u) -eq 0 ] || die "root privileges required"
+		configure_chroot
+		do_debootstrap
+		prepare_chroot
+		;;
+	update-lists)
+		[ $(id -u) -eq 0 ] || die "root privileges required"
+		configure_chroot
+		if [ -z "$CHROOT_DIR" ] ; then
+			CHROOT_DIR="$(mktemp -d)"
+			CLEAN_DIR="$CHROOT_DIR"
+			do_debootstrap
 		fi
-	done
-done
-ARCHIVE_URL_LIST="$UBUNTU_MIRROR"
-for m in $MIRROR_LIST; do
-	[ "$m" = "$UBUNTU_MIRROR" ] || ARCHIVE_URL_LIST="$ARCHIVE_URL_LIST,${m%/}/"
-done
-
-ARCHIVE_EXCEPTIONS="$(cat "$EXCEPT_FILE" |tr "\n" " ")"
-
-rm $SOURCES_FILE $EXCEPT_FILE
-
-echo "expand update.cfg"
-expand_variables "update.cfg.in" "update.cfg"
-
-
+		test_debootstrap
+		prepare_chroot
+		update_lists
+		;;
+	*)
+		usage
+		;;
+esac
+exit 0
 
