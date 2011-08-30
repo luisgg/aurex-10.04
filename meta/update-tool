@@ -109,7 +109,7 @@ update_seeds(){
 			mkdir -p "seeds/$d.$CURRENT_DIST"
 			FIRST_TIME=Y
 		fi
-		rsync -axC seeds/$d.$CURRENT_DIST $TMP_DIR/current-$d.$CURRENT_DIST/
+		rsync -axC seeds/$d.$CURRENT_DIST/ $TMP_DIR/current-$d.$CURRENT_DIST/
 		if ! diff -qr $TMP_DIR/current-$d.$CURRENT_DIST $TMP_DIR/$d.$CURRENT_DIST  >/dev/null ; then
 			if [ "$FIRST_TIME" ] ; then
 				echo "$d.$CURRENT_DIST: No previous seeds found. Copying seeds for first time"
@@ -150,8 +150,40 @@ do_debootstrap(){
 	debootstrap "$CURRENT_DIST" "$CHROOT_DIR"
 }
 
+chroot_mounts(){
+	mount --bind /dev/ "$CHROOT_DIR/dev"
+	mount --bind /proc/ "$CHROOT_DIR/proc"
+	mount --bind /sys/ "$CHROOT_DIR/sys"
+
+}
+
+chroot_umounts(){
+	umount "$CHROOT_DIR/dev"
+	umount "$CHROOT_DIR/proc"
+	umount "$CHROOT_DIR/sys"
+}
+
+prepare_chroot(){
+	if [ "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] && [ -r "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] ; then
+		cp "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" "$CHROOT_DIR/etc/apt/sources.list"
+	fi
+	if [ "$CUSTOM_DEBOOTSTRAP_COPY" ] && [ -d "$CUSTOM_DEBOOTSTRAP_COPY" ] ; then
+		rsync -axC "$CUSTOM_DEBOOTSTRAP_COPY/" "$CHROOT_DIR/"
+	fi
+	chroot_mounts
+	if [ "$CUSTOM_DEBOOTSTRAP_PKGLIST" ] && [ -r "$CUSTOM_DEBOOTSTRAP_PKGLIST" ] ; then
+		cp "$CUSTOM_DEBOOTSTRAP_PKGLIST" "$CHROOT_DIR/tmp/package.list"
+		chroot $CHROOT_DIR "dpkg --set-selections < /tmp/package.list"
+		chroot $CHROOT_DIR "apt-get update && apt-get --allow-unauthenticated -y dselect-upgrade"
+	fi
+	if [ "$CUSTOM_DEBOOSTRAP_CMD" ] ; then
+		chroot $CHROOT_DIR "$CUSTOM_DEBOOSTRAP_CMD"
+	fi
+	chroot_umounts
+}
+
 usage(){
-	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|configure-chroot|debootstrap|update-lists}"
+	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|configure-chroot|debootstrap|prepare-chroot|update-lists}"
 }
 
 # variables
@@ -180,6 +212,12 @@ case "$1" in
 		;;
 	configure-chroot)
 		configure_chroot
+		;;
+	prepare-chroot)
+		[ "$CHROOT_DIR" ] || die "prepare-chroot requires --current-target=<DIRNAME> option"
+		configure_chroot
+		test_debootstrap
+		prepare_chroot
 		;;
 	update-metapackages)
 		configure_sources
