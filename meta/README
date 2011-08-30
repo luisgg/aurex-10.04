@@ -1,6 +1,6 @@
 The aurex-meta source package generates binary metapackes for aurex (in a similar way to ubuntu-meta), but with some important differences:
- - seeds are not stored in external repositories, but contained in the source (just like 'lliurex-meta')
- - 
+ - seeds are not stored in external repositories, but contained in the source ('self-contained', just like when we write 'lliurex-meta' ...)
+ - 'multiples sources/origins support': Metapackages are built from multiples archive repository URL's and multiple distributions (-updates, -security, o anything else ...) support. 
 
 Metapackages and seeds
 ======================
