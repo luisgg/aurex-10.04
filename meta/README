@@ -1,6 +1,11 @@
-The aurex-meta source package generates binary metapackes for aurex (in a similar way to ubuntu-meta), but with some important differences:
- - seeds are not stored in external repositories, but contained in the source ('self-contained', just like when we write 'lliurex-meta' ...)
- - 'multiples sources/origins support': Metapackages are built from multiples archive repository URL's and multiple distributions (-updates, -security, o anything else ...) support. 
+Introduction
+============
+The aurex-meta source package generates binary metapackages for aurex (in a similar way to ubuntu-meta), but with some important differences:
+ - 'self-contained metapackages': seeds are not stored in external repositories, but included in the source, just like when I write 'lliurex-meta' some time ago ...
+ - 'multiples sources/origins support': This is the most significant innovation in relation to {Ubuntu|LliureX}-meta. Aurex metapackages are built from multiples archive repository URL's and multiple distributions (-updates, -security, o anything else ...) support.
+ - '(reprepro) filter-list creation': aurex-meta can generate filter-list files (in the format of dpkg --get-selections) for each source. These files can beused with reprepro to update the distribution repository from multiple sources.
+
+Aurex-meta is a good example of the aurex project philosophy: "NOT an Ubuntu derivative, just an add-on", and is a very useful tool to generate custom metapackages/repositories merging Ubuntu with other repos as PPAs, derivatives or local repositories, "picking" the best of each source to generate a single repository.
 
 Metapackages and seeds
 ======================
@@ -13,7 +18,7 @@ The provided script 'update-seeds' download and updates original Ubuntu seeds fr
 
 Configuration
 =============
-The basic configuration file is 'aurex-met.conf'. The files is just sourced in update-scripts. The variable names are easy to understand (IMHO). This variables are basically used by the update scripts to expand templates (see templates section in this file). Empty varibles are usually generated in scripts, so be careful when changing the file.
+The basic configuration file is 'aurex-meta.conf'. The files is just sourced in update-scripts. The variable names are easy to understand (IMHO). This variables are basically used by the update scripts to expand templates (see templates section in this file). Empty varibles are usually generated in scripts, so be careful when changing the file.
 
 Templates and variables
 =======================
@@ -24,8 +29,33 @@ Files associated to templates are automatically replaced with template expansion
 Update and generate metapackages
 ================================
 The 'update-metapackages' script uses germinate-update-metapackage to grow seeds into the final depends and recommends package lists. The script uses custom option --multiple-dists, so the aurex patched version is required.
-The 
+The script generates the required configuration file for germinate (update.cfg) from the template 'update.cfg.in', the 'aurex-meta.conf' configuration file and the 'sources' directory (explained in the next section).
 
-germinate-updoes all the job
- are  Please notice that only variable added (like .
-, and the templates filename is the shame  extension ins '.in') and 
+sources
+=======
+the directory 'sources' contains arbitrary files (with standard 'sources.list' format). This files will be used to configure 'archive_base/default:' parameter in the germinate-update-metapackage configuration, acting as "apt package sources" to generate package lists from seeds.
+You can supply a '.list' sources-list file or a '.list.in' template to generate the source.
+
+reprepro package lists
+======================
+'update-list' script generates and updates ".pkg" files in 'lists' directory. The script generates a file for each 'sources' file, with the same name but with '.pkg' extension. The files are in the format of dpkg --get-selections, so they are suitable to use as filter with reprepro.
+In order to generate lists, 'update-list' simulates the installation of CURRENT metapackages in a debootstrap chroot environment to detect required packages from each source.
+The chroot contains an standard Ubuntu debootstrap. The required customization can be archieved AFTER debootstrap installation with some OPTIONALS variables in aurex-meta.conf:
+ - CUSTOM_DEBOOTSTRAP_PKGLIST: filename of a list of packages to install/purge/hold in dpkg --get-selections format
+ - CUSTOM_DEBOOTSTRAP_COPY: (local) directory to copy (rsync) into root directory of debootstrap. You can use this option to override any file in chroot.
+ - CUSTOM_DEBOOSTRAP_CMD: custom command to execute in the chroot after debootstrap, custom install and custom copy. The next step is just the simulated installation of metapackages.
+
+
+update scripts and package building
+===================================
+The full process is:
+ 1.- run update-seeds, verify Ubuntu changes (if any) and edit your own seeds.
+ 2.- run update-metapackages, to update metapackage lists. If required, verify changelog, and add binary packages to debian/control.
+ 3.- build the debian packages and submit then to your own repo.
+ 4.- run update-lists and use the generated files to update your repository with repro.
+
+Notice that after adding new metapackages (in step 2), you must complete step 3 BEFORE using these metapackages in seeds, because germinate-updatemetapackage uses CURRENT repositories to validate seeds.
+
+
+That's folks. Enjoy, feel free to test and report bugs and improvements to <aurex.linux@gmail.com>
+
