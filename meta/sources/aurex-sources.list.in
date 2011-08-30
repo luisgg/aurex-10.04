@@ -1,0 +1,8 @@
+# -------------
+# AureX sources
+# -------------
+# partner component excluded
+
+deb _@_AUREX_MIRROR_@_ lucid main
+#deb-src _@_AUREX_MIRROR_@_ lucid main
+

@@ -1,0 +1,94 @@
+== Kernel ==
+
+ * linux [amd64 i386 ia64 sparc]
+
+== Desktop ==
+
+A small first step to comprehensive certification. Unfortunately, lsb
+includes lsb-desktop, which pulls in both gtk and qt, so we pick individual
+modules instead.
+
+ * lsb-core [amd64 hppa i386 ia64 sparc]
+ * lsb-cxx [amd64 hppa i386 ia64 sparc]
+ * lsb-graphics [amd64 hppa i386 ia64 sparc]
+
+== Server ==
+
+ * ssh
+ * nfs-kernel-server   # need an NFS server
+ * samba  [amd64 i386] # for Windows filesharing and integration
+ * ltsp-server-standalone [amd64 hppa i386 ia64 sparc] # for LTSP-on-install
+ * ltsp-client [amd64 hppa i386 ia64 sparc]            # for LTSP-on-install
+ * ldm [amd64 hppa i386 ia64 sparc] # seeded because its not a hard dependency of ltsp-client anymore
+ * ldm-ubuntu-theme [amd64 hppa i386 ia64 sparc] # seeded to make it available for LTSP-on-install
+
+== Networking ==
+
+ * bsd-mailx
+ * vlan                   # userland tools to config 8021q support
+
+== Development ==
+
+ * build-essential
+ * fakeroot
+ * devscripts          # Debian package development
+ * bzr [i386]          # amd64 CD overflowing, and the package became a hog
+
+== Common UNIX stuff ==
+
+ * nfs-common		  # allows people to access NFS filesystems
+ # * vim                    # vim-tiny is in minimal; vim includes syntax highlighting, help files, etc.
+
+== Hardware & Network Access ==
+
+ * pptp-linux             # client for Microsoft-compatible VPN's, needed for some ISPs
+ * eagle-usb-utils        # needed for some ADSL modems
+ * bpalogin
+ * ndiswrapper-utils-1.9 [amd64 i386]
+ * ndisgtk
+
+ * linux-wlan-ng
+ * libatm1	# suggested by ppp for PPP-over-ATM
+ * setserial	# needed by folks with nonstandard serial ports
+ * b43-fwcutter
+
+== Common language packs ==
+
+ # must have
+ * Languages: en
+ * language-pack-${Languages}
+ * language-pack-gnome-${Languages}
+ * language-support-${Languages}
+
+Enough room on amd64 armel i386, not enough on ia64 powerpc:
+ * Languages: es xh pt
+ * language-pack-${Languages} [!ia64 !powerpc]
+ * language-pack-gnome-${Languages} [!ia64 !powerpc]
+
+ * Languages: de
+ * language-pack-${Languages} [i386]
+ * language-pack-gnome-${Languages} [i386]
+
+# * Languages: fr bn hi ar ru zh-hans ja
+# * language-pack-${Languages}
+# * language-pack-gnome-${Languages}
+
+== Installer ==
+
+ * grub # needed for dmraid et al
+ * oem-config-gtk
+ * uboot-mkimage [armel]
+
+== Transitional packages ==
+
+ * mktemp # replaced by coreutils in karmic
+
+== Germinate workarounds ==
+
+ * wamerican  # iamerican Depends: ispell Recommends: wordlist, but wamerican isn't spotted in time so germinate arbitrarily picks miscfiles instead
+
+== Blacklist ==
+
+libavcodec cannot be shipped on CDs (cf. Ubuntu technical board resolution 2007-01-02).
+
+ * !libavcodec*

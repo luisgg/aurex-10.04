@@ -1,0 +1,31 @@
+The aurex-meta source package generates binary metapackes for aurex (in a similar way to ubuntu-meta), but with some important differences:
+ - seeds are not stored in external repositories, but contained in the source (just like 'lliurex-meta')
+ - 
+
+Metapackages and seeds
+======================
+Metapackages are built using "standard ubuntu-like seeds" (not transgenic seeds at this moment", so you must read the documentation of Ubuntu's 'germinate' tool.
+Seeds are stored under directory 'seeds' (surprise !!!). There are tree subdirs:
+	- $CURRENT_DIST (lucid): aurex specific and changes
+        - ubuntu.$CURRENT_DIST / platform.$CURRENT_DIST : original seeds from Ubuntu
+DO NOT CHANGE files under ubuntu.$CURRENT_DIST / platform.$CURRENT_DIST. To modify an original Ubuntu seed, copy the file under seeds/$CURRENT_DIST and edit. The edited file will overridethe original one (under ubuntu.$CURRENT_DIST or platform.$CURRENT_DIST).
+The provided script 'update-seeds' download and updates original Ubuntu seeds from launchpad in directories ubuntu.$CURRENT_DIST / platform.$CURRENT_DIST. In case of change, old ubuntu seeds are stored in ubuntu.$CURRENT_DIST.<TIMESTAMP> or platform.$CURRENT_DIST.<TIMESTAMP> as backup. Sorry, but no "changes inspection" tools are includes, so use 'diff -uNr ...' or your favorite diff utility.
+
+Configuration
+=============
+The basic configuration file is 'aurex-met.conf'. The files is just sourced in update-scripts. The variable names are easy to understand (IMHO). This variables are basically used by the update scripts to expand templates (see templates section in this file). Empty varibles are usually generated in scripts, so be careful when changing the file.
+
+Templates and variables
+=======================
+Some files (like the germinate configuration file 'update.cfg') are generated from templates. The templates can refer variable with the notation: _@_VARIABLENAME_@_. The template filenames use file extension '.in' 'as usual'.
+Variables must be included in aurex-meta.conf, NO OTHER VARIABLES will be expanded. Scripts can change the variable value before expansion, but the variable must appear in aurex-meta.conf (because of that the presence of empty variables).
+Files associated to templates are automatically replaced with template expansion in update-scripts, so do not edit directly the generated files, make the required changes in the templates or update variable values in the configuration file.
+
+Update and generate metapackages
+================================
+The 'update-metapackages' script uses germinate-update-metapackage to grow seeds into the final depends and recommends package lists. The script uses custom option --multiple-dists, so the aurex patched version is required.
+The 
+
+germinate-updoes all the job
+ are  Please notice that only variable added (like .
+, and the templates filename is the shame  extension ins '.in') and 

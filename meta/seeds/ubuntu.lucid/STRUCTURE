@@ -1,0 +1,29 @@
+include platform.lucid
+desktop: desktop-common
+dns-server: standard
+lamp-server: standard
+openssh-server: standard
+print-server: standard
+samba-server: standard
+postgresql-server: standard
+mail-server: standard
+tomcat-server: standard
+virt-host: standard
+eucalyptus-cloud: server
+eucalyptus-walrus: server
+eucalyptus-cluster: server
+eucalyptus-storage: server
+eucalyptus-simple-cluster: eucalyptus-cloud eucalyptus-walrus eucalyptus-cluster eucalyptus-storage
+eucalyptus-node: server
+server: standard
+server-ship: boot installer dns-server lamp-server openssh-server print-server samba-server postgresql-server mail-server server tomcat-server virt-host eucalyptus-simple-cluster eucalyptus-node d-i-requirements
+uec: standard
+ship: boot installer desktop d-i-requirements
+live: desktop live-common
+dvd-live: live
+ship-live: boot live
+development: desktop
+dvd: server-ship ship development supported-common
+supported-desktop-extra: dvd dvd-live
+# make sure supported remains the last entry
+supported: dvd-live ship-live dvd language-packs supported-desktop-extra

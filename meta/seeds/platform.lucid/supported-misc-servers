@@ -1,0 +1,58 @@
+= Servers and Daemons =
+
+Database:
+
+ * mdbtools				# OOo2 supports the JET format
+
+Email:
+
+ * fetchmail
+ * procmail
+ * exim4
+ * exim4-daemon-heavy
+ * exim4-daemon-light
+ * dovecot-postfix
+
+Must also consider webmail and so on...
+
+VPN:
+
+ * racoon # ipsec vpn
+
+Web applications:
+
+ * zope3-sandbox
+ * python-moinmoin      # moin (>= 1.5)
+ * python-django
+ * python-tickcount #ChuckShort - server-lucid-canonical-application-support
+ * python-openid #ChuckShort - server-lucid-canonical-application-support
+ * python-pastescript #ChuckShort - server-lucid-canonical-application-support
+ * python-pastedeploy #ChuckShort - server-lucid-canonical-application-support
+ * python-psycopg2
+
+Printing:
+
+ * m2300w  # Driver for the Minolta magicolor 2300W/24000W color laser printers 
+ * openprinting-ppds-extra          # Less common printer drivers we don't want in desktop
+
+Utilities:
+
+ * graphviz
+ * logcheck		  # great security tool for any server
+ * logcheck-database	  # useful for above
+ * rrdtool
+ * john
+
+Radius server:
+
+ * freeradius
+
+Backup:
+
+ * bacula-director-sqlite3
+ * bacula-sd-sqlite3
+
+Other:
+
+ * sysvinit  # ScottJamesRemnant retain support for now
+

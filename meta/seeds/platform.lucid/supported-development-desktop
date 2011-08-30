@@ -1,0 +1,55 @@
+= Development =
+
+== Development Tools ==
+
+ * valgrind
+ * cmake
+ * indent
+
+== Revision Control ==
+
+ * subversion
+ * subversion-tools
+ * git-core
+ * gitk
+ * cvs
+
+== Advanced editors ==
+
+ * vim          # Needs to stay off server CDs because it pulls in Gnome
+ * emacs
+ * emacs23-el
+ * emacs23-nox
+ * emacs-goodies-el
+
+== Documentation ==
+
+ * monodoc-webkit-manual
+
+== Development Tools ==
+
+ * openjdk-6-demo
+ * openjdk-6-source
+
+= Libraries =
+
+ * tk8.5-dev
+ * libsdl1.2debian-all
+ * libsdl1.2debian-alsa
+ * libsdl1.2debian-esd
+ * libsdl1.2debian-oss
+ * libgl1-mesa-swx11-i686
+ * libchart-perl
+ * libgd-graph-perl
+ * libtemplate-perl
+
+= Python3 =
+
+ * python3-doc
+ * idle
+ * python3-all-dev
+ * python3-all-dbg
+ * python3-examples
+ * python3-setuptools
+ * python3-bsddb3-dbg
+ * python-bsddb3-doc

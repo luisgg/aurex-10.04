@@ -1,0 +1,69 @@
+= Development =
+
+== Development Tools ==
+
+ * bison
+ * debconf-english   # for minimal buildd chroots, without i18n cruft
+ * flex
+ * patchutils
+ * gdb
+ * autoconf
+ * automake
+ * autotools-dev
+ * libtool
+ * ccache            # C/C++ development, package development
+ * exuberant-ctags   # ColinWatson
+ * linux32		# without it, biarch buildds can go wonky
+ * autopkgtest
+ * apport-retrace
+ * apport-cli
+ * libc6-prof [amd64 i386 lpia powerpc sparc hppa]
+ * libc6.1-prof [ia64]
+ * gfortran-multilib
+ * libstdc++6-4.4-pic
+ * ant1.8-optional	# Java development, drop it if ant is updated to 1.8
+ * ant1.8-doc
+ * texinfo-doc-nonfree  # GFD'd documentation for texinfo
+
+== Revision Control ==
+
+ * bzr
+ * bzrtools
+
+== Package Maintainance ==
+
+ * debhelper         # ColinWatson
+ * dh-make
+ * dupload           # ColinWatson
+ * linda             # python-based replacement for lintian
+ * lintian
+ * pbuilder          # ColinWatson
+ * apt-listchanges
+ * apt-transport-https # sanctioned by MichaelVogt
+ * dput
+ * pkgstriptranslations # for removing gettext data on the buildds
+ * pkg-create-dbgsym # automatic creation of debug symbols
+ * hello
+ * hello-debhelper
+ * dselect            # old-school package management
+
+== Seed Management ==
+
+ * germinate         # quis custodiet ipsos custodes?
+
+= Shells =
+
+ * zsh
+
+= Libraries =
+
+ * libcrypt-blowfish-perl
+ * libdate-manip-perl
+ * libnet-ldap-perl
+ * libfile-rsyncp-perl
+ * libnss-db
+ * tdsodbc
+
+= Misc =
+
+ * util-linux-locales  # contents provided in langpacks, just needs to be held in main

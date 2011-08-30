@@ -1,0 +1,6 @@
+aurex-meta (1.197+aurex10.04.1) UNRELEASED; urgency=low
+
+  * Initial release.
+  * Imported lucid seeds from launchpad
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 29 Aug 2011 09:59:02 +0200

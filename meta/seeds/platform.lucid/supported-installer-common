@@ -1,0 +1,27 @@
+= Installer =
+
+ # Used for netboot installations
+ * Kernel-Version: 2.6.32-33-386 2.6.32-33-generic-pae
+ * /^.*-firmware-.*-386-di/ [i386]
+ * /^.*-modules-.*-386-di/ [i386]
+
+ * debian-installer # also has side-effect of pulling in installer image build system
+ * gfxboot
+ * gfxboot-theme-ubuntu
+
+ * ppp-udeb # experimental
+
+ * redboot-imx51-babbage # used to create SD card images on armel iMX51 Babbage
+
+ * installation-guide-amd64 [amd64]
+ * installation-guide-hppa [hppa]
+ * installation-guide-i386 [i386]
+ * installation-guide-ia64 [ia64]
+ * installation-guide-lpia [lpia]
+ * installation-guide-powerpc [powerpc]
+ * installation-guide-sparc [sparc]
+
+ * lilo
+ * lilo-installer [amd64 i386]
+
+ * live-installer

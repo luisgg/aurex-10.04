@@ -1,0 +1,34 @@
+These packages may be installed dynamically by d-i based on installation
+parameters. They should generally be made available on CDs.
+
+== Filesystems ==
+
+ * xfsprogs
+ * jfsutils
+ * hfsplus [powerpc]  # ColinWatson
+ * reiserfsprogs
+ * lvm2
+ * mdadm
+ * dmsetup
+ * dmraid
+ * cryptsetup
+ * ecryptfs-utils
+
+== For language support in the installer ==
+
+ * console-terminus
+ * unifont
+
+== Hardware & Network Access ==
+
+ * mouseemu	# needed on Macs with single-button mice
+ * ps3pf-utils [powerpc] # small utilities for PlayStation 3 systems
+ * elfspe2 [powerpc] # SPE access for Cell systems
+
+== Installer ==
+
+ * grub # needed for dmraid et al
+ * mkvmlinuz [powerpc] # for nobootloader
+ * lupin-support # installer-for-windows
+ * uboot-mkimage [armel] # needed on dove and omap for uboot
+ * uboot-envtools [armel] # needed on omap for uboot

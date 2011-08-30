@@ -1,0 +1,36 @@
+#!/bin/sh
+
+set -e
+
+. ./aurex-meta.conf
+
+TMP_DIR="$(mktemp -d)"
+echo "Downloading seeds from launchpad ..."
+bzr branch $BZR_DIST $TMP_DIR/bzr-ubuntu.$CURRENT_DIST
+bzr branch $BZR_PLAT $TMP_DIR/bzr-platform.$CURRENT_DIST
+
+TIME_STAMP="$(date "+%Y%m%d-%H%M%S")"
+for d in ubuntu platform ; do
+	rsync -axC $TMP_DIR/bzr-$d.$CURRENT_DIST/ $TMP_DIR/$d.$CURRENT_DIST/
+	FIRST_TIME=""
+	if [ ! -d "seeds/$d.$CURRENT_DIST" ] ; then
+		mkdir -p "seeds/$d.$CURRENT_DIST"
+		FIRST_TIME=Y
+	fi
+	if ! diff -qr seeds/$d.$CURRENT_DIST $TMP_DIR/$d.$CURRENT_DIST  >/dev/null ; then
+		if [ "$FIRST_TIME" ] ; then
+			echo "$d.$CURRENT_DIST: No previous seeds found. Copying seeds for first time"
+		else
+			echo "$d.$CURRENT_DIST: Some changes detected. Updating local seeds ..."
+			mkdir -p seeds/$d.$CURRENT_DIST.$TIME_STAMP
+			rsync -axC seeds/$d.$CURRENT_DIST/ seeds/$d.$CURRENT_DIST.$TIME_STAMP/
+			echo "$d.$CURRENT_DIST: OLD seeds stored in $d.$CURRENT_DIST.$TIME_STAMP as backup."
+		fi
+		rsync -axC --delete $TMP_DIR/$d.$CURRENT_DIST/ seeds/$d.$CURRENT_DIST/
+		echo "$d.$CURRENT_DIST: updated."
+	else
+		echo "$d.$CURRENT_DIST: No changes found"
+	fi
+done
+
+rm -fr $TMP_DIR

@@ -1,0 +1,89 @@
+#!/bin/sh
+
+set -e
+
+# functions
+
+die(){
+	exit 1
+}
+
+list_mirrors(){
+	sed -ne  "/$SOURCES_REGEX/s%$SOURCES_REGEX%\1%p" "$@"
+}
+
+list_dists(){
+	sed -ne  "/$SOURCES_REGEX/s%$SOURCES_REGEX%\2%p" "$@"
+}
+
+list_components(){
+	sed -ne  "/$SOURCES_REGEX/s%$SOURCES_REGEX%\3%p" "$@" |tr " " "\n"
+}
+
+sed_rules(){
+        for v in $(sed -ne "/^[^=]\+=/s%=.*$%%;p" ./aurex-meta.conf) ; do
+                V="$(eval "echo $(eval "echo -n '$';echo -n $v")")"
+                echo "s%_@_${v}_@_%${V}%g;"
+        done
+}
+
+expand_variables(){
+	sed_rules |sed -f - "$1" > "$2"
+}
+
+# variables
+. ./aurex-meta.conf
+SOURCES_BASEDIR=./sources
+SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\(.*\)$"
+
+# main
+
+# expand sources.list
+[ -d "$SOURCES_BASEDIR" ] || die
+
+echo "expand templates for sources.list"
+for f in $SOURCES_BASEDIR/*.in ; do
+	if [ -r $f ] ; then
+		F="$SOURCES_BASEDIR/$(basename "$f" ".in")"
+		expand_variables "$f" "$F"
+	fi
+done
+
+# get mirror list and exceptions
+echo "get mirrors, dists and components"
+SOURCES_FILE="$(tempfile)"
+sed -ne "/$SOURCES_REGEX/p" $SOURCES_BASEDIR/*.list |sort -u > $SOURCES_FILE
+MIRROR_LIST="$(list_mirrors $SOURCES_FILE |sort -u)"
+DIST_LIST="$(list_dists $SOURCES_FILE |sort -u)"
+COMP_LIST="$(list_components $SOURCES_FILE |sort -u)"
+
+echo "get exceptions"
+EXCEPT_FILE="$(tempfile)"
+for m in $MIRROR_LIST ; do
+	for d in $DIST_LIST ; do
+		reg_ex="^deb[[:blank:]]\+$m[[:blank:]]\+$d"
+		if grep -q "$reg_ex[[:blank:]]\+" $SOURCES_FILE; then
+			for c in $COMP_LIST ; do
+				if ! grep -q "${reg_ex}.*[[:blank:]]$c\([[:blank:]]\|$\)" "$SOURCES_FILE" ; then
+					echo "${m%/}/,$d,$c" >> $EXCEPT_FILE
+				fi
+			done
+		else
+			echo "${m%/}/,$d" >> $EXCEPT_FILE
+		fi
+	done
+done
+ARCHIVE_URL_LIST="$UBUNTU_MIRROR"
+for m in $MIRROR_LIST; do
+	[ "$m" = "$UBUNTU_MIRROR" ] || ARCHIVE_URL_LIST="$ARCHIVE_URL_LIST,${m%/}/"
+done
+
+ARCHIVE_EXCEPTIONS="$(cat "$EXCEPT_FILE" |tr "\n" " ")"
+
+rm $SOURCES_FILE $EXCEPT_FILE
+
+echo "expand update.cfg"
+expand_variables "update.cfg.in" "update.cfg"
+
+
+

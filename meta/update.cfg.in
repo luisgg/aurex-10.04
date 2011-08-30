@@ -1,0 +1,20 @@
+[DEFAULT]
+dist: _@_CURRENT_DIST_@_
+
+[_@_CURRENT_DIST_@_]
+seeds: _@_SEED_LIST_@_
+metapackage_map/minimal: ubuntu-minimal
+metapackage_map/standard: ubuntu-standard
+metapackage_map/desktop: ubuntu-desktop
+architectures: i386
+dists: _@_DIST_LIST_@_
+seed_base: file://_@_CURRENT_DIR_@_/seeds/
+archive_base/default: _@_ARCHIVE_URL_LIST_@_
+archive_base/exceptions: _@_ARCHIVE_EXCEPTIONS_@_
+archive_base/ports: http://ports.ubuntu.com/ubuntu-ports/
+archive_base/ia64: %(archive_base/ports)s
+archive_base/lpia: %(archive_base/ports)s
+archive_base/powerpc: %(archive_base/ports)s
+archive_base/sparc: %(archive_base/ports)s
+archive_base/armel: %(archive_base/ports)s
+components: _@_COMP_LIST_@_
