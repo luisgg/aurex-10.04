@@ -109,7 +109,8 @@ update_seeds(){
 			mkdir -p "seeds/$d.$CURRENT_DIST"
 			FIRST_TIME=Y
 		fi
-		if ! diff -qr seeds/$d.$CURRENT_DIST $TMP_DIR/$d.$CURRENT_DIST  >/dev/null ; then
+		rsync -axC seeds/$d.$CURRENT_DIST $TMP_DIR/current-$d.$CURRENT_DIST/
+		if ! diff -qr $TMP_DIR/current-$d.$CURRENT_DIST $TMP_DIR/$d.$CURRENT_DIST  >/dev/null ; then
 			if [ "$FIRST_TIME" ] ; then
 				echo "$d.$CURRENT_DIST: No previous seeds found. Copying seeds for first time"
 			else
@@ -138,6 +139,15 @@ configure_chroot(){
 	cat $TMP_DIR/ubuntu-sources.list > aurex-chroot/sources.list
 	cat $TMP_DIR/aurex-sources.list >> aurex-chroot/sources.list
 	rm -f "$TMP_DIR"
+}
+
+test_debootstrap(){
+	# TODO : ...
+	[ -d "$CHROOT_DIR" ] && [ -x "$CHROOT_DIR/bin/sh" ] || die "Invalid debootstrap dir"
+}
+
+do_debootstrap(){
+	debootstrap "$CURRENT_DIST" "$CHROOT_DIR"
 }
 
 usage(){
@@ -193,6 +203,7 @@ case "$1" in
 		test_debootstrap
 		prepare_chroot
 		update_lists
+		[ -z "$CLEAN_DIR" ] || rm -rf "$CLEAN_DIR"
 		;;
 	*)
 		usage
