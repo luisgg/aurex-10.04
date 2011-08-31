@@ -1,0 +1,2 @@
+aurex-minimal: depends-on-essential-package-without-using-version depends: dash
+aurex-minimal: unknown-section metapackages
