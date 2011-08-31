@@ -206,7 +206,7 @@ prepare_chroot(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists}"
+	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean}"
 }
 
 # variables
@@ -227,7 +227,7 @@ case "$1" in
 	configure-sources)
 		configure_sources
 		;;
-	clean-sources)
+	clean)
 		expand_sources clean
 		rm update.cfg
 		;;

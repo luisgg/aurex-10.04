@@ -1,8 +1,0 @@
-# -------------
-# AureX sources
-# -------------
-# partner component excluded
-
-deb http://192.168.100.200/aurex/ lucid main
-#deb-src http://192.168.100.200/aurex/ lucid main
-

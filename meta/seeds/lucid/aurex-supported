@@ -2,6 +2,9 @@ Task-Per-Derivative: 1
 Task-Section: user
 Task-Description: aurex support
 Task-Extended-Description: This task provides aurex supported packages
+Task-Metapackage: exclude-aurex-support
+# 'exclude' prefix in metapackage name to avoid installation in update-lists script
+
 #Task-Seeds: aurex-support-kernel
 
 = kernel images =
@@ -28,3 +31,33 @@ Task-Extended-Description: This task provides aurex supported packages
  * zentyal
  * zentyal-all
  * language-packs-zentyal-all
+
+= nvidia backport =
+ * nvidia-current
+ * nvidia-current-dev
+ * nvidia-current-modaliases
+ * nvidia-glx-185
+ * nvidia-glx-185-dev
+ * nvidia-185-kernel-source
+ * nvidia-185-modaliases
+ * nvidia-185-libvdpau
+ * nvidia-185-libvdpau-dev
+
+= Language support =
+ * Languages: es ca en fr de it
+
+ * language-pack-${Languages}
+ * language-pack-${Languages}-base
+ * language-pack-gnome-${Languages}
+ * language-pack-gnome-${Languages}-base
+ * language-support-${Languages}
+ * language-support-writing-${Languages}
+== firefox language support ==
+ * firefox-locale-${Languages}
+
+= libreoffice =
+ * Languages: es ca en-gb en-us fr de it
+ * libreoffice-l10n-${Languages}
+ * libreoffice-help-${Languages}
+ * libreoffice-style-*
+

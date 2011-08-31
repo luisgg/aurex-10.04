@@ -11,7 +11,7 @@ Task-Metapackage: aurex-desktop
  * aurex-boot-theme
  * aurex-plymouth-theme
 
-= libreoffice
+= libreoffice =
  * libreoffice
  * libreoffice-gnome
  * libreoffice-l10n-common
@@ -21,8 +21,24 @@ Task-Metapackage: aurex-desktop
  * (libreoffice-help-ca)
  * (libreoffice-l10n-en-gb)
  * (libreoffice-help-en-gb)
- * (libreoffice-l10n-de)
- * (libreoffice-help-de)
- * (libreoffice-l10n-fr)
- * (libreoffice-help-fr)
+
+= language support =
+ * language-pack-es
+ * language-pack-es-base
+ * language-pack-gnome-es
+ * language-pack-gnome-es-base
+ * language-support-es
+ * language-support-writing-es
+ * (language-pack-ca)
+ * (language-pack-ca-base)
+ * (language-pack-gnome-ca)
+ * (language-pack-gnome-ca-base)
+ * (language-support-ca)
+ * (language-support-writing-ca)
+ * (language-pack-en)
+ * (language-pack-en-base)
+ * (language-pack-gnome-en)
+ * (language-pack-gnome-en-base)
+ * (language-support-en)
+ * (language-support-writing-en)
 
