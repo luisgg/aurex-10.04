@@ -1,3 +1,12 @@
+aurex-meta (1.197+aurex10.04.1) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added aurex-boot-theme to aurex-desktop
+  * Added aurex-gnome-theme to aurex-desktop
+  * Added aurex-plymouth-theme to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 31 Aug 2011 19:51:55 +0200
+
 aurex-meta (1.197+aurex10.04.0) UNRELEASED; urgency=low
 
   * Initial release.
