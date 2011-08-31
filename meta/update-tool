@@ -33,7 +33,7 @@ expand_variables(){
 }
 
 expand_sources(){
-	TARGET_DIR=""
+	TARGET_DIR="$SOURCES_BASEDIR/"
 	if [ "$1" ]; then
 		TARGET_DIR="${1%/}/"
 	fi
@@ -47,11 +47,11 @@ expand_sources(){
 	fi
 	for f in $SOURCES_BASEDIR/*.in ; do
 		if [ -r $f ] ; then
-			F="$SOURCES_BASEDIR/$(basename "$f" ".in")"
+			F="${TARGET_DIR}$(basename "$f" ".in")"
 			if [ "$1" = "clean" ] ; then
 				rm -f "$F"
 			else
-				expand_variables "$f" "${TARGET_DIR}$F"
+				expand_variables "$f" "$F"
 			fi
 		fi
 	done
@@ -135,10 +135,12 @@ configure_sources(){
 
 configure_chroot(){
 	TMP_DIR="$(mktemp -d)"
+	cp $SOURCES_BASEDIR/*.list $TMP_DIR
 	expand_sources "$TMP_DIR"
-	cat $TMP_DIR/ubuntu-sources.list > aurex-chroot/sources.list
-	cat $TMP_DIR/aurex-sources.list >> aurex-chroot/sources.list
-	rm -f "$TMP_DIR"
+	TMP_SOURCES="$(tempfile)"
+	cat $TMP_DIR/*.list > "$TMP_SOURCES"
+	rm -rf "$TMP_DIR"
+	echo "$TMP_SOURCES"
 }
 
 test_debootstrap(){
@@ -147,43 +149,64 @@ test_debootstrap(){
 }
 
 do_debootstrap(){
+	rm -fr "$CHROOT_DIR"
+	mkdir -p "$CHROOT_DIR"
 	debootstrap "$CURRENT_DIST" "$CHROOT_DIR"
 }
 
 chroot_mounts(){
-	mount --bind /dev/ "$CHROOT_DIR/dev"
+	mount --bind /dev "$CHROOT_DIR/dev"
+	mount --bind /dev/pts "$CHROOT_DIR/dev/pts"
 	mount --bind /proc/ "$CHROOT_DIR/proc"
 	mount --bind /sys/ "$CHROOT_DIR/sys"
 
 }
 
 chroot_umounts(){
+	umount "$CHROOT_DIR/dev/pts"
 	umount "$CHROOT_DIR/dev"
 	umount "$CHROOT_DIR/proc"
 	umount "$CHROOT_DIR/sys"
 }
 
 prepare_chroot(){
+	CHROOT_CMD="chroot $CHROOT_DIR "
 	if [ "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] && [ -r "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] ; then
-		cp "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" "$CHROOT_DIR/etc/apt/sources.list"
+		CHROOT_SOURCES_LIST="$CUSTOM_DEBOOTSTRAP_SOURCESLIST"
+	fi
+	if [ "$CHROOT_SOURCES_LIST" ] && [ -r "$CHROOT_SOURCES_LIST" ] ; then
+		echo "chroot: copy sources.list"
+		cp "$CHROOT_SOURCES_LIST" "$CHROOT_DIR/etc/apt/sources.list"
 	fi
 	if [ "$CUSTOM_DEBOOTSTRAP_COPY" ] && [ -d "$CUSTOM_DEBOOTSTRAP_COPY" ] ; then
+		echo "chroot: copy custom files"
 		rsync -axC "$CUSTOM_DEBOOTSTRAP_COPY/" "$CHROOT_DIR/"
 	fi
 	chroot_mounts
-	if [ "$CUSTOM_DEBOOTSTRAP_PKGLIST" ] && [ -r "$CUSTOM_DEBOOTSTRAP_PKGLIST" ] ; then
-		cp "$CUSTOM_DEBOOTSTRAP_PKGLIST" "$CHROOT_DIR/tmp/package.list"
-		chroot $CHROOT_DIR "dpkg --set-selections < /tmp/package.list"
-		chroot $CHROOT_DIR "apt-get update && apt-get --allow-unauthenticated -y dselect-upgrade"
+	CURRENT_LC_ALL="$LC_ALL"
+	CURRENT_LANG="$LANG"
+	export LC_ALL=C
+	export LANG=C
+	if [ "$CUSTOM_DEBOOTSTRAP_PKGS" ] ; then
+		echo "chroot: install custom pkgs"
+		$CHROOT_CMD apt-get update || true
+		$CHROOT_CMD apt-get --allow-unauthenticated -y install "$CUSTOM_DEBOOTSTRAP_PKGS" || true
 	fi
 	if [ "$CUSTOM_DEBOOSTRAP_CMD" ] ; then
-		chroot $CHROOT_DIR "$CUSTOM_DEBOOSTRAP_CMD"
+		echo "chroot: run custom cmd"
+		$CHROOT_CMD $CUSTOM_DEBOOSTRAP_CMD || true
 	fi
+	echo "chroot: update & dist-upgrade"
+	$CHROOT_CMD apt-get update || true 
+	$CHROOT_CMD apt-get --allow-unauthenticated -y dist-upgrade || true
 	chroot_umounts
+	export LC_ALL=$CURRENT_LC_ALL
+	export LANG=$CURRENT_LANG
+	echo "chroot: end preparation"
 }
 
 usage(){
-	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|configure-chroot|debootstrap|prepare-chroot|update-lists}"
+	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists}"
 }
 
 # variables
@@ -191,6 +214,7 @@ usage(){
 SOURCES_BASEDIR=./sources
 SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\(.*\)$"
 
+CHROOT_SOURCES_LIST=""
 # main
 
 case "$2" in
@@ -210,12 +234,9 @@ case "$1" in
 	update-seeds)
 		update_seeds
 		;;
-	configure-chroot)
-		configure_chroot
-		;;
 	prepare-chroot)
 		[ "$CHROOT_DIR" ] || die "prepare-chroot requires --current-target=<DIRNAME> option"
-		configure_chroot
+		CHROOT_SOURCES_LIST="$(configure_chroot)"
 		test_debootstrap
 		prepare_chroot
 		;;
@@ -226,13 +247,13 @@ case "$1" in
 	debootstrap)
 		[ "$CHROOT_DIR" ] || die "debootstrap requires --current-target=<DIRNAME> option"
 		[ $(id -u) -eq 0 ] || die "root privileges required"
-		configure_chroot
+		CHROOT_SOURCES_LIST="$(configure_chroot)"
 		do_debootstrap
 		prepare_chroot
 		;;
 	update-lists)
 		[ $(id -u) -eq 0 ] || die "root privileges required"
-		configure_chroot
+		CHROOT_SOURCES_LIST="$(configure_chroot)"
 		if [ -z "$CHROOT_DIR" ] ; then
 			CHROOT_DIR="$(mktemp -d)"
 			CLEAN_DIR="$CHROOT_DIR"

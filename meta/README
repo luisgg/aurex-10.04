@@ -43,7 +43,7 @@ In order to generate lists, 'update-lists' simulates the installation of CURRENT
 The chroot contains an standard Ubuntu debootstrap. The required customization can be archieved AFTER debootstrap installation with some OPTIONALS variables in aurex-meta.conf. The variables and action order is:
  - CUSTOM_DEBOOTSTRAP_SOURCESLIST: filename of sources.list file to replace /et(apt/sources.list in chroot
  - CUSTOM_DEBOOTSTRAP_COPY: (local) directory to copy (rsync) into root directory of debootstrap. You can use this option to override any file in chroot.
- - CUSTOM_DEBOOTSTRAP_PKGLIST: filename of a list of packages to install/purge/hold in dpkg --get-selections format.
+ - CUSTOM_DEBOOTSTRAP_PKGS: space separated list of packages to install into the chroot
  - CUSTOM_DEBOOSTRAP_CMD: custom command to execute in the chroot after debootstrap, custom install and custom copy. The next step is just the simulated installation of metapackages.
 'update-lists' supports option "--current-target=<DIRNAME>" to re-use a debootstrap dir to speed the process. Customization is not skipped.
 Note that 'update-lists' uses debootstrap and REQUIRES root privileges.
