@@ -140,7 +140,7 @@ configure_chroot(){
 	TMP_SOURCES="$(tempfile)"
 	cat $TMP_DIR/*.list > "$TMP_SOURCES"
 	rm -rf "$TMP_DIR"
-	echo "$TMP_SOURCES"
+	CHROOT_SOURCES_LIST="$TMP_SOURCES"
 }
 
 test_debootstrap(){
@@ -176,7 +176,7 @@ prepare_chroot(){
 	fi
 	if [ "$CHROOT_SOURCES_LIST" ] && [ -r "$CHROOT_SOURCES_LIST" ] ; then
 		echo "chroot: copy sources.list"
-		cp "$CHROOT_SOURCES_LIST" "$CHROOT_DIR/etc/apt/sources.list"
+		cat "$CHROOT_SOURCES_LIST" > "$CHROOT_DIR/etc/apt/sources.list"
 	fi
 	if [ "$CUSTOM_DEBOOTSTRAP_COPY" ] && [ -d "$CUSTOM_DEBOOTSTRAP_COPY" ] ; then
 		echo "chroot: copy custom files"
@@ -236,7 +236,7 @@ case "$1" in
 		;;
 	prepare-chroot)
 		[ "$CHROOT_DIR" ] || die "prepare-chroot requires --current-target=<DIRNAME> option"
-		CHROOT_SOURCES_LIST="$(configure_chroot)"
+		configure_chroot
 		test_debootstrap
 		prepare_chroot
 		;;
@@ -247,13 +247,13 @@ case "$1" in
 	debootstrap)
 		[ "$CHROOT_DIR" ] || die "debootstrap requires --current-target=<DIRNAME> option"
 		[ $(id -u) -eq 0 ] || die "root privileges required"
-		CHROOT_SOURCES_LIST="$(configure_chroot)"
+		configure_chroot
 		do_debootstrap
 		prepare_chroot
 		;;
 	update-lists)
 		[ $(id -u) -eq 0 ] || die "root privileges required"
-		CHROOT_SOURCES_LIST="$(configure_chroot)"
+		configure_chroot
 		if [ -z "$CHROOT_DIR" ] ; then
 			CHROOT_DIR="$(mktemp -d)"
 			CLEAN_DIR="$CHROOT_DIR"
