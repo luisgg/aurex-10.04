@@ -1,0 +1,10 @@
+Task-Section: user
+Task-Description: aurex standard
+Task-Extended-Description: This task provides the standard aurex environment.
+Task-Key: aurex-standard
+Task-Seeds: standard
+Task-Metapackage: aurex-standard
+
+ * vim
+ * tree
+

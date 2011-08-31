@@ -1,6 +1,13 @@
+Task-Section: user
+Task-Description: aurex minimal
+Task-Extended-Description: This task provides the minimal aurex environment.
+Task-Key: aurex-minimal
+Task-Seeds: required minimal
 Task-Metapackage: aurex-minimal
 
  * aurex-transmute
- * vim
- * tree
+
+= kernel images =
+ * linux-image-generic-pae-lts-backport-maverick
+ * linux-headers-generic-pae-lts-backport-maverick
 

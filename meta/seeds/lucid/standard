@@ -5,6 +5,9 @@ Task-Extended-Description: This task installs a reasonably small character-mode 
 Task-Key: ubuntu-standard
 Task-Test-new-install: install skip
 
+= aurex =
+ * aurex-standard
+
 = UNIX =
 
 == Comfortable Unix System ==

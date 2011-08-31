@@ -9,6 +9,9 @@ Note that some packages that form the core of an Ubuntu-based system are in the 
 
 Recommends are followed when processing this seed even though debootstrap doesn't do that. This may occasionally produce confusing results; however, it should be correct at release time, since the results of processing the seed are synced to Priority: important overrides.
 
+= aurex =
+ * aurex-minimal
+
 = Hardware and Architecture Support =
 
 == Generic ==

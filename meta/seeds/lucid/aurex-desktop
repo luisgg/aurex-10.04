@@ -3,8 +3,26 @@ Task-Section: user
 Task-Description: aurex desktop
 Task-Extended-Description: This task provides the aurex desktop environment.
 Task-Key: aurex-desktop
-Task-Seeds: desktop-common desktop aurex-minimal
+Task-Seeds: desktop-common desktop aurex-minimal aurex-standard
 Task-Metapackage: aurex-desktop
 
- * aurex-kk
+= Wallpapers and themes =
+ * aurex-gnome-theme
+ * aurex-boot-theme
+ * aurex-plymouth-theme
+
+= libreoffice
  * libreoffice
+ * libreoffice-gnome
+ * libreoffice-l10n-common
+ * libreoffice-l10n-es
+ * libreoffice-help-es
+ * (libreoffice-l10n-ca)
+ * (libreoffice-help-ca)
+ * (libreoffice-l10n-en-gb)
+ * (libreoffice-help-en-gb)
+ * (libreoffice-l10n-de)
+ * (libreoffice-help-de)
+ * (libreoffice-l10n-fr)
+ * (libreoffice-help-fr)
+
