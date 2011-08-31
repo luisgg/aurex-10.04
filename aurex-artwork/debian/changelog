@@ -1,3 +1,9 @@
+aurex-artwork (0.3) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 31 Aug 2011 14:32:31 +0200
+
 aurex-artwork (0.2) lucid; urgency=low
 
   * Added aurex-sunrise plymouth theme (based on space-sunrise)
