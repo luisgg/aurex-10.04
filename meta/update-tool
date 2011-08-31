@@ -209,6 +209,104 @@ prepare_chroot(){
 	echo "chroot: end preparation"
 }
 
+update_lists(){
+	CURRENT_LC_ALL="$LC_ALL"
+	CURRENT_LANG="$LANG"
+	DEB_ARCH="i386"
+	export LC_ALL=C
+	export LANG=C
+	APT_CMD="chroot $CHROOT_DIR apt-get --allow-unauthenticated -ysV "
+	chroot_mounts
+	INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
+	TMP_FILE="$(tempfile)"
+	for s in $SEED_LIST ; do
+		echo "Processing seed: $s"
+		meta="$(sed -ne "/^$s /s%^.* %%p" metapackage-map)"
+		if [ "$meta" ] && [ "${meta%%-*}" != "exclude" ] ; then
+			echo "   Simulate installation of metapackage $meta"
+			$APT_CMD --install-recommends install $meta |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\1 \2 \3%;p}" >> $TMP_FILE
+		else
+			for f in "$s-$DEB_ARCH" "$s-recommends-$DEB_ARCH" ; do
+				echo "   Simulate installation of package list $f"
+				if [ -r "$f" ] ; then
+					cat "$f" |while read p ; do
+						$APT_CMD install $p |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
+					done
+				fi
+			done
+		fi
+	done
+	echo "processing files"
+	# discard packages from ubuntu
+	LISTS_DIR="filters"
+	INDEX_FILE="$LISTS_DIR/filter.index"
+	:> $INDEX_FILE
+	grep -v "^Ubuntu:" $TMP_FILE |while read d p v; do
+		BULK_REPO="$(pcache_show_repository "$p" "$v")"
+		REPO_URL="${BULK_REPO% *}"
+		REPO_DIS="${BULK_REPO#* }"
+		REPO_FILE="$(echo "${BULK_REPO}" |tr "/ " "_:").list"
+		if ! grep -qFx "$REPO_URL $REPO_DIS -> $REPO_FILE" $INDEX_FILE ; then
+			echo "$REPO_URL $REPO_DIS -> $REPO_FILE" >> $INDEX_FILE
+		fi
+		echo "$p" >> "$LISTS_DIR/$REPO_FILE"
+	done
+	chroot_umounts
+	export LC_ALL=$CURRENT_LC_ALL
+	export LANG=$CURRENT_LANG
+
+}
+
+# pkg_cache functions
+# -------------------
+
+pcache_get_candidate(){
+	LANG=C apt-cache policy "$1" |sed -ne "/^[[:blank:]]*Candidate:/{s%^[[:blank:]]*Candidate:[[:blank:]]*%%;p}"
+}
+
+pcache_show_field(){
+	local PKG_FIELD="$1"
+	local PKG_NAME="$2"
+	local PKG_VERSION="$3"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pcache_get_candidate "$PKG_NAME")"
+	LANG=C apt-cache show "$PKG_NAME" |sed -ne "/^Version:[[:blank:]]*$PKG_VERSION/,/^$/{/^$PKG_FIELD:[[:blank:]]*/s%^$PKG_FIELD:[[:blank:]]*%%p}" |tr "," "\n"
+}
+
+pcache_show_repository(){
+	local PKG_NAME="$1"
+	local PKG_VERSION="$2"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pcache_get_candidate "$PKG_NAME")"
+	REG_EX="^.*|[[:blank:]]*$PKG_VERSION[[:blank:]]*|[[:blank:]]*\([^[:blank:]]\+\)[[:blank:]]\+\([^\/]\+\).*[[:blank:]]Packages$"
+	#apt-cache madison "$PKG_NAME" |sed -ne "/|[[:blank:]]\+$PKG_VERSION[[:blank:]]\+|.* Packages$/{s%^.*|[[:blank:]]*%%;s%[[:blank:]]*Packages$%%;p}"
+	apt-cache madison "$PKG_NAME" |sed -ne "/$REG_EX/{s%$REG_EX%\1 \2%;p}" |head -1
+}
+
+pcache_get_depends(){
+	pcache_show_field "Depends" "$1" "$2"| sed -e "s%^[[:blank:]]*%%"
+}
+
+pcache_get_recommends(){
+	pcache_show_field "Recommends" "$1" "$2"| sed -e "s%^[[:blank:]]*%%"
+
+}
+
+pcache_get_suggests(){
+	pcache_show_field "Suggests" "$1" "$2"| sed -e "s%^[[:blank:]]*%%"
+
+}
+
+pcache_list(){
+	local PKG_NAME="$1"
+	local PKG_VERSION="$2"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pcache_get_candidate "$PKG_NAME")"
+        pcache_show_field "Depends" "$PKG_NAME" "$PKG_VERSION"| sed -e "s%^[[:blank:]]*%%"
+        pcache_show_field "Recommends" "$PKG_NAME" "$PKG_VERSION"| sed -e "s%^[[:blank:]]*%(%;s%[[:blank:]]*$%)%"
+	pcache_show_field "Suggests" "$PKG_NAME" "$PKG_VERSION"| sed -e "s%^[[:blank:]]*%((%;s%[[:blank:]]*$%))%"
+}
+
+# -------------------
+
+
 usage(){
 	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean}"
 }
@@ -257,6 +355,7 @@ case "$1" in
 		;;
 	update-lists)
 		[ $(id -u) -eq 0 ] || die "root privileges required"
+		[ -r "metapackage-map" ] || die "metapackage-map file not found"
 		configure_chroot
 		if [ -z "$CHROOT_DIR" ] ; then
 			CHROOT_DIR="$(mktemp -d)"
