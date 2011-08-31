@@ -32,6 +32,10 @@ expand_variables(){
 	sed_rules |sed -f - "$1" > "$2"
 }
 
+clean_sources(){
+	expand_sources "" "clean"
+}
+
 expand_sources(){
 	TARGET_DIR="$SOURCES_BASEDIR/"
 	if [ "$1" ]; then
@@ -40,7 +44,7 @@ expand_sources(){
 	# expand sources.list
 	[ -d "$SOURCES_BASEDIR" ] || die
 
-	if [ "$1" = "clean" ] ; then
+	if [ "$2" = "clean" ] ; then
 		echo "clean sources.list templates"
 	else
 		echo "expand templates for sources.list"
@@ -48,7 +52,7 @@ expand_sources(){
 	for f in $SOURCES_BASEDIR/*.in ; do
 		if [ -r $f ] ; then
 			F="${TARGET_DIR}$(basename "$f" ".in")"
-			if [ "$1" = "clean" ] ; then
+			if [ "$2" = "clean" ] ; then
 				rm -f "$F"
 			else
 				expand_variables "$f" "$F"
@@ -228,8 +232,8 @@ case "$1" in
 		configure_sources
 		;;
 	clean)
-		expand_sources clean
-		rm update.cfg
+		clean_sources
+		rm -f update.cfg
 		;;
 	update-seeds)
 		update_seeds

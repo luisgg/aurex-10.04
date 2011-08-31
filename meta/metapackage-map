@@ -1,0 +1,7 @@
+minimal ubuntu-minimal
+standard ubuntu-standard
+desktop ubuntu-desktop
+aurex-minimal aurex-minimal
+aurex-standard aurex-standard
+aurex-desktop aurex-desktop
+aurex-supported exclude-aurex-support
