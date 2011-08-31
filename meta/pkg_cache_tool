@@ -1,0 +1,49 @@
+#!/bin/sh
+
+
+# funcs
+# -----
+
+pcache_get_candidate(){
+	LANG=C apt-cache policy "$1" |sed -ne "/^[[:blank:]]*Candidate:/{s%^[[:blank:]]*Candidate:[[:blank:]]*%%;p}"
+}
+
+pcache_show_field(){
+	local PKG_FIELD="$1"
+	local PKG_NAME="$2"
+	local PKG_VERSION="$3"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pkg_get_candidate "$PKG_NAME")"
+	LANG=C apt-cache show "$PKG_NAME" |sed -ne "/^Version:[[:blank:]]*$PKG_VERSION/,/^$/{/^$PKG_FIELD:[[:blank:]]*/s%^$PKG_FIELD:[[:blank:]]*%%p}" |tr "," "\n"
+}
+
+pcache_show_repository(){
+	local PKG_NAME="$1"
+	local PKG_VERSION="$2"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pkg_get_candidate "$PKG_NAME")"
+	apt-cache madison "$PKG_NAME" |sed -ne "/| $PKG_VERSION |.* Packages$/{s%^.*|[[:blank:]]*%%;s%[[:blank:]]*Packages$%%;p}"
+}
+
+pcache_get_depends(){
+	pcache_show_field "Depends" "$1" "$2"| sed -e "s%^[[:blank:]]*%%"
+}
+
+pcache_get_recommends(){
+	pcache_show_field "Recommends" "$1" "$2"| sed -e "s%^[[:blank:]]*%%"
+
+}
+
+pcache_get_suggests(){
+	pcache_show_field "Suggests" "$1" "$2"| sed -e "s%^[[:blank:]]*%%"
+
+}
+
+pcache_list(){
+	local PKG_NAME="$1"
+	local PKG_VERSION="$2"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pkg_get_candidate "$PKG_NAME")"
+        pcache_show_field "Depends" "$PKG_NAME" "$PKG_VERSION"| sed -e "s%^[[:blank:]]*%%"
+        pcache_show_field "Recommends" "$PKG_NAME" "$PKG_VERSION"| sed -e "s%^[[:blank:]]*%(%;s%[[:blank:]]*$%)%"
+	pcache_show_field "Suggests" "$PKG_NAME" "$PKG_VERSION"| sed -e "s%^[[:blank:]]*%((%;s%[[:blank:]]*$%))%"
+}
+
+
