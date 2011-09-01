@@ -22,7 +22,7 @@ nvidia-glx-185-dev
 ubuntu-desktop
 ubuntu-minimal
 ubuntu-standard
-# ->  lucid-proposed
+# -> http://archive.ubuntu.com/ubuntu/ lucid-proposed
 linux-headers-2.6.35-30
 # -> http://archive.ubuntu.com/ubuntu/ lucid-updates
 acpi-support

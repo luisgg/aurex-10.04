@@ -217,7 +217,6 @@ gen_repo_basename(){
 update_lists(){
 	CURRENT_LC_ALL="$LC_ALL"
 	CURRENT_LANG="$LANG"
-	DEB_ARCH="i386"
 	export LC_ALL=C
 	export LANG=C
 	APT_CMD="chroot $CHROOT_DIR apt-get --allow-unauthenticated -ysV "
@@ -232,7 +231,7 @@ update_lists(){
 			echo "   Simulate installation of metapackage $meta"
 			$APT_CMD --install-recommends install $meta |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
 		else
-			for f in "$s-$DEB_ARCH" "$s-recommends-$DEB_ARCH" ; do
+			for f in "$s-$CURRENT_ARCH" "$s-recommends-$CURRENT_ARCH" ; do
 				echo "   Simulate installation of package list $f"
 				if [ -r "$f" ] ; then
 					cat "$f" |while read p ; do
@@ -245,7 +244,7 @@ update_lists(){
 	echo "processing files"
 	LISTS_DIR="$(mktemp -d)"
 	echo "$LISTS_DIR"
-	OUTPUT_FILE="filter-lists/full-list.bulk"
+	OUTPUT_FILE="filter-lists/full-list-$CURRENT_ARCH.bulk"
 	# grep to discard packages from ubuntu
 	cat "$DEBOOTSTRAP_BULK" "$TMP_FILE" |sort -u |grep -v "^Ubuntu:" |while read d p v; do
 		BULK_REPO="$(chroot $CHROOT_DIR apt-cache madison $p |pcache_sed_repository "$p" "$v")"
@@ -362,8 +361,9 @@ usage(){
 SOURCES_BASEDIR=./sources
 SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\(.*\)$"
 
-DEBOOTSTRAP_BULK="filter-lists/debootstrap.pkgs"
-
+# TODO: Find a lesser dirty wat to get current debian architecture name
+CURRENT_ARCH=$(dpkg -s coreutils |sed -ne "/^Architecture:/s%^.* %%p")
+DEBOOTSTRAP_BULK="filter-lists/debootstrap-$CURRENT_ARCH.pkgs"
 CHROOT_SOURCES_LIST=""
 # main
 
