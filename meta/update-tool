@@ -219,6 +219,7 @@ update_lists(){
 	chroot_mounts
 	INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
 	TMP_FILE="$(tempfile)"
+	echo "$TMP_FILE"
 	for s in $SEED_LIST ; do
 		echo "Processing seed: $s"
 		meta="$(sed -ne "/^$s /s%^.* %%p" metapackage-map)"
@@ -242,7 +243,7 @@ update_lists(){
 	INDEX_FILE="$LISTS_DIR/filter.index"
 	:> $INDEX_FILE
 	grep -v "^Ubuntu:" $TMP_FILE |while read d p v; do
-		BULK_REPO="$(pcache_show_repository "$p" "$v")"
+		BULK_REPO="$(chroot $CHROOT apt-cache madison $p |pcache_sed_repository "$p" "$v")"
 		REPO_URL="${BULK_REPO% *}"
 		REPO_DIS="${BULK_REPO#* }"
 		REPO_FILE="$(echo "${BULK_REPO}" |tr "/ " "_:").list"
@@ -270,6 +271,15 @@ pcache_show_field(){
 	local PKG_VERSION="$3"
 	[ "$PKG_VERSION" ] || PKG_VERSION="$(pcache_get_candidate "$PKG_NAME")"
 	LANG=C apt-cache show "$PKG_NAME" |sed -ne "/^Version:[[:blank:]]*$PKG_VERSION/,/^$/{/^$PKG_FIELD:[[:blank:]]*/s%^$PKG_FIELD:[[:blank:]]*%%p}" |tr "," "\n"
+}
+
+pcache_sed_repository(){
+	local PKG_NAME="$1"
+	local PKG_VERSION="$2"
+	[ "$PKG_VERSION" ] || PKG_VERSION="$(pcache_get_candidate "$PKG_NAME")"
+	REG_EX="^.*|[[:blank:]]*$PKG_VERSION[[:blank:]]*|[[:blank:]]*\([^[:blank:]]\+\)[[:blank:]]\+\([^\/]\+\).*[[:blank:]]Packages$"
+	#apt-cache madison "$PKG_NAME" |sed -ne "/|[[:blank:]]\+$PKG_VERSION[[:blank:]]\+|.* Packages$/{s%^.*|[[:blank:]]*%%;s%[[:blank:]]*Packages$%%;p}"
+	sed -ne "/$REG_EX/{s%$REG_EX%\1 \2%;p}" |head -1
 }
 
 pcache_show_repository(){
@@ -308,7 +318,7 @@ pcache_list(){
 
 
 usage(){
-	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean}"
+	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean} [--current-target=<DIRNAME>]"
 }
 
 # variables
