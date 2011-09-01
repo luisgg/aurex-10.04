@@ -225,7 +225,7 @@ update_lists(){
 		meta="$(sed -ne "/^$s /s%^.* %%p" metapackage-map)"
 		if [ "$meta" ] && [ "${meta%%-*}" != "exclude" ] ; then
 			echo "   Simulate installation of metapackage $meta"
-			$APT_CMD --install-recommends install $meta |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\1 \2 \3%;p}" >> $TMP_FILE
+			$APT_CMD --install-recommends install $meta |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
 		else
 			for f in "$s-$DEB_ARCH" "$s-recommends-$DEB_ARCH" ; do
 				echo "   Simulate installation of package list $f"
@@ -238,20 +238,24 @@ update_lists(){
 		fi
 	done
 	echo "processing files"
-	# discard packages from ubuntu
-	LISTS_DIR="filters"
-	INDEX_FILE="$LISTS_DIR/filter.index"
-	:> $INDEX_FILE
+	LISTS_DIR="$(mktemp -d)"
+	OUTPUT_FILE="filter-list.bulk"
+	# grep to discard packages from ubuntu
 	grep -v "^Ubuntu:" $TMP_FILE |while read d p v; do
 		BULK_REPO="$(chroot $CHROOT apt-cache madison $p |pcache_sed_repository "$p" "$v")"
-		REPO_URL="${BULK_REPO% *}"
-		REPO_DIS="${BULK_REPO#* }"
-		REPO_FILE="$(echo "${BULK_REPO}" |tr "/ " "_:").list"
-		if ! grep -qFx "$REPO_URL $REPO_DIS -> $REPO_FILE" $INDEX_FILE ; then
-			echo "$REPO_URL $REPO_DIS -> $REPO_FILE" >> $INDEX_FILE
+		if [ "$BULK_REPO" ] ; then
+			REPO_URL="${BULK_REPO% *}"
+			REPO_DIS="${BULK_REPO#* }"
+			REPO_FILE="${LISTS_DIR}/filter_$(echo "${BULK_REPO}" |tr "/ " "_:").list"
+			[ -r "$REPO_FILE" ] || echo "# -> $REPO_URL $REPO_DIS" > "$REPO_FILE"
+			echo "$p" >> "$REPO_FILE"
 		fi
-		echo "$p" >> "$LISTS_DIR/$REPO_FILE"
 	done
+	:> $OUTPUT_FILE
+	for f in $LISTS_DIR/filter_* ; do
+		[ ! -r "$f" ] || cat $f >> $OUTPUT_FILE
+	done
+	rm -fr "$LISTS_DIR"
 	chroot_umounts
 	export LC_ALL=$CURRENT_LC_ALL
 	export LANG=$CURRENT_LANG
@@ -318,7 +322,7 @@ pcache_list(){
 
 
 usage(){
-	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean} [--current-target=<DIRNAME>]"
+	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean} [--target-dir=<DIRNAME>]"
 }
 
 # variables
@@ -329,13 +333,17 @@ SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\
 CHROOT_SOURCES_LIST=""
 # main
 
-case "$2" in
-	--current-target=*)
-		CHROOT_DIR="${2#*=}"
+for o in "$1" "$2" ; do
+	if [ "$o" ] ; then
+		if [ "${o%%=*}" = "--target-dir" ] ; then
+			CHROOT_DIR="${o#*=}"
+		else
+			[ "$ACTION" ] || ACTION="$o"
+		fi
+	fi
+done
 		;;
-esac
-
-case "$1" in
+case "$ACTION" in
 	configure-sources)
 		configure_sources
 		;;
@@ -347,7 +355,7 @@ case "$1" in
 		update_seeds
 		;;
 	prepare-chroot)
-		[ "$CHROOT_DIR" ] || die "prepare-chroot requires --current-target=<DIRNAME> option"
+		[ "$CHROOT_DIR" ] || die "prepare-chroot requires --target-dir=<DIRNAME> option"
 		configure_chroot
 		test_debootstrap
 		prepare_chroot
@@ -357,7 +365,7 @@ case "$1" in
 		germinate-update-metapackage --multiple-dists
 		;;
 	debootstrap)
-		[ "$CHROOT_DIR" ] || die "debootstrap requires --current-target=<DIRNAME> option"
+		[ "$CHROOT_DIR" ] || die "debootstrap requires --target-dir=<DIRNAME> option"
 		[ $(id -u) -eq 0 ] || die "root privileges required"
 		configure_chroot
 		do_debootstrap
