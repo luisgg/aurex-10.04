@@ -202,7 +202,7 @@ prepare_chroot(){
 	fi
 	echo "chroot: update & dist-upgrade"
 	$CHROOT_CMD apt-get update || true 
-	$CHROOT_CMD apt-get --allow-unauthenticated -y dist-upgrade || true
+	# $CHROOT_CMD apt-get --allow-unauthenticated -y dist-upgrade || true
 	chroot_umounts
 	export LC_ALL=$CURRENT_LC_ALL
 	export LANG=$CURRENT_LANG
