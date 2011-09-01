@@ -244,6 +244,7 @@ update_lists(){
 	done
 	echo "processing files"
 	LISTS_DIR="$(mktemp -d)"
+	echo "$LISTS_DIR"
 	OUTPUT_FILE="filter-lists/full-list.bulk"
 	# grep to discard packages from ubuntu
 	cat "$DEBOOTSTRAP_BULK" "$TMP_FILE" |sort -u |grep -v "^Ubuntu:" |while read d p v; do
@@ -266,7 +267,7 @@ update_lists(){
 		REPO_FILE="${LISTS_DIR}/$(gen_repo_basename "$UBUNTU_MIRROR $REPO_DIS").list"
 		URL_FILE="${REPO_FILE%.list}.url"
 		if [ ! -r "$URL_FILE" ] ; then
-			echo "# -> $REPO_URL $REPO_DIS" > "$URL_FILE"
+			echo "# -> $UBUNTU_MIRROR $REPO_DIS" > "$URL_FILE"
 			:> "$REPO_FILE"
 		fi
 		sed -ne "\%^Ubuntu:[^\/]*/$REPO_DIS %{s%^[^[:blank:]]\+[[:blank:]]%%;s%[[:blank:]].*$%%;p}" "$TMP_FILE" >> "$REPO_FILE"
@@ -285,8 +286,8 @@ update_lists(){
 	else
 		echo "Se encontraron cambios"
 	fi
-	rm -f "$TMP_FILE"
-	rm -fr "$LISTS_DIR"
+	# rm -f "$TMP_FILE"
+	# rm -fr "$LISTS_DIR"
 	chroot_umounts
 	export LC_ALL=$CURRENT_LC_ALL
 	export LANG=$CURRENT_LANG
