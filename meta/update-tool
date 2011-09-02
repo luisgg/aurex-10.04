@@ -223,7 +223,6 @@ update_lists(){
 	chroot_mounts
 	INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
 	TMP_FILE="$(tempfile)"
-	echo "$TMP_FILE"
 	for s in $SEED_LIST ; do
 		echo "Processing seed: $s"
 		meta="$(sed -ne "/^$s /s%^.* %%p" metapackage-map)"
@@ -243,8 +242,6 @@ update_lists(){
 	done
 	echo "processing files"
 	LISTS_DIR="$(mktemp -d)"
-	echo "$LISTS_DIR"
-	OUTPUT_FILE="filter-lists/full-list-$CURRENT_ARCH.bulk"
 	# grep to discard packages from ubuntu
 	cat "$DEBOOTSTRAP_BULK" "$TMP_FILE" |sort -u |grep -v "^Ubuntu:" |while read d p v; do
 		BULK_REPO="$(chroot $CHROOT_DIR apt-cache madison $p |pcache_sed_repository "$p" "$v")"
@@ -272,24 +269,44 @@ update_lists(){
 		sed -ne "\%^Ubuntu:[^\/]*/$REPO_DIS %{s%^[^[:blank:]]\+[[:blank:]]%%;s%[[:blank:]].*$%%;p}" "$TMP_FILE" >> "$REPO_FILE"
 	done
 	#	
-	cp $OUTPUT_FILE "$LISTS_DIR/old-list.bulk"
-	:> $OUTPUT_FILE
+	cp $FULL_LIST "$LISTS_DIR/old-list.bulk"
+	:> $FULL_LIST
 	for f in $(ls -1 $LISTS_DIR/*.list 2>/dev/null |sort) ; do
 		F="${f%.list}.url"
-		cat "$F" >> $OUTPUT_FILE
-		sort -u "$f" >> $OUTPUT_FILE
+		cat "$F" >> $FULL_LIST
+		sort -u "$f" >> $FULL_LIST
 	done
-	echo "update-lists terminado. $OUTPUT_FILE actualizado"
-	if diff -q >/dev/null $OUTPUT_FILE "$LISTS_DIR/old-list.bulk" ; then
+	echo "update-lists terminado. $FULL_LIST actualizado"
+	if diff -q >/dev/null $FULL_LIST "$LISTS_DIR/old-list.bulk" ; then
 		echo "No se encontraron diferencias"
 	else
 		echo "Se encontraron cambios"
 	fi
-	# rm -f "$TMP_FILE"
-	# rm -fr "$LISTS_DIR"
+	rm -f "$TMP_FILE"
+	rm -fr "$LISTS_DIR"
 	chroot_umounts
 	export LC_ALL=$CURRENT_LC_ALL
 	export LANG=$CURRENT_LANG
+
+}
+
+split_lists(){
+	nfirst=""
+	for f in filter-lists/*.bulk ; do
+		F="$(basename "$f" .bulk)"
+		F_ARCH="${F##*-}"
+		LINE_LIST="$(grep -n '^#' $f |cut -f 1 -d :)"
+		for n in $LINE_LIST '$' ; do
+			if  [ "$nfirst" ] ;then
+				REPO_URL="$(sed -ne "${nfirst}{s%^# -> %%;p}" "$f")"
+				FILENAME="$(gen_repo_basename "$REPO_URL")"
+				nlast="$n"
+				sed -ne "${nfirst},${nlast}{/^#.*$/d;p}" "$f" > "$CHROOT_DIR/${FILENAME}-$F_ARCH.list"
+				echo "$REPO_URL" > "$CHROOT_DIR/${FILENAME}-$F_ARCH.url"
+			fi
+			nfirst="$n"
+		done
+	done
 
 }
 
@@ -353,7 +370,7 @@ pcache_list(){
 
 
 usage(){
-	die "Usage: $(basename "$0") {configure-sources|clean-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|clean} [--target-dir=<DIRNAME>]"
+	die "Usage: $(basename "$0") {configure-sources|update-seeds|update-metapackages|debootstrap|prepare-chroot|update-lists|split-lists|clean} [--target-dir=<DIRNAME>]"
 }
 
 # variables
@@ -364,6 +381,8 @@ SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\
 # TODO: Find a lesser dirty wat to get current debian architecture name
 CURRENT_ARCH=$(dpkg -s coreutils |sed -ne "/^Architecture:/s%^.* %%p")
 DEBOOTSTRAP_BULK="filter-lists/debootstrap-$CURRENT_ARCH.pkgs"
+FULL_LIST="filter-lists/full-list-$CURRENT_ARCH.bulk"
+
 CHROOT_SOURCES_LIST=""
 # main
 
@@ -418,6 +437,11 @@ case "$ACTION" in
 		prepare_chroot
 		update_lists
 		[ -z "$CLEAN_DIR" ] || rm -rf "$CLEAN_DIR"
+		;;
+	split-lists)
+		[ "$CHROOT_DIR" ] || die "split-lists requires --target-dir=<DIRNAME> option"
+		[ -d "$CHROOT_DIR" ] || die "$CHROOT_DIR is not a valid directory"
+		split_lists
 		;;
 	*)
 		usage
