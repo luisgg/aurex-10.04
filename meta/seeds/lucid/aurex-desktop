@@ -12,11 +12,11 @@ Task-Metapackage: aurex-desktop
  * aurex-plymouth-theme
 
 = libreoffice =
- * libreoffice
- * libreoffice-gnome
- * libreoffice-l10n-common
- * libreoffice-l10n-es
- * libreoffice-help-es
+ * (libreoffice)
+ * (libreoffice-gnome)
+ * (libreoffice-l10n-common)
+ * (libreoffice-l10n-es)
+ * (libreoffice-help-es)
  * (libreoffice-l10n-ca)
  * (libreoffice-help-ca)
  * (libreoffice-l10n-en-gb)
