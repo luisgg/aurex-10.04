@@ -64,3 +64,6 @@ Task-Metapackage: exclude-aurex-support
  * libreoffice-help-${Languages}
  * libreoffice-style-*
 
+= dropbox =
+ * nautilus-dropbox
+
