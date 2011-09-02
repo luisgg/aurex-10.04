@@ -1,8 +1,11 @@
-aurex-transmute (0.3) UNRELEASED; urgency=low
+aurex-transmute (0.3) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * added /etc/default/dropbox-repo to prevent dropbox to modify
+    sources.list
+  * linux-*-generic-pae-lts-backport-maverick replaced with
+    linux-*-server-lts-backport-maverick
 
- -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 26 Aug 2011 08:29:34 +0200
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 02 Sep 2011 12:03:31 +0200
 
 aurex-transmute (0.2) lucid; urgency=low
 

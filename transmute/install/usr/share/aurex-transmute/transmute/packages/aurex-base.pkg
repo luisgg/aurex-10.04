@@ -1,4 +1,4 @@
-linux-image-generic-pae-lts-backport-maverick		install
-linux-headers-generic-pae-lts-backport-maverick		install
+linux-image-server-lts-backport-maverick		install
+linux-headers-server-lts-backport-maverick		install
 linux-headers-generic					purge
 linux-image-generic					purge
