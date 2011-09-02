@@ -16,7 +16,7 @@ Task-Metapackage: exclude-aurex-support
  * linux-headers-virtual-lts-backport-maverick
  * linux-headers-server-lts-backport-maverick
 
-= virtualization =
+= virtualization libvirt =
  * libvirt-bin
  * libvirt0
  * python-libvirt
@@ -25,6 +25,10 @@ Task-Metapackage: exclude-aurex-support
  * virtinst
  * qemu-kvm
  * quemu
+
+= virtualization virtualbox =
+ * virtualbox-4.0
+ * virtualbox-4.1
 
 = zentyal =
  * zentyal
