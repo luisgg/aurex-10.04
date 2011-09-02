@@ -8,6 +8,6 @@ Task-Metapackage: aurex-minimal
  * aurex-transmute
 
 = kernel images =
- * linux-image-generic-pae-lts-backport-maverick
- * linux-headers-generic-pae-lts-backport-maverick
+ * linux-image-server-lts-backport-maverick
+ * linux-headers-server-lts-backport-maverick
 
