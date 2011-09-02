@@ -11,3 +11,5 @@ Task-Metapackage: aurex-minimal
  * linux-image-server-lts-backport-maverick
  * linux-headers-server-lts-backport-maverick
 
+= networking =
+ * bridge-utils
