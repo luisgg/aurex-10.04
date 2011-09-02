@@ -9,7 +9,6 @@ Task-Metapackage: exclude-aurex-support
 
 = kernel images =
  * linux-image-generic-lts-backport-maverick
- * linux-image-generic-pae-lts-backport-maverick
  * linux-image-virtual-lts-backport-maverick
  * linux-image-server-lts-backport-maverick
  * linux-headers-generic-lts-backport-maverick
