@@ -1,0 +1,224 @@
+custom repository howto (The aurex way)
+=======================================
+packages: reprepro inoticoming gnupg apache2
+
+gpg keys
+========
+We need to generate signing key as root, so, the recommended way is:
+	sudo su -
+	gpg --gen-key
+ -> option (2) DSA y Elgamal
+ -> size: 1024
+ -> option 0 = (no caducity)
+ -> Name: aurex linux repository
+ -> email: aurex.linux@gmail.com
+ -> Comment: <empty>
+ -> pass phrase: <empty>
+
+execute:
+	gpg --list-keys
+
+an then look for a line similar to:
+	...
+	pub  1024D/3D3CBB05 2011-09-02
+
+(the part after 1024D/ is the required reprepro configuration key)
+
+The public key should be exported (and published) in an ASCII armored file.
+To export the key, run:
+
+gpg --export --armor 3D3CBB05 > repo-key.asc
+
+reprepro
+========
+create repo dirs, in our example:
+	mkdir -p /srv/repo/aurex/conf /srv/repo/aurex/incoming /srv/repo/aurex/incomingtmp
+To easy allow local uploads, a quick an dirty trick is to create a system group ('uploaders') and change ownership and permissions in the incoming dir. In our example:
+	addgroup --system uploaders
+	chgrp uploaders /srv/repo/aurex/incoming
+	chmod 775 /srv/repo/aurex/incoming
+
+Generate the reprepro configuration files:
+
+conf/distributions
+------------------
+Origin: AureX
+Label: AureX
+Suite: lucid
+Codename: lucid
+Architectures: i386 amd64 source
+Components: main partner
+Description: AureX stable repository for Ubuntu 10.04 lucid
+Version: 10.04
+SignWith: 3D3CBB05
+Pull: tau2lucid
+Update: - ppa_firefox_stable-lucid-i386 ppa_firefox_stable-lucid-amd64 ppa_libvirt-lucid-i386 ppa_libvirt-lucid-amd64
+
+Origin: AureX
+Label: AureX
+Suite: tau
+Codename: tau
+Architectures: i386 amd64 source
+Components: main
+Description: Testing AureX (tau) repository. Use at your own risk
+Version: 10.04
+SignWith: 3D3CBB05
+
+conf/incoming
+-------------
+Name: incoming
+IncomingDir: incoming
+Cleanup: on_deny on_error
+Tempdir: incomingtmp
+Default: tau
+Allow: tau lucid>tau unstable>tau UNRELEASED>tau
+
+conf/pulls
+----------
+Name: tau2lucid
+From: tau
+Components: main
+Architectures: i386 amd64 source
+FilterList: install tau2lucid.list
+
+
+We need to write an update rule for every "url-suite-arch" combination, because we generate 'per arch' lists. In our example, we are going to update from two different ppa's, so we edit conf/updates in the form:
+
+conf/updates
+------------
+Name: ppa_firefox_stable-lucid-i386
+Method: http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: i386 source
+FilterList: purge ppa_firefox_stable-lucid-i386.list
+
+Name: ppa_firefox_stable-lucid-amd64
+Method: http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: amd64 source
+FilterList: purge ppa_firefox_stable-lucid-amd64.list
+
+Name: ppa_libvirt-lucid-i386
+Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: i386 source
+FilterList: purge ppa_libvirt-lucid-i386.list
+
+Name: ppa_libvirt-lucid-amd64
+Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: amd64 source
+FilterList: purge ppa_libvirt-lucid-amd64.list
+
+
+update
+======
+
+reprepro -VV --noskipold --export=force update
+
+
+
+
+rebuildd
+========
+configuration:
+
+/etc/rebuildd/rebuilddrc
+------------------------
+[mail]
+mailto = aurex.linux@gmail.com
+from = rebuildd@localhost
+subject_prefix = [rebuildd]
+
+[http]
+logfile = /var/log/rebuildd/httpd.log
+log_lines_nb = 30
+ip = 0.0.0.0
+cache = 1
+templates_dir = /usr/share/rebuildd/templates
+port = 9998
+
+[build]
+max_jobs = 10
+max_threads = 2
+check_every = 300
+more_archs = any
+kill_timeout = 90
+# TODO: redefine source_cmd 
+source_cmd = apt-get -q --download-only -t ${d} source ${p}=${v}
+work_dir = /var/cache/rebuildd/build
+#post_build_cmd = /usr/local/bin/buildd-update ${d} ${a}
+dists =	lucid
+build_cmd = pbuilder build --buildresult /var/cache/pbuilder/result/${d}/ --basetgz /var/cache/pbuilder/${d}-${a}.tgz ${p}_${v}.dsc
+
+database_uri = sqlite:///var/lib/rebuildd/rebuildd.db
+build_more_recent = 1
+
+[telnet]
+ip = 127.0.0.1
+prompt = rebuildd@localhost->
+motd = Connected on rebuildd on localhost
+port = 9999
+
+[log]
+time_format = %d-%m-%Y %H:%M:%S
+logs_dir = /var/log/rebuildd/build_logs
+mail_failed = 1
+mail_successful = 0
+file = /var/log/rebuildd/rebuildd.log
+
+
+
+
+cowbuilder
+==========
+create chroots:
+	sudo cowbuilder --create --distribution lucid --components "main universe" --basepath /var/cache/pbuilder/lucid-amd64.cow
+	sudo cowbuilder --create --distribution lucid --components "main universe" --architecture i386 --basepath /var/cache/pbuilder/lucid-i386.cow
+
+update:
+sudo cowbuilder --update --basepath /var/cache/pbuilder/lucid-i386.cow
+sudo cowbuilder --update --basepath /var/cache/pbuilder/lucid-amd64.cow
+
+compile:
+
+sudo DIST=lucid ARCH=i386 cowbuilder --debbuildopts "-b" --build ../hello_2.4-3.dsc --basepath /var/cache/pbuilder/lucid-i386.cow
+
+NOTE: --debbuildopts:
+	"-b" binary only
+	"-S" source only (uses 'source' as arch, so geerates generates: $p_$v_source.changes file)
+results in:
+/var/cache/pbuilder/result/
+
+
+
+configuration:
+
+/etc/pbuilderrc
+---------------
+if [ -f debian/changelog ]; then
+        [ -z "$ARCH" ] && ARCH=$(dpkg --print-architecture)
+        [ -z "$DIST" ] && DIST=$(dpkg-parsechangelog | sed -n 's/^Distribution: //p')
+fi
+ 
+PDEBUILD_PBUILDER="cowbuilder --build --basepath /var/cache/pbuilder/base-${DIST}_${ARCH}.cow"
+ 
+DEBBUILDOPTS="-d ${OPTS}"
+ 
+ARCHITECTURE=${ARCH}
+ 
+BUILDRESULT=~/build-area
+ 
+MIRRORSITE=http://es.archive.ubuntu.com/ubuntu/
+EXTRAPACKAGES="$EXTRAPACKAGES lintian"
+ 
+AUTO_DEBSIGN=yes
+ 
+HOOKDIR=${HOME}/.pbuilder/hooks/
+ 
+PKGNAME_LOGFILE_EXTENTION="_${ARCH}.build"
+

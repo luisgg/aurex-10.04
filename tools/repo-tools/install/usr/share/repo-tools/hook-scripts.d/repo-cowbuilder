@@ -1,0 +1,85 @@
+#!/bin/sh
+
+build_binary(){
+	cowbuilder --debbuildopts "$PBUILDOPTS" --build $DSC_FILE --basepath $PBASEPATH || return $?
+}
+
+upload_binary(){
+	reprepro -V -b $RBASEDIR include $RDIST$ "$PRESULTPATH/${PKG_NAME}_${PKG_VERSION}_${ARCH}.changes" || return $?
+}
+
+get_archs(){
+	sed -ne "/^Architecture:/s%^.*:[[:blank:]]*%%p" $1 |tr " " "\n"
+}
+
+get_changes_archs(){
+	get_archs $CHANGES_FILE
+}
+
+get_dsc_file(){
+	echo "$(dirname "$CHANGES_FILE")/$(sed -ne "/\.dsc$/s%^.*[[:blank:]]%%p" $CHANGES_FILE |head -1)"
+}
+
+get_pkg_archs(){
+	WE_CAN="$(we_can_build_archs)"
+	# translate "any" for "any we can build ..."
+	get_archs $(get_dsc_file) |sed "s%any%$WE_CAN%" |tr " " "\n"
+}
+
+we_can_build_archs(){
+	HOST_ARCH="$(dpkg --print-architecture)"
+	if [ "$HOST_ARCH" = "amd64" ] ; then
+		HOST_ARCH="$HOST_ARCH i386"
+	fi
+	echo "$HOST_ARCH"
+}
+
+write_log(){
+	logger -t "$LOG_TAG" "$1"
+}
+
+# main
+
+PKG_NAME=$3
+PKG_VERSION=$4
+CHANGES_FILE="$5"
+DSC_FILE="$(get_dsc_file)"
+LOG_TAG="REPO-BUILDER[$$]"
+
+TARGET_ARCHS=""
+for a in $(get_pkg_archs) ; do
+	if ! get_changes_archs |grep -qxF "$a" ; then
+		# ${a} is not build yet ... can we build binary packages ?
+		if we_can_build_archs |tr " " "\n" |grep -qxF "$a" ; then
+			TARGET_ARCHS="$TARGET_ARCHS $a"
+		fi
+	fi
+done
+
+PBASEDIR="/var/cache/pbuilder"
+DIST=lucid
+PRESULTBASE="$PBASEDIR/result/"
+PBUILDOPTS="-b"
+RBASEDIR="/srv/repo/aurex/"
+RDIST="tau"
+for a in $TARGET_ARCHS ; do
+	ARCH=$a
+	export DIST ARCH
+	PBASEPATH="$PBASEDIR/$DIST-$ARCH.cow"
+	PRESULTPATH="$PRESULTBASE/$PKG_NAME-$PKG_VERSION-$DIST-$ARCH"
+	mkdir -p $PRESULTPATH
+	if [ -d "$PBASEPATH" ] ; then
+		if build_binary ; then
+			write_log "Successfully build of $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+			if upload_binary ; then
+				write_log "Successfully upload of $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+			else
+				write_log "Error uploading $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+			fi
+		else
+			write_log "Error building $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+		fi
+		rm -fr "$PRESULTPATH"
+	fi
+done
+exit 0

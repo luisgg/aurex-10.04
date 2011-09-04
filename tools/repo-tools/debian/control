@@ -1,0 +1,13 @@
+Source: repo-tools
+Section: admin
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+
+Package: repo-tools
+Architecture: all
+Depends: ${misc:Depends}, reprepro, inoticoming, cowbuilder, upstart
+Description: Custom debian repository tools
+ Scripts to setup an automatic custom debian repository using reprepro,
+ inoticoming and cowbuilder for a rudimentary autobuilder

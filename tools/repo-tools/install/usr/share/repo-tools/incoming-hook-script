@@ -1,0 +1,14 @@
+#!/bin/sh
+# repo-tools incoming hook script
+# run all the scripts (linked) at /etc/repo-tools/hook-scripts.d
+#
+# parameter description:
+	action=$1
+	release=$2
+	package=$3
+	version=$4
+	changes_file=$5
+
+run-parts /etc/repo-tools/hook-scripts.d -a $action -a $release -a $package -a $version -a $changes_file
+
+exit 0
