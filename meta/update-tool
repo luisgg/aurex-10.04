@@ -148,14 +148,20 @@ configure_chroot(){
 }
 
 test_debootstrap(){
-	# TODO : ...
-	[ -d "$CHROOT_DIR" ] && [ -x "$CHROOT_DIR/bin/sh" ] || die "Invalid debootstrap dir"
+	for a in $ARCH_LIST ; do
+		CHROOT_DIR="$TARGET_DIR/$CURRENT_DIST-$a"
+		# TODO : ...
+		[ -d "$CHROOT_DIR" ] && [ -x "$CHROOT_DIR/bin/sh" ] || die "Invalid debootstrap dir"
+	done
 }
 
 do_debootstrap(){
-	rm -fr "$CHROOT_DIR"
-	mkdir -p "$CHROOT_DIR"
-	debootstrap "$CURRENT_DIST" "$CHROOT_DIR"
+	for a in $ARCH_LIST ; do
+		CHROOT_DIR="$TARGET_DIR/$CURRENT_DIST-$a"
+		rm -fr "$CHROOT_DIR"
+		mkdir -p "$CHROOT_DIR"
+		debootstrap "$CURRENT_DIST" "$CHROOT_DIR"
+	done
 }
 
 chroot_mounts(){
@@ -174,37 +180,42 @@ chroot_umounts(){
 }
 
 prepare_chroot(){
-	CHROOT_CMD="chroot $CHROOT_DIR "
-	if [ "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] && [ -r "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] ; then
-		CHROOT_SOURCES_LIST="$CUSTOM_DEBOOTSTRAP_SOURCESLIST"
-	fi
-	if [ "$CHROOT_SOURCES_LIST" ] && [ -r "$CHROOT_SOURCES_LIST" ] ; then
-		echo "chroot: copy sources.list"
-		cat "$CHROOT_SOURCES_LIST" > "$CHROOT_DIR/etc/apt/sources.list"
-	fi
-	if [ "$CUSTOM_DEBOOTSTRAP_COPY" ] && [ -d "$CUSTOM_DEBOOTSTRAP_COPY" ] ; then
-		echo "chroot: copy custom files"
-		rsync -axC "$CUSTOM_DEBOOTSTRAP_COPY/" "$CHROOT_DIR/"
-	fi
-	chroot_mounts
 	CURRENT_LC_ALL="$LC_ALL"
 	CURRENT_LANG="$LANG"
 	export LC_ALL=C
 	export LANG=C
-	if [ "$CUSTOM_DEBOOTSTRAP_PKGS" ] ; then
-		echo "chroot: install custom pkgs"
-		$CHROOT_CMD apt-get update || true
-		$CHROOT_CMD apt-get --allow-unauthenticated -y install "$CUSTOM_DEBOOTSTRAP_PKGS" || true
-	fi
-	if [ "$CUSTOM_DEBOOSTRAP_CMD" ] ; then
-		echo "chroot: run custom cmd"
-		$CHROOT_CMD $CUSTOM_DEBOOSTRAP_CMD || true
-	fi
-	echo "chroot: update & dist-upgrade"
-	$CHROOT_CMD apt-get update || true 
-	$CHROOT_CMD apt-get --allow-unauthenticated -y dist-upgrade || true
-	$CHROOT_CMD dpkg -l |sed -ne "/^ii/s%\(^ii[[:blank:]]\+[^[:blank:]]\+[[:blank:]]\+[^[:blank:]]\+\).*$%\1%p" > $DEBOOTSTRAP_BULK
-	chroot_umounts
+	for a in $ARCH_LIST ; do
+		CHROOT_DIR="$TARGET_DIR/$CURRENT_DIST-$a"
+		CHROOT_CMD="chroot $CHROOT_DIR "
+		DEBOOTSTRAP_BULK="filter-lists/debootstrap-$a.pkgs"
+
+		if [ "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] && [ -r "$CUSTOM_DEBOOTSTRAP_SOURCESLIST" ] ; then
+			CHROOT_SOURCES_LIST="$CUSTOM_DEBOOTSTRAP_SOURCESLIST"
+		fi
+		if [ "$CHROOT_SOURCES_LIST" ] && [ -r "$CHROOT_SOURCES_LIST" ] ; then
+			echo "chroot: copy sources.list"
+			cat "$CHROOT_SOURCES_LIST" > "$CHROOT_DIR/etc/apt/sources.list"
+		fi
+		if [ "$CUSTOM_DEBOOTSTRAP_COPY" ] && [ -d "$CUSTOM_DEBOOTSTRAP_COPY" ] ; then
+			echo "chroot: copy custom files"
+			rsync -axC "$CUSTOM_DEBOOTSTRAP_COPY/" "$CHROOT_DIR/"
+		fi
+		chroot_mounts
+		if [ "$CUSTOM_DEBOOTSTRAP_PKGS" ] ; then
+			echo "chroot: install custom pkgs"
+			$CHROOT_CMD apt-get update || true
+			$CHROOT_CMD apt-get --allow-unauthenticated -y install "$CUSTOM_DEBOOTSTRAP_PKGS" || true
+		fi
+		if [ "$CUSTOM_DEBOOSTRAP_CMD" ] ; then
+			echo "chroot: run custom cmd"
+			$CHROOT_CMD $CUSTOM_DEBOOSTRAP_CMD || true
+		fi
+		echo "chroot: update & dist-upgrade"
+		$CHROOT_CMD apt-get update || true 
+		$CHROOT_CMD apt-get --allow-unauthenticated -y dist-upgrade || true
+		$CHROOT_CMD dpkg -l |sed -ne "/^ii/s%\(^ii[[:blank:]]\+[^[:blank:]]\+[[:blank:]]\+[^[:blank:]]\+\).*$%\1%p" > $DEBOOTSTRAP_BULK
+		chroot_umounts
+	done
 	export LC_ALL=$CURRENT_LC_ALL
 	export LANG=$CURRENT_LANG
 	echo "chroot: end preparation"
@@ -219,72 +230,77 @@ update_lists(){
 	CURRENT_LANG="$LANG"
 	export LC_ALL=C
 	export LANG=C
-	APT_CMD="chroot $CHROOT_DIR apt-get --allow-unauthenticated -ysV "
-	chroot_mounts
-	INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
-	TMP_FILE="$(tempfile)"
-	for s in $SEED_LIST ; do
-		echo "Processing seed: $s"
-		meta="$(sed -ne "/^$s /s%^.* %%p" metapackage-map)"
-		if [ "$meta" ] && [ "${meta%%-*}" != "exclude" ] ; then
-			echo "   Simulate installation of metapackage $meta"
-			$APT_CMD --install-recommends install $meta |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
-		else
-			for f in "$s-$CURRENT_ARCH" "$s-recommends-$CURRENT_ARCH" ; do
-				echo "   Simulate installation of package list $f"
-				if [ -r "$f" ] ; then
-					cat "$f" |while read p ; do
-						$APT_CMD install $p |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
-					done
+	for a in $ARCH_LIST ; do
+		CHROOT_DIR="$TARGET_DIR/$CURRENT_DIST-$a"
+		DEBOOTSTRAP_BULK="filter-lists/debootstrap-$a.pkgs"
+		FULL_LIST="filter-lists/full-list-$a.bulk"
+		APT_CMD="chroot $CHROOT_DIR apt-get --allow-unauthenticated -ysV "
+		chroot_mounts
+		INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
+		TMP_FILE="$(tempfile)"
+		for s in $SEED_LIST ; do
+			echo "Processing seed: $s"
+			meta="$(sed -ne "/^$s /s%^.* %%p" metapackage-map)"
+			if [ "$meta" ] && [ "${meta%%-*}" != "exclude" ] ; then
+				echo "   Simulate installation of metapackage $meta"
+				$APT_CMD --install-recommends install $meta |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
+			else
+				for f in "$s-$a" "$s-recommends-$a" ; do
+					echo "   Simulate installation of package list $f"
+					if [ -r "$f" ] ; then
+						cat "$f" |while read p ; do
+							$APT_CMD install $p |sed -ne "/$INST_REG_EX/{s%$INST_REG_EX%\3 \1 \2%;p}" >> $TMP_FILE
+						done
+					fi
+				done
+			fi
+		done
+		echo "processing files"
+		LISTS_DIR="$(mktemp -d)"
+		# grep to discard packages from ubuntu
+		cat "$DEBOOTSTRAP_BULK" "$TMP_FILE" |sort -u |grep -v "^Ubuntu:" |while read d p v; do
+			BULK_REPO="$(chroot $CHROOT_DIR apt-cache madison $p |pcache_sed_repository "$p" "$v")"
+			if [ "$BULK_REPO" ] ; then
+				REPO_URL="${BULK_REPO% *}"
+				REPO_DIS="${BULK_REPO#* }"
+				REPO_FILE="${LISTS_DIR}/$(gen_repo_basename "${BULK_REPO}").list"
+				URL_FILE="${REPO_FILE%.list}.url"
+				if [ ! -r "$URL_FILE" ] ; then
+					echo "# -> $REPO_URL $REPO_DIS" > "$URL_FILE"
+					:> "$REPO_FILE"
 				fi
-			done
-		fi
-	done
-	echo "processing files"
-	LISTS_DIR="$(mktemp -d)"
-	# grep to discard packages from ubuntu
-	cat "$DEBOOTSTRAP_BULK" "$TMP_FILE" |sort -u |grep -v "^Ubuntu:" |while read d p v; do
-		BULK_REPO="$(chroot $CHROOT_DIR apt-cache madison $p |pcache_sed_repository "$p" "$v")"
-		if [ "$BULK_REPO" ] ; then
-			REPO_URL="${BULK_REPO% *}"
-			REPO_DIS="${BULK_REPO#* }"
-			REPO_FILE="${LISTS_DIR}/$(gen_repo_basename "${BULK_REPO}").list"
+				echo "$p" >> "$REPO_FILE"
+			fi
+		done
+		echo "processing Ubuntu packages"
+		# TODO: generate list files for ubuntu packages
+		for REPO_DIS in $(sed -ne "/^Ubuntu:/{s% .*$%%;s%^.*/%%;p}" "$TMP_FILE" |sort -u) ; do
+			REPO_FILE="${LISTS_DIR}/$(gen_repo_basename "$UBUNTU_MIRROR $REPO_DIS").list"
 			URL_FILE="${REPO_FILE%.list}.url"
 			if [ ! -r "$URL_FILE" ] ; then
-				echo "# -> $REPO_URL $REPO_DIS" > "$URL_FILE"
+				echo "# -> $UBUNTU_MIRROR $REPO_DIS" > "$URL_FILE"
 				:> "$REPO_FILE"
 			fi
-			echo "$p" >> "$REPO_FILE"
+			sed -ne "\%^Ubuntu:[^\/]*/$REPO_DIS %{s%^[^[:blank:]]\+[[:blank:]]%%;s%[[:blank:]].*$%%;p}" "$TMP_FILE" >> "$REPO_FILE"
+		done
+		#	
+		cp $FULL_LIST "$LISTS_DIR/old-list.bulk"
+		:> $FULL_LIST
+		for f in $(ls -1 $LISTS_DIR/*.list 2>/dev/null |sort) ; do
+			F="${f%.list}.url"
+			cat "$F" >> $FULL_LIST
+			sort -u "$f" >> $FULL_LIST
+		done
+		echo "update-lists terminado. $FULL_LIST actualizado"
+		if diff -q >/dev/null $FULL_LIST "$LISTS_DIR/old-list.bulk" ; then
+			echo "No se encontraron diferencias"
+		else
+			echo "Se encontraron cambios"
 		fi
+		rm -f "$TMP_FILE"
+		rm -fr "$LISTS_DIR"
+		chroot_umounts
 	done
-	echo "processing Ubuntu packages"
-	# TODO: generate list files for ubuntu packages
-	for REPO_DIS in $(sed -ne "/^Ubuntu:/{s% .*$%%;s%^.*/%%;p}" "$TMP_FILE" |sort -u) ; do
-		REPO_FILE="${LISTS_DIR}/$(gen_repo_basename "$UBUNTU_MIRROR $REPO_DIS").list"
-		URL_FILE="${REPO_FILE%.list}.url"
-		if [ ! -r "$URL_FILE" ] ; then
-			echo "# -> $UBUNTU_MIRROR $REPO_DIS" > "$URL_FILE"
-			:> "$REPO_FILE"
-		fi
-		sed -ne "\%^Ubuntu:[^\/]*/$REPO_DIS %{s%^[^[:blank:]]\+[[:blank:]]%%;s%[[:blank:]].*$%%;p}" "$TMP_FILE" >> "$REPO_FILE"
-	done
-	#	
-	cp $FULL_LIST "$LISTS_DIR/old-list.bulk"
-	:> $FULL_LIST
-	for f in $(ls -1 $LISTS_DIR/*.list 2>/dev/null |sort) ; do
-		F="${f%.list}.url"
-		cat "$F" >> $FULL_LIST
-		sort -u "$f" >> $FULL_LIST
-	done
-	echo "update-lists terminado. $FULL_LIST actualizado"
-	if diff -q >/dev/null $FULL_LIST "$LISTS_DIR/old-list.bulk" ; then
-		echo "No se encontraron diferencias"
-	else
-		echo "Se encontraron cambios"
-	fi
-	rm -f "$TMP_FILE"
-	rm -fr "$LISTS_DIR"
-	chroot_umounts
 	export LC_ALL=$CURRENT_LC_ALL
 	export LANG=$CURRENT_LANG
 
@@ -301,8 +317,8 @@ split_lists(){
 				REPO_URL="$(sed -ne "${nfirst}{s%^# -> %%;p}" "$f")"
 				FILENAME="$(gen_repo_basename "$REPO_URL")"
 				nlast="$n"
-				sed -ne "${nfirst},${nlast}{/^#.*$/d;p}" "$f" > "$CHROOT_DIR/${FILENAME}-$F_ARCH.list"
-				echo "$REPO_URL" > "$CHROOT_DIR/${FILENAME}-$F_ARCH.url"
+				sed -ne "${nfirst},${nlast}{/^#.*$/d;p}" "$f" > "$TARGET_DIR/${FILENAME}-$F_ARCH.list"
+				echo "$REPO_URL" > "$TARGET_DIR/${FILENAME}-$F_ARCH.url"
 			fi
 			nfirst="$n"
 		done
@@ -374,14 +390,17 @@ usage(){
 }
 
 # variables
+TARGET_DIR=""
+CHROOT_DIR=""
 . ./aurex-meta.conf
 SOURCES_BASEDIR=./sources
 SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\(.*\)$"
 
-# TODO: Find a lesser dirty wat to get current debian architecture name
-CURRENT_ARCH=$(dpkg -s coreutils |sed -ne "/^Architecture:/s%^.* %%p")
-DEBOOTSTRAP_BULK="filter-lists/debootstrap-$CURRENT_ARCH.pkgs"
-FULL_LIST="filter-lists/full-list-$CURRENT_ARCH.bulk"
+CURRENT_ARCH=$(dpkg --print-architecture)
+ARCH_LIST="$CURRENT_ARCH"
+if [ "$CURRENT_ARCH" = "amd64" ] ; then
+	ARCH_LIST="i386 amd64"
+fi
 
 CHROOT_SOURCES_LIST=""
 # main
@@ -389,7 +408,7 @@ CHROOT_SOURCES_LIST=""
 for o in "$1" "$2" ; do
 	if [ "$o" ] ; then
 		if [ "${o%%=*}" = "--target-dir" ] ; then
-			CHROOT_DIR="${o#*=}"
+			TARGET_DIR="${o#*=}"
 		else
 			[ "$ACTION" ] || ACTION="$o"
 		fi
@@ -408,7 +427,7 @@ case "$ACTION" in
 		update_seeds
 		;;
 	prepare-chroot)
-		[ "$CHROOT_DIR" ] || die "prepare-chroot requires --target-dir=<DIRNAME> option"
+		[ "$TARGET_DIR" ] || die "prepare-chroot requires --target-dir=<DIRNAME> option"
 		configure_chroot
 		test_debootstrap
 		prepare_chroot
@@ -418,7 +437,7 @@ case "$ACTION" in
 		germinate-update-metapackage --multiple-dists
 		;;
 	debootstrap)
-		[ "$CHROOT_DIR" ] || die "debootstrap requires --target-dir=<DIRNAME> option"
+		[ "$TARGET_DIR" ] || die "debootstrap requires --target-dir=<DIRNAME> option"
 		[ $(id -u) -eq 0 ] || die "root privileges required"
 		configure_chroot
 		do_debootstrap
@@ -428,9 +447,9 @@ case "$ACTION" in
 		[ $(id -u) -eq 0 ] || die "root privileges required"
 		[ -r "metapackage-map" ] || die "metapackage-map file not found"
 		configure_chroot
-		if [ -z "$CHROOT_DIR" ] ; then
-			CHROOT_DIR="$(mktemp -d)"
-			CLEAN_DIR="$CHROOT_DIR"
+		if [ -z "$TARGET_DIR" ] ; then
+			TARGET_DIR="$(mktemp -d)"
+			CLEAN_DIR="$TARGET_DIR"
 			do_debootstrap
 		fi
 		test_debootstrap
@@ -439,8 +458,8 @@ case "$ACTION" in
 		[ -z "$CLEAN_DIR" ] || rm -rf "$CLEAN_DIR"
 		;;
 	split-lists)
-		[ "$CHROOT_DIR" ] || die "split-lists requires --target-dir=<DIRNAME> option"
-		[ -d "$CHROOT_DIR" ] || die "$CHROOT_DIR is not a valid directory"
+		[ "$TARGET_DIR" ] || die "split-lists requires --target-dir=<DIRNAME> option"
+		[ -d "$TARGET_DIR" ] || die "$TARGET_DIR is not a valid directory"
 		split_lists
 		;;
 	*)
