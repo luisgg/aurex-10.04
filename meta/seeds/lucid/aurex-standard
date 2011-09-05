@@ -7,4 +7,17 @@ Task-Metapackage: aurex-standard
 
  * vim
  * tree
+ * debconf-utils
 
+= network filesystem support =
+ * nfs-common
+ * smbclient
+ * smbfs
+
+= archivers/pkg managers =
+ * zip
+ * unzip
+ * unrar
+ * arj
+ * rpm
+ * alien

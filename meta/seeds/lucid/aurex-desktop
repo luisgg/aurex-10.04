@@ -42,3 +42,17 @@ Task-Metapackage: aurex-desktop
  * (language-support-en)
  * (language-support-writing-en)
 
+= pdf viewer =
+ * acroread
+
+= multimedia =
+ * ubuntu-restricted-extras
+ * libdvdread4
+== flash ==
+ * flashplugin-installer [i386]
+ * flashplugin64-installer [amd64]
+
+= win emulation =
+ * (wine)
+ * (winetricks)
+

@@ -1,0 +1,4 @@
+# Latest official WineHQ releases 
+deb http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu lucid main 
+#deb-src http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu lucid main 
+

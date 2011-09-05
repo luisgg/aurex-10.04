@@ -1,0 +1,4 @@
+# Opera packages for the i386 and amd64 architectures.
+deb http://deb.opera.com/opera/ stable non-free
+# no sources
+

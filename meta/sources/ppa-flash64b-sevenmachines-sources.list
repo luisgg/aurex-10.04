@@ -1,0 +1,4 @@
+# Latest adobe flash plugin for x86-64
+deb http://ppa.launchpad.net/sevenmachines/flash/ubuntu lucid main 
+# deb-src http://ppa.launchpad.net/sevenmachines/flash/ubuntu lucid main 
+
