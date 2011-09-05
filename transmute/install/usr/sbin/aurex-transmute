@@ -59,7 +59,9 @@ test_id(){
 }
 
 test_aurex_sources(){
-	grep -q "^deb[[:blank:]]\+[^[:blank:]]\+/aurex/\?[[:blank:]]\+$AUREX_CODENAME[[:blank:]]\+main" /etc/apt/sources.list || return 1
+	for c in main contrib ; do
+		grep -q "^deb[[:blank:]]\+[^[:blank:]]\+/aurex/\?[[:blank:]]\+$AUREX_CODENAME[[:blank:]]\+.*\b$c\($\|[[:blank:]]\)" /etc/apt/sources.list || return 1
+	done
 	return 0
 }
 
