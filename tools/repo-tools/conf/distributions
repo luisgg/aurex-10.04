@@ -2,18 +2,21 @@ Origin: AureX
 Label: AureX
 Suite: lucid
 Codename: lucid
-Architectures: i386 source
-Components: main
+Architectures: i386 amd64 source
+Components: main partner
 Description: AureX stable repository for Ubuntu 10.04 lucid
 Version: 10.04
-SignWith: A871704C
+SignWith: 3D3CBB05
+Pull: tau2lucid
+Update: - ppa_firefox_stable-lucid-i386 ppa_firefox_stable-lucid-amd64 ppa_libvirt-lucid-i386 ppa_libvirt-lucid-amd64
 
 Origin: AureX
 Label: AureX
 Suite: tau
 Codename: tau
-Architectures: i386 source
+Architectures: i386 amd64 source
 Components: main
-Description: Testing AureX (tau) repository. Useat your own risk
+Description: Testing AureX (tau) repository. Use at your own risk
 Version: 10.04
-SignWith: A871704C
+SignWith: 3D3CBB05
+

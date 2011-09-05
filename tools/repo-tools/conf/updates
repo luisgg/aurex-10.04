@@ -1,0 +1,28 @@
+Name: ppa_firefox_stable-lucid-i386
+Method: http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: i386 source
+FilterList: purge ppa_firefox_stable-lucid-i386.list
+
+Name: ppa_firefox_stable-lucid-amd64
+Method: http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: amd64 source
+FilterList: purge ppa_firefox_stable-lucid-amd64.list
+
+Name: ppa_libvirt-lucid-i386
+Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: i386 source
+FilterList: purge ppa_libvirt-lucid-i386.list
+
+Name: ppa_libvirt-lucid-amd64
+Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu
+Suite: lucid
+Components: main>partner
+Architectures: amd64 source
+FilterList: purge ppa_libvirt-lucid-amd64.list
+

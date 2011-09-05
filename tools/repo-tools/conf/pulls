@@ -1,0 +1,5 @@
+Name: tau2lucid
+From: tau
+Components: main
+Architectures: i386 amd64 source
+FilterList: install tau2lucid.list

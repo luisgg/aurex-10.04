@@ -1,0 +1,113 @@
+#!/bin/sh
+
+build_binary(){
+	cowbuilder  --buildresult "$PRESULTPATH" --debbuildopts "$PBUILDOPTS" --build $DSC_FILE --basepath $PBASEPATH || return $?
+}
+
+upload_binary(){
+	reprepro -V --waitforlock 1000 --ignore=wrongdistribution include $RDIST "$PRESULTPATH/${PKG_NAME}_${PKG_VERSION}_${ARCH}.changes" || return $?
+}
+
+get_archs(){
+	sed -ne "/^Architecture:/s%^.*:[[:blank:]]*%%p" $1 |tr " " "\n"
+}
+
+get_pkg_name(){
+	sed -ne "/^Source:/s%^.*:[[:blank:]]*%%p" $CHANGES_FILE
+}
+
+get_pkg_version(){
+	sed -ne "/^Version:/s%^.*:[[:blank:]]*%%p" $CHANGES_FILE
+}
+
+get_changes_archs(){
+	get_archs $CHANGES_FILE
+}
+
+get_dsc_file(){
+	echo "$(dirname "$CHANGES_FILE")/$(sed -ne "/\.dsc$/s%^.*[[:blank:]]%%p" $CHANGES_FILE |head -1)"
+}
+
+get_pkg_source_files(){
+	DIRNAME="$(dirname "$CHANGES_FILE")/"
+	sed -ne "/^Files:/,\${/\.deb$/d;/^[[:blank:]]/s%^.*[[:blank:]]%$DIRNAME%p}" $CHANGES_FILE
+	echo $CHANGES_FILE
+}
+
+get_pkg_archs(){
+	WE_CAN="$(we_can_build_archs)"
+	# translate "any" for "any we can build ..."
+	get_archs $(get_dsc_file) |sed "s%any%$WE_CAN%" |tr " " "\n"
+}
+
+we_can_build_archs(){
+	HOST_ARCH="$(dpkg --print-architecture)"
+	if [ "$HOST_ARCH" = "amd64" ] ; then
+		HOST_ARCH="$HOST_ARCH i386"
+	fi
+	echo "$HOST_ARCH"
+}
+
+write_log(){
+	logger -t "$LOG_TAG" "$1"
+}
+
+# main
+
+CHANGES_FILE="$2"
+PKG_NAME="$(get_pkg_name)"
+PKG_VERSION="$(get_pkg_version)"
+DSC_FILE="$(get_dsc_file)"
+LOG_TAG="REPO-BUILDER[$$]"
+
+if [ "$1" != "--build-binary" ] ; then
+	write_log "Starting. Parameters: $*"
+	for a in $(get_pkg_archs) ; do
+		if ! get_changes_archs |grep -qxF "$a" ; then
+			# ${a} is not build yet ... can we build binary packages ?
+			if we_can_build_archs |tr " " "\n" |grep -qxF "$a" ; then
+				TMP_DIR="$(mktemp -d)"
+				# copy files to the temp dir
+				cp $(get_pkg_source_files) $TMP_DIR
+				$0 --build-binary "$TMP_DIR/$(basename "$CHANGES_FILE")" "$a" &
+			fi
+		fi
+	done
+	exit 0
+fi
+# mode "--build-binary"
+ARCH="$3"
+
+PBASEDIR="/var/cache/pbuilder"
+DIST=lucid
+PRESULTBASE="$PBASEDIR/result/"
+PBUILDOPTS="-b"
+RBASEDIR="/srv/repo/aurex/"
+RDIST="tau"
+HOME=/root
+export DIST ARCH HOME
+PBASEPATH="$PBASEDIR/$DIST-$ARCH.cow"
+PRESULTPATH="$PRESULTBASE/$PKG_NAME-$PKG_VERSION-$DIST-$ARCH"
+ERROR_LOG="$PRESULTPATH/error.log"
+mkdir -p $PRESULTPATH
+if [ -d "$PBASEPATH" ] ; then
+	write_log "Starting build of $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+	if build_binary >$ERROR_LOG  2>&1; then
+		write_log "Successfully build of $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+		if upload_binary >$ERROR_LOG  2>&1 ; then
+			write_log "Successfully upload of $PKG_NAME $PKG_VERSION for distribution $RDIST ($ARCH)"
+			rm -fr "$PRESULTPATH"
+		else
+			write_log "Error uploading $PKG_NAME $PKG_VERSION for distribution $RDIST ($ARCH)"
+			write_log "see $ERROR_LOG"
+		fi
+	else
+		write_log "Error building $PKG_NAME $PKG_VERSION for distribution $DIST ($ARCH)"
+		write_log "see $ERROR_LOG"
+	fi
+fi
+# remove directory
+CLEAN_DIR="$(dirname "$CHANGES_FILE")"
+rm -fr "$CLEAN_DIR"
+
+exit 0

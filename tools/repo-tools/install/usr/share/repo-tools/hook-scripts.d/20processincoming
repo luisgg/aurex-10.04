@@ -1,0 +1,2 @@
+#!/bin/sh
+reprepro -v  --waitforlock  1000 processincoming incoming "$1"
