@@ -84,7 +84,7 @@ expand_update_cfg(){
 			else
 				echo "${m%/}/,$d" >> $EXCEPT_FILE
 			fi
-			if !grep -q "^.*deb-src[[:blank:]]\+$m[[:blank:]]\+$d" $SOURCES_FILE; then
+			if ! grep -q "^.*deb-src[[:blank:]]\+$m[[:blank:]]\+$d" $SOURCES_FILE; then
 				echo "${m%/}/,$d,Sources" >> $EXCEPT_FILE
 			fi
 		done
