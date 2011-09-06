@@ -19,5 +19,7 @@ Task-Metapackage: aurex-standard
  * unzip
  * unrar
  * arj
+ * lha
+ * cabextract
  * rpm
  * alien
