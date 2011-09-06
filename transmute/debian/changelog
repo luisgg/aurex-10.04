@@ -1,6 +1,7 @@
 aurex-transmute (0.5) unstable; urgency=low
 
   * Added (s07) repository key
+  * New binary: aurex-translive
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 06 Sep 2011 01:07:10 +0200
 
