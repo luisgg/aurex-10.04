@@ -65,7 +65,7 @@ expand_update_cfg(){
 	# get mirror list and exceptions
 	echo "get mirrors, dists and components"
 	SOURCES_FILE="$(tempfile)"
-	sed -ne "/$SOURCES_REGEX/p" $SOURCES_BASEDIR/*.list |sort -u > $SOURCES_FILE
+	sed -ne "/$SOURCES_REGEX/p;/$SOURCES_SRC_REGEX/p" $SOURCES_BASEDIR/*.list |sort -u > $SOURCES_FILE
 	MIRROR_LIST="$(list_mirrors $SOURCES_FILE |sort -u)"
 	DIST_LIST="$(list_dists $SOURCES_FILE |sort -u)"
 	COMP_LIST="$(list_components $SOURCES_FILE |sort -u)"
@@ -83,6 +83,9 @@ expand_update_cfg(){
 				done
 			else
 				echo "${m%/}/,$d" >> $EXCEPT_FILE
+			fi
+			if !grep -q "^.*deb-src[[:blank:]]\+$m[[:blank:]]\+$d" $SOURCES_FILE; then
+				echo "${m%/}/,$d,Sources" >> $EXCEPT_FILE
 			fi
 		done
 	done
@@ -395,6 +398,7 @@ CHROOT_DIR=""
 . ./aurex-meta.conf
 SOURCES_BASEDIR=./sources
 SOURCES_REGEX="^deb[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\(.*\)$"
+SOURCES_SRC_REGEX="^.*deb-src[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\([^[:blank:]]\+\)[[:blank:]]\+\(.*\)$"
 
 CURRENT_ARCH=$(dpkg --print-architecture)
 ARCH_LIST="$CURRENT_ARCH"

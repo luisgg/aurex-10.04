@@ -1,3 +1,47 @@
+aurex-meta (1.197+aurex10.04.4) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added acroread to aurex-desktop [i386]
+  * Added alien to aurex-desktop [i386], aurex-standard [i386]
+  * Added arj to aurex-desktop [i386], aurex-standard [i386]
+  * Added bridge-utils to aurex-desktop [i386], aurex-minimal [i386]
+  * Added debconf-utils to aurex-desktop [i386], aurex-standard [i386]
+  * Added flashplugin-installer to aurex-desktop [i386]
+  * Added libdvdread4 to aurex-desktop [i386]
+  * Added linux-headers-server-lts-backport-maverick to aurex-desktop
+    [i386], aurex-minimal [i386]
+  * Added linux-image-server-lts-backport-maverick to aurex-desktop
+    [i386], aurex-minimal [i386]
+  * Added nautilus-dropbox to aurex-supported [i386]
+  * Added nfs-common to aurex-desktop [i386], aurex-standard [i386]
+  * Added opera to aurex-supported [i386]
+  * Added rpm to aurex-desktop [i386], aurex-standard [i386]
+  * Added smbclient to aurex-desktop [i386], aurex-standard [i386]
+  * Added smbfs to aurex-desktop [i386], aurex-standard [i386]
+  * Added ubuntu-restricted-extras to aurex-desktop [i386]
+  * Added unrar to aurex-desktop [i386], aurex-standard [i386]
+  * Added unzip to aurex-desktop [i386], aurex-standard [i386]
+  * Added virtualbox-4.0 to aurex-supported [i386]
+  * Added virtualbox-4.1 to aurex-supported [i386]
+  * Added wine to aurex-desktop-recommends [i386]
+  * Added wine1.2 to aurex-supported [i386]
+  * Added wine1.3 to aurex-supported [i386]
+  * Added winetricks to aurex-desktop-recommends [i386]
+  * Added zip to aurex-desktop [i386], aurex-standard [i386]
+  * Removed aurex-desktop from desktop [i386]
+  * Removed aurex-standard from standard [i386]
+  * Removed linux-headers-generic-pae-lts-backport-maverick from aurex-
+    desktop [i386], aurex-minimal [i386]
+  * Removed linux-image-generic-pae-lts-backport-maverick from aurex-
+    desktop [i386], aurex-minimal [i386], aurex-supported [i386]
+  * Moved libreoffice to aurex-desktop-recommends [i386]
+  * Moved libreoffice-gnome to aurex-desktop-recommends [i386]
+  * Moved libreoffice-help-es to aurex-desktop-recommends [i386]
+  * Moved libreoffice-l10n-common to aurex-desktop-recommends [i386]
+  * Moved libreoffice-l10n-es to aurex-desktop-recommends [i386]
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 06 Sep 2011 01:55:17 +0200
+
 aurex-meta (1.197+aurex10.04.3) lucid; urgency=low
 
   * Added support for amd64 

@@ -16,7 +16,6 @@ iproute
 iputils-ping
 kbd
 less
-libc6-i686
 linux-headers-server-lts-backport-maverick
 linux-image-server-lts-backport-maverick
 locales

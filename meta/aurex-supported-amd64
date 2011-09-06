@@ -65,7 +65,6 @@ libreoffice-style-tango
 libvirt-bin
 libvirt0
 linux-headers-generic-lts-backport-maverick
-linux-headers-generic-pae-lts-backport-maverick
 linux-headers-server-lts-backport-maverick
 linux-headers-virtual-lts-backport-maverick
 linux-image-generic-lts-backport-maverick

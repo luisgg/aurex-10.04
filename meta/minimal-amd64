@@ -1,8 +1,6 @@
 adduser
 apt
 apt-utils
-aurex-transmute
-bridge-utils
 bzip2
 console-setup
 dash
@@ -16,9 +14,6 @@ iproute
 iputils-ping
 kbd
 less
-libc6-i686
-linux-headers-server-lts-backport-maverick
-linux-image-server-lts-backport-maverick
 locales
 lsb-release
 makedev
@@ -36,7 +31,6 @@ sudo
 tasksel
 tzdata
 ubuntu-keyring
-ubuntu-minimal
 udev
 upstart
 ureadahead
