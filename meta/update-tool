@@ -37,9 +37,9 @@ clean_sources(){
 }
 
 expand_sources(){
-	TARGET_DIR="$SOURCES_BASEDIR/"
+	T_DIR="$SOURCES_BASEDIR/"
 	if [ "$1" ]; then
-		TARGET_DIR="${1%/}/"
+		T_DIR="${1%/}/"
 	fi
 	# expand sources.list
 	[ -d "$SOURCES_BASEDIR" ] || die
@@ -51,7 +51,7 @@ expand_sources(){
 	fi
 	for f in $SOURCES_BASEDIR/*.in ; do
 		if [ -r $f ] ; then
-			F="${TARGET_DIR}$(basename "$f" ".in")"
+			F="${T_DIR}$(basename "$f" ".in")"
 			if [ "$2" = "clean" ] ; then
 				rm -f "$F"
 			else
