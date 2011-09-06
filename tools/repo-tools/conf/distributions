@@ -3,7 +3,7 @@ Label: AureX
 Suite: lucid
 Codename: lucid
 Architectures: i386 amd64 source
-Components: main partner
+Components: main contrib
 Description: AureX stable repository for Ubuntu 10.04 lucid
 Version: 10.04
 SignWith: 3D3CBB05
