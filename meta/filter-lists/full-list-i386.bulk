@@ -1,15 +1,4 @@
-# -> http://192.168.100.200/aurex/ lucid
-aurex-boot-theme
-aurex-desktop
-aurex-gdm-theme
-aurex-gnome-theme
-aurex-icon-theme
-aurex-minimal
-aurex-plymouth-theme
-aurex-standard
-aurex-transmute
-aurex-wallpaper-theme
-gtk-aurex-bamboo-zen-theme
+# -> http://192.168.200.210/aurex/ lucid
 nvidia-185-kernel-source
 nvidia-185-libvdpau
 nvidia-185-libvdpau-dev
@@ -19,9 +8,6 @@ nvidia-current-dev
 nvidia-current-modaliases
 nvidia-glx-185
 nvidia-glx-185-dev
-ubuntu-desktop
-ubuntu-minimal
-ubuntu-standard
 # -> http://archive.ubuntu.com/ubuntu/ lucid-proposed
 linux-headers-2.6.35-30
 # -> http://archive.ubuntu.com/ubuntu/ lucid-updates
@@ -60,6 +46,7 @@ brasero-common
 bsdutils
 byobu
 bzip2
+cabextract
 capplets-data
 checkbox
 checkbox-gtk
@@ -135,10 +122,10 @@ evolution-plugins
 f-spot
 fglrx-modaliases
 file-roller
+flashplugin-installer
+flashplugin-nonfree
 foomatic-filters
 fuse-utils
-gcj-4.4-base
-gcj-4.4-jre-lib
 gdebi
 gdebi-core
 gdm
@@ -150,6 +137,7 @@ ghostscript-x
 gnome-about
 gnome-control-center
 gnome-desktop-data
+gnome-exe-thumbnailer
 gnome-keyring
 gnome-orca
 gnome-panel
@@ -178,7 +166,7 @@ hplip
 hplip-data
 hunspell-en-ca
 hunspell-fr
-icedtea-6-jre-cacao
+icoutils
 ifupdown
 imagemagick
 indicator-applet
@@ -203,6 +191,7 @@ language-selector
 language-selector-common
 ldap-utils
 lftp
+lib32bz2-1.0
 libapache2-mod-php5
 libapparmor-perl
 libapparmor1
@@ -228,7 +217,7 @@ libc-bin
 libc-dev-bin
 libc6
 libc6-dev
-libc6-i686
+libc6-i386
 libcairomm-1.0-1
 libcamel1.2-14
 libck-connector0
@@ -268,7 +257,6 @@ libfreetype6
 libfuse2
 libgail-common
 libgail18
-libgcj10
 libgcr0
 libgdata-common
 libgdata-google1.2-1
@@ -291,6 +279,7 @@ libgp11-0
 libgs8
 libgssapi-krb5-2
 libgstfarsight0.10-0
+libgtk-vnc-1.0-0
 libgtk2.0-0
 libgtk2.0-bin
 libgtk2.0-common
@@ -353,6 +342,7 @@ libpurple0
 libqt4-dbus
 libqt4-designer
 libqt4-network
+libqt4-opengl
 libqt4-script
 libqt4-sql
 libqt4-sql-mysql
@@ -366,7 +356,6 @@ librsvg2-common
 libsdl1.2debian
 libsdl1.2debian-alsa
 libsdl1.2debian-pulseaudio
-libservlet2.5-java
 libslp1
 libsndfile1
 libsnmp-base
@@ -395,21 +384,19 @@ linux-firmware
 linux-headers-2.6.32-33
 linux-headers-2.6.32-33-generic
 linux-headers-2.6.35-30-generic
-linux-headers-2.6.35-30-generic-pae
+linux-headers-2.6.35-30-server
 linux-headers-2.6.35-30-virtual
 linux-headers-generic
 linux-headers-generic-lts-backport-maverick
-linux-headers-generic-pae-lts-backport-maverick
 linux-headers-server-lts-backport-maverick
 linux-headers-virtual-lts-backport-maverick
 linux-image
 linux-image-2.6.32-33-generic
 linux-image-2.6.35-30-generic
-linux-image-2.6.35-30-generic-pae
+linux-image-2.6.35-30-server
 linux-image-2.6.35-30-virtual
 linux-image-generic
 linux-image-generic-lts-backport-maverick
-linux-image-generic-pae-lts-backport-maverick
 linux-image-server-lts-backport-maverick
 linux-image-virtual-lts-backport-maverick
 linux-libc-dev
@@ -431,12 +418,11 @@ nautilus
 nautilus-data
 nautilus-sendto-empathy
 network-manager
+nspluginwrapper
 ntp
 ntpdate
 obexd-client
-openjdk-6-jre
-openjdk-6-jre-headless
-openjdk-6-jre-lib
+openoffice.org-common
 openoffice.org-style-human
 openssh-client
 openssl
@@ -457,8 +443,7 @@ php5-pspell
 php5-sqlite
 plymouth
 plymouth-label
-plymouth-theme-script
-plymouth-theme-text
+plymouth-theme-ubuntu-logo
 plymouth-theme-ubuntu-text
 plymouth-x11
 pm-utils
@@ -484,6 +469,7 @@ python-desktopcouch-records
 python-farsight
 python-gnomeapplet
 python-gnomekeyring
+python-gtk-vnc
 python-gtksourceview2
 python-imaging
 python-lazr.restfulclient
@@ -529,9 +515,9 @@ totem-mozilla
 totem-plugins
 transmission-common
 transmission-gtk
+ttf-mscorefonts-installer
 ttf-thai-tlwg
 tzdata
-tzdata-java
 ubuntu-system-service
 ubuntuone-client
 ubuntuone-client-gnome
@@ -557,7 +543,6 @@ xdg-utils
 xkb-data
 xserver-common
 xserver-xorg-core
-xserver-xorg-video-geode
 xulrunner-1.9.2
 # -> http://archive.ubuntu.com/ubuntu/ lucid
 acl
@@ -601,7 +586,6 @@ build-essential
 busybox-initramfs
 busybox-static
 ca-certificates
-ca-certificates-java
 cdparanoia
 cli-common
 command-not-found
@@ -629,8 +613,6 @@ debconf
 debconf-i18n
 debhelper
 debianutils
-default-jre
-default-jre-headless
 defoma
 desktop-file-utils
 dictionaries-common
@@ -769,7 +751,6 @@ iputils-ping
 iputils-tracepath
 irqbalance
 iso-codes
-java-common
 javascript-common
 kbd
 kerneloops-daemon
@@ -792,9 +773,14 @@ launchpad-integration
 ldap-auth-client
 ldap-auth-config
 less
+lib32asound2
+lib32gcc1
+lib32ncurses5
+lib32nss-mdns
+lib32stdc++6
+lib32v4l-0
+lib32z1
 libaa1
-libaccess-bridge-java
-libaccess-bridge-java-jni
 libacl1
 libaio1
 libanthy0
@@ -857,11 +843,6 @@ libclutter-1.0-0
 libclutter-gtk-0.10-0
 libcolamd2.7.1
 libcommon-sense-perl
-libcommons-beanutils-java
-libcommons-collections3-java
-libcommons-compress-java
-libcommons-digester-java
-libcommons-logging-java
 libcompizconfig0
 libcompress-raw-zlib-perl
 libconfig-tiny-perl
@@ -889,10 +870,7 @@ libdatetime-locale-perl
 libdatetime-perl
 libdatetime-timezone-perl
 libdatrie1
-libdb-je-java
 libdb4.7
-libdb4.7-java
-libdb4.7-java-gcj
 libdb4.8
 libdbd-pg-perl
 libdbi-perl
@@ -947,12 +925,11 @@ libgail-gnome-module
 libgamin0
 libgc1c2
 libgcc1
-libgcj-bc
-libgcj-common
 libgconf2-4
 libgconf2.0-cil
 libgcrypt11
 libgd-gd2-perl
+libgd2-noxpm
 libgd2-xpm
 libgdbm3
 libgdict-1.0-6
@@ -1010,7 +987,6 @@ libgsm1
 libgssdp-1.0-2
 libgstreamer-plugins-base0.10-0
 libgstreamer0.10-0
-libgtk-vnc-1.0-0
 libgtk2-perl
 libgtk2.0-cil
 libgtkhtml-editor-common
@@ -1024,7 +1000,6 @@ libgupnp-1.0-3
 libgupnp-igd-1.0-2
 libgweather-common
 libgweather1
-libhsqldb-java
 libhtml-format-perl
 libhtml-parser-perl
 libhtml-tagset-perl
@@ -1035,7 +1010,6 @@ libibus1
 libical0
 libice6
 libicu42
-libicu4j-java
 libidl0
 libidn11
 libiec61883-0
@@ -1057,9 +1031,7 @@ libipc-sharelite-perl
 libiw30
 libjack0
 libjasper1
-libjaxp1.3-java
 libjcode-pm-perl
-libjline-java
 libjpeg62
 libjs-prototype
 libjs-scriptaculous
@@ -1067,7 +1039,6 @@ libjson-glib-1.0-0
 libjson-perl
 libjson-rpc-perl
 libjson-xs-perl
-libjtidy-java
 libkeyutils1
 libklibc
 liblaunchpad-integration1
@@ -1085,7 +1056,6 @@ liblouis0
 liblpint-bonobo0
 libltdl7
 liblua5.1-0
-liblucene2-java
 liblzma1
 liblzo2-2
 libm17n-0
@@ -1210,7 +1180,6 @@ librdf0
 libreadline6
 libreadonly-perl
 libreadonly-xs-perl
-libregexp-java
 libresample1
 librpc-xml-perl
 librrd4
@@ -1220,6 +1189,7 @@ libsane
 libsasl2-2
 libsasl2-modules
 libsctp1
+libsdl-ttf2.0-0
 libselinux1
 libsensors4
 libsepol1
@@ -1246,7 +1216,6 @@ libsqlite3-0
 libstartup-notification0
 libstdc++6
 libstdc++6-4.4-dev
-libstlport4.6ldbl
 libstring-shellquote-perl
 libsub-name-perl
 libsybdb5
@@ -1487,7 +1456,6 @@ python-gnomecanvas
 python-gnupginterface
 python-gobject
 python-gst0.10
-python-gtk-vnc
 python-gtk2
 python-gtkspell
 python-httplib2
@@ -1586,12 +1554,12 @@ tinymce
 tk8.4
 toshset
 traceroute
-tree
 tsclient
 tsconf
 ttf-dejavu
 ttf-dejavu-core
 ttf-dejavu-extra
+ttf-droid
 ttf-freefont
 ttf-indic-fonts-core
 ttf-kacst-one
@@ -1599,20 +1567,23 @@ ttf-khmeros-core
 ttf-lao
 ttf-liberation
 ttf-punjabi-fonts
-ttf-sil-gentium
-ttf-sil-gentium-basic
 ttf-takao-pgothic
+ttf-umefont
 ttf-unfonts-core
 ttf-wqy-microhei
 ubuntu-artwork
+ubuntu-desktop
 ubuntu-docs
 ubuntu-keyring
+ubuntu-minimal
 ubuntu-mono
 ubuntu-sounds
+ubuntu-standard
 ubuntu-wallpapers
 ucf
 ufw
 unixodbc
+unrar
 unrar-free
 unzip
 update-notifier
@@ -1622,9 +1593,7 @@ usbmuxd
 usbutils
 vbetool
 vgabios
-vim
 vim-common
-vim-runtime
 vim-tiny
 vlan
 vpb-driver-source
@@ -1634,6 +1603,7 @@ wcatalan
 wfrench
 whiptail
 whois
+wine1.2-gecko
 wireless-crda
 wireless-tools
 witalian
@@ -1685,7 +1655,6 @@ xserver-xorg-video-chips
 xserver-xorg-video-cirrus
 xserver-xorg-video-fbdev
 xserver-xorg-video-i128
-xserver-xorg-video-i740
 xserver-xorg-video-intel
 xserver-xorg-video-mach64
 xserver-xorg-video-mga
@@ -1716,21 +1685,20 @@ yelp
 zenity
 zip
 zlib1g
+# -> http://deb.opera.com/opera/ stable
+opera
+# -> http://download.virtualbox.org/virtualbox/debian/ lucid
+virtualbox-4.0
+virtualbox-4.1
+# -> http://linux.dropbox.com/ubuntu/ lucid
+nautilus-dropbox
 # -> http://ppa.launchpad.net/bisigi/ppa/ubuntu/ lucid
 humanity-icon-theme
-metacity-aquadreams-theme
 # -> http://ppa.launchpad.net/libreoffice/ppa/ubuntu/ lucid
-libreoffice
-libreoffice-base
 libreoffice-base-core
-libreoffice-calc
 libreoffice-common
 libreoffice-core
-libreoffice-draw
 libreoffice-emailmerge
-libreoffice-filter-mobiledev
-libreoffice-gnome
-libreoffice-gtk
 libreoffice-help-ca
 libreoffice-help-de
 libreoffice-help-en-gb
@@ -1738,8 +1706,6 @@ libreoffice-help-en-us
 libreoffice-help-es
 libreoffice-help-fr
 libreoffice-help-it
-libreoffice-impress
-libreoffice-java-common
 libreoffice-l10n-ca
 libreoffice-l10n-common
 libreoffice-l10n-de
@@ -1748,7 +1714,6 @@ libreoffice-l10n-es
 libreoffice-l10n-fr
 libreoffice-l10n-it
 libreoffice-math
-libreoffice-report-builder-bin
 libreoffice-style-andromeda
 libreoffice-style-crystal
 libreoffice-style-galaxy
@@ -1794,8 +1759,14 @@ seabios
 virt-manager
 virt-viewer
 virtinst
-# -> http://ppa.launchpad.net/tiheum/equinox/ubuntu/ lucid
-faenza-icon-theme
+# -> http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu/ lucid
+ia32-libs
+ttf-symbol-replacement
+ttf-symbol-replacement-wine1.3
+wine1.2
+wine1.3
+wine1.3-gecko
+winetricks
 # -> http://ppa.launchpad.net/zentyal/2.1/ubuntu/ lucid
 asterisk
 asterisk-config
@@ -1863,6 +1834,7 @@ samba-common
 samba-common-bin
 samba-vscan
 smbclient
+winbind
 zentyal
 zentyal-all
 zentyal-antivirus
