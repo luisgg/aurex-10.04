@@ -1,4 +1,15 @@
-# -> http://192.168.200.210/aurex/ lucid
+# -> http://192.168.10.40/aurex/ lucid
+aurex-boot-theme
+aurex-desktop
+aurex-gdm-theme
+aurex-gnome-theme
+aurex-icon-theme
+aurex-minimal
+aurex-plymouth-theme
+aurex-standard
+aurex-transmute
+aurex-wallpaper-theme
+gtk-aurex-bamboo-zen-theme
 nvidia-185-kernel-source
 nvidia-185-libvdpau
 nvidia-185-libvdpau-dev
@@ -8,11 +19,15 @@ nvidia-current-dev
 nvidia-current-modaliases
 nvidia-glx-185
 nvidia-glx-185-dev
+ubuntu-desktop
+ubuntu-minimal
+ubuntu-standard
 # -> http://archive.ubuntu.com/ubuntu/ lucid-proposed
 linux-headers-2.6.35-30
 # -> http://archive.ubuntu.com/ubuntu/ lucid-updates
 acpi-support
 acpid
+alien
 apache2
 apache2-mpm-prefork
 apache2-mpm-worker
@@ -113,6 +128,7 @@ erlang-syntax-tools
 erlang-tools
 erlang-webtool
 erlang-xmerl
+ethtool
 evince
 evolution
 evolution-common
@@ -126,6 +142,8 @@ flashplugin-installer
 flashplugin-nonfree
 foomatic-filters
 fuse-utils
+gcj-4.4-base
+gcj-4.4-jre-lib
 gdebi
 gdebi-core
 gdm
@@ -151,6 +169,7 @@ gnome-user-guide
 grub-common
 grub-pc
 gstreamer0.10-plugins-good
+gstreamer0.10-plugins-ugly-multiverse
 gstreamer0.10-pulseaudio
 gtk2-engines-pixbuf
 gvfs
@@ -166,6 +185,8 @@ hplip
 hplip-data
 hunspell-en-ca
 hunspell-fr
+icedtea-6-jre-cacao
+icedtea6-plugin
 icoutils
 ifupdown
 imagemagick
@@ -209,6 +230,9 @@ libavahi-core6
 libavahi-glib1
 libavahi-gobject0
 libavahi-ui0
+libavcodec-extra-52
+libavformat52
+libavutil-extra-49
 libbind9-60
 libblkid1
 libbrasero-media0
@@ -257,6 +281,7 @@ libfreetype6
 libfuse2
 libgail-common
 libgail18
+libgcj10
 libgcr0
 libgdata-common
 libgdata-google1.2-1
@@ -309,6 +334,7 @@ libmagickcore2
 libmagickcore2-extra
 libmagickwand2
 libmetacity-private0
+libmodplug0c2
 libmysqlclient16
 libnautilus-extension1
 libnm-glib2
@@ -336,6 +362,7 @@ libpolkit-backend-1-0
 libpolkit-gobject-1-0
 libpoppler-glib4
 libpoppler5
+libpostproc51
 libpq5
 libpurple-bin
 libpurple0
@@ -356,6 +383,7 @@ librsvg2-common
 libsdl1.2debian
 libsdl1.2debian-alsa
 libsdl1.2debian-pulseaudio
+libservlet2.5-java
 libslp1
 libsndfile1
 libsnmp-base
@@ -364,6 +392,7 @@ libsoup-gnome2.4-1
 libsoup2.4-1
 libss2
 libssl0.9.8
+libswscale0
 libtag1-vanilla
 libtag1c2a
 libtiff4
@@ -418,11 +447,14 @@ nautilus
 nautilus-data
 nautilus-sendto-empathy
 network-manager
+nfs-common
 nspluginwrapper
 ntp
 ntpdate
 obexd-client
-openoffice.org-common
+openjdk-6-jre
+openjdk-6-jre-headless
+openjdk-6-jre-lib
 openoffice.org-style-human
 openssh-client
 openssl
@@ -443,13 +475,15 @@ php5-pspell
 php5-sqlite
 plymouth
 plymouth-label
-plymouth-theme-ubuntu-logo
+plymouth-theme-script
+plymouth-theme-text
 plymouth-theme-ubuntu-text
 plymouth-x11
 pm-utils
 pm-utils-powersave-policy
 policykit-1
 poppler-utils
+portmap
 postfix
 postfix-ldap
 postfix-pcre
@@ -518,6 +552,7 @@ transmission-gtk
 ttf-mscorefonts-installer
 ttf-thai-tlwg
 tzdata
+tzdata-java
 ubuntu-system-service
 ubuntuone-client
 ubuntuone-client-gnome
@@ -586,6 +621,7 @@ build-essential
 busybox-initramfs
 busybox-static
 ca-certificates
+ca-certificates-java
 cdparanoia
 cli-common
 command-not-found
@@ -602,6 +638,7 @@ cpp
 cpp-4.4
 cpu-checker
 cron
+cups-pdf
 cvs
 dansguardian
 dash
@@ -611,6 +648,7 @@ dcraw
 ddclient
 debconf
 debconf-i18n
+debconf-utils
 debhelper
 debianutils
 defoma
@@ -647,6 +685,7 @@ fontconfig-config
 foo2zjs
 foomatic-db
 foomatic-db-engine
+freepats
 freeradius
 freeradius-common
 freeradius-ldap
@@ -708,10 +747,14 @@ grep
 groff-base
 gsfonts
 gstreamer0.10-alsa
+gstreamer0.10-ffmpeg
 gstreamer0.10-gnonlin
 gstreamer0.10-nice
+gstreamer0.10-plugins-bad
+gstreamer0.10-plugins-bad-multiverse
 gstreamer0.10-plugins-base
 gstreamer0.10-plugins-base-apps
+gstreamer0.10-plugins-ugly
 gstreamer0.10-tools
 gstreamer0.10-x
 gtk2-engines
@@ -751,9 +794,11 @@ iputils-ping
 iputils-tracepath
 irqbalance
 iso-codes
+java-common
 javascript-common
 kbd
 kerneloops-daemon
+keyutils
 klibc-utils
 l7-protocols
 language-support-ca
@@ -773,6 +818,7 @@ launchpad-integration
 ldap-auth-client
 ldap-auth-config
 less
+lha
 lib32asound2
 lib32gcc1
 lib32ncurses5
@@ -780,7 +826,10 @@ lib32nss-mdns
 lib32stdc++6
 lib32v4l-0
 lib32z1
+liba52-0.7.4
 libaa1
+libaccess-bridge-java
+libaccess-bridge-java-jni
 libacl1
 libaio1
 libanthy0
@@ -797,6 +846,7 @@ libart2.0-cil
 libasound2
 libasound2-plugins
 libaspell15
+libass4
 libatasmart4
 libatm1
 libattr1
@@ -829,10 +879,12 @@ libcanberra0
 libcap-ng0
 libcap2
 libcarp-clan-perl
+libcdaudio1
 libcdio-cdda0
 libcdio-paranoia0
 libcdio10
 libcdparanoia0
+libcelt0-0
 libchart-perl
 libclass-accessor-perl
 libclass-container-perl
@@ -843,6 +895,11 @@ libclutter-1.0-0
 libclutter-gtk-0.10-0
 libcolamd2.7.1
 libcommon-sense-perl
+libcommons-beanutils-java
+libcommons-collections3-java
+libcommons-compress-java
+libcommons-digester-java
+libcommons-logging-java
 libcompizconfig0
 libcompress-raw-zlib-perl
 libconfig-tiny-perl
@@ -870,11 +927,16 @@ libdatetime-locale-perl
 libdatetime-perl
 libdatetime-timezone-perl
 libdatrie1
+libdb-je-java
 libdb4.7
+libdb4.7-java
+libdb4.7-java-gcj
 libdb4.8
 libdbd-pg-perl
 libdbi-perl
 libdbi0
+libdc1394-22
+libdca0
 libdevel-caller-perl
 libdevel-lexalias-perl
 libdevel-stacktrace-perl
@@ -883,6 +945,7 @@ libdevkit-power-gobject1
 libdigest-hmac-perl
 libdigest-md4-perl
 libdigest-sha1-perl
+libdirac-encoder0
 libdirectfb-1.2-0
 libdotconf1.0
 libdrm-intel1
@@ -890,9 +953,12 @@ libdrm-nouveau1
 libdrm-radeon1
 libdrm2
 libdv4
+libdvdnav4
+libdvdread4
 libedit2
 libeggdbus-1-0
 libelf1
+libenca0
 libenchant1c2a
 libept0
 liberror-perl
@@ -905,14 +971,18 @@ libexempi3
 libexif12
 libexpat1
 libexporter-cluster-perl
+libfaac0
+libfaad2
 libfcgi-perl
 libffi5
+libfftw3-3
 libfile-copy-recursive-perl
 libfile-mmagic-perl
 libfile-slurp-perl
 libfilesys-df-perl
 libflac8
 libflickrnet2.2-cil
+libflite1
 libfont-afm-perl
 libfontconfig1
 libfontenc1
@@ -925,6 +995,8 @@ libgail-gnome-module
 libgamin0
 libgc1c2
 libgcc1
+libgcj-bc
+libgcj-common
 libgconf2-4
 libgconf2.0-cil
 libgcrypt11
@@ -943,6 +1015,7 @@ libglib-perl
 libglib2.0-cil
 libglitz-glx1
 libglitz1
+libgme0
 libgmime-2.4-2
 libgmime2.4-cil
 libgmp3c2
@@ -985,6 +1058,7 @@ libgsf-1-common
 libgsl0ldbl
 libgsm1
 libgssdp-1.0-2
+libgssglue1
 libgstreamer-plugins-base0.10-0
 libgstreamer0.10-0
 libgtk2-perl
@@ -1000,6 +1074,7 @@ libgupnp-1.0-3
 libgupnp-igd-1.0-2
 libgweather-common
 libgweather1
+libhsqldb-java
 libhtml-format-perl
 libhtml-parser-perl
 libhtml-tagset-perl
@@ -1010,6 +1085,8 @@ libibus1
 libical0
 libice6
 libicu42
+libicu4j-java
+libid3tag0
 libidl0
 libidn11
 libiec61883-0
@@ -1028,10 +1105,13 @@ libio-socket-ssl-perl
 libio-string-perl
 libio-stringy-perl
 libipc-sharelite-perl
+libiptcdata0
 libiw30
 libjack0
 libjasper1
+libjaxp1.3-java
 libjcode-pm-perl
+libjline-java
 libjpeg62
 libjs-prototype
 libjs-scriptaculous
@@ -1039,6 +1119,8 @@ libjson-glib-1.0-0
 libjson-perl
 libjson-rpc-perl
 libjson-xs-perl
+libjtidy-java
+libkate1
 libkeyutils1
 libklibc
 liblaunchpad-integration1
@@ -1056,9 +1138,11 @@ liblouis0
 liblpint-bonobo0
 libltdl7
 liblua5.1-0
+liblucene2-java
 liblzma1
 liblzo2-2
 libm17n-0
+libmad0
 libmagic1
 libmail-dkim-perl
 libmail-rfc822-address-perl
@@ -1069,7 +1153,10 @@ libmcrypt4
 libmeanwhile1
 libmemcached2
 libmime-tools-perl
+libmimic0
+libmjpegtools-1.9
 libmldbm-perl
+libmms0
 libmng1
 libmono-addins-gui0.2-cil
 libmono-addins0.2-cil
@@ -1086,6 +1173,10 @@ libmono-system-runtime2.0-cil
 libmono-system-web2.0-cil
 libmono-system2.0-cil
 libmono2.0-cil
+libmp3lame0
+libmp4v2-0
+libmpcdec3
+libmpeg2-4
 libmpfr1ldbl
 libmtp8
 libmusicbrainz4c2a
@@ -1114,6 +1205,7 @@ libnetfilter-conntrack3
 libnetfilter-queue1
 libnewt0.52
 libnfnetlink0
+libnfsidmap2
 libnice0
 libnih-dbus1
 libnih1
@@ -1124,15 +1216,20 @@ libnss-mdns
 libntfs-3g75
 libntfs10
 libnunit2.4-cil
+libofa0
 libogg0
 liboil0.3
 liboobs-1-4
 libopenais3
+libopencore-amrnb0
+libopencore-amrwb0
 libopenexr6
 libopenipmi0
+libopenjpeg2
 libopenobex1
 liboping0
 liborbit2
+liborc-0.4-0
 libossp-uuid-perl
 libossp-uuid16
 libotf0
@@ -1170,6 +1267,7 @@ libpulse-browse0
 libpulse-mainloop-glib0
 libpulse0
 libpython2.6
+libquicktime1
 libquota-perl
 libradiusclient-ng2
 libraptor1
@@ -1180,14 +1278,20 @@ librdf0
 libreadline6
 libreadonly-perl
 libreadonly-xs-perl
+libregexp-java
 libresample1
 librpc-xml-perl
+librpcsecgss3
+librpm0
+librpmbuild0
+librpmio0
 librrd4
 librsync1
 libsamplerate0
 libsane
 libsasl2-2
 libsasl2-modules
+libschroedinger-1.0-0
 libsctp1
 libsdl-ttf2.0-0
 libselinux1
@@ -1196,6 +1300,7 @@ libsepol1
 libsexy2
 libsgutils2-2
 libshout3
+libsidplay1
 libsigc++-2.0-0c2a
 libsilc-1.1-2
 libsilcclient-1.1-3
@@ -1203,6 +1308,7 @@ libslang2
 libsm6
 libsoap-lite-perl
 libsocket6-perl
+libsoundtouch1c2
 libsox-fmt-alsa
 libsox-fmt-base
 libsox1a
@@ -1247,6 +1353,7 @@ libtommath0
 libtotem-plparser17
 libtree-perl
 libts-0.0-0
+libtwolame0
 libubuntuone-1.0-1
 libunicode-map-perl
 libunicode-map8-perl
@@ -1267,6 +1374,7 @@ libvorbisenc2
 libvorbisfile3
 libvpb0
 libwavpack1
+libwildmidi0
 libwmf0.2-7
 libwmf0.2-7-gtk
 libwnck-common
@@ -1277,6 +1385,7 @@ libwps-0.1-1
 libwrap0
 libx11-6
 libx11-data
+libx264-85
 libx86-1
 libxapian15
 libxau6
@@ -1321,6 +1430,7 @@ libxss1
 libxt6
 libxtst6
 libxv1
+libxvidcore4
 libxvmc1
 libxxf86dga1
 libxxf86misc1
@@ -1510,6 +1620,9 @@ re2c
 readline-common
 renattach
 rhythmbox-ubuntuone-music-store
+rpm
+rpm-common
+rpm2cpio
 rrdtool
 rtkit
 sane-utils
@@ -1554,6 +1667,7 @@ tinymce
 tk8.4
 toshset
 traceroute
+tree
 tsclient
 tsconf
 ttf-dejavu
@@ -1567,18 +1681,18 @@ ttf-khmeros-core
 ttf-lao
 ttf-liberation
 ttf-punjabi-fonts
+ttf-sil-gentium
+ttf-sil-gentium-basic
 ttf-takao-pgothic
 ttf-umefont
 ttf-unfonts-core
 ttf-wqy-microhei
 ubuntu-artwork
-ubuntu-desktop
 ubuntu-docs
 ubuntu-keyring
-ubuntu-minimal
 ubuntu-mono
+ubuntu-restricted-extras
 ubuntu-sounds
-ubuntu-standard
 ubuntu-wallpapers
 ucf
 ufw
@@ -1593,7 +1707,9 @@ usbmuxd
 usbutils
 vbetool
 vgabios
+vim
 vim-common
+vim-runtime
 vim-tiny
 vlan
 vpb-driver-source
@@ -1694,11 +1810,19 @@ virtualbox-4.1
 nautilus-dropbox
 # -> http://ppa.launchpad.net/bisigi/ppa/ubuntu/ lucid
 humanity-icon-theme
+metacity-aquadreams-theme
 # -> http://ppa.launchpad.net/libreoffice/ppa/ubuntu/ lucid
+libreoffice
+libreoffice-base
 libreoffice-base-core
+libreoffice-calc
 libreoffice-common
 libreoffice-core
+libreoffice-draw
 libreoffice-emailmerge
+libreoffice-filter-mobiledev
+libreoffice-gnome
+libreoffice-gtk
 libreoffice-help-ca
 libreoffice-help-de
 libreoffice-help-en-gb
@@ -1706,6 +1830,8 @@ libreoffice-help-en-us
 libreoffice-help-es
 libreoffice-help-fr
 libreoffice-help-it
+libreoffice-impress
+libreoffice-java-common
 libreoffice-l10n-ca
 libreoffice-l10n-common
 libreoffice-l10n-de
@@ -1714,6 +1840,7 @@ libreoffice-l10n-es
 libreoffice-l10n-fr
 libreoffice-l10n-it
 libreoffice-math
+libreoffice-report-builder-bin
 libreoffice-style-andromeda
 libreoffice-style-crystal
 libreoffice-style-galaxy
@@ -1759,10 +1886,15 @@ seabios
 virt-manager
 virt-viewer
 virtinst
+# -> http://ppa.launchpad.net/sevenmachines/flash/ubuntu/ lucid
+flashplugin64-installer
+# -> http://ppa.launchpad.net/tiheum/equinox/ubuntu/ lucid
+faenza-icon-theme
 # -> http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu/ lucid
 ia32-libs
 ttf-symbol-replacement
 ttf-symbol-replacement-wine1.3
+wine
 wine1.2
 wine1.3
 wine1.3-gecko
@@ -1834,6 +1966,7 @@ samba-common
 samba-common-bin
 samba-vscan
 smbclient
+smbfs
 winbind
 zentyal
 zentyal-all
