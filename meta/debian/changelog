@@ -1,3 +1,18 @@
+aurex-meta (1.197+aurex10.04.6) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added aurex-desktop to desktop
+  * Added aurex-standard to standard
+  * Added cabextract to aurex-desktop, aurex-standard
+  * Added cups-pdf to aurex-desktop
+  * Added ethtool to aurex-desktop, aurex-standard
+  * Added lha to aurex-desktop, aurex-standard
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 07 Sep 2011 14:43:52 +0200
+
 aurex-meta (1.197+aurex10.04.5) lucid; urgency=low
 
   * Refreshed dependencies

@@ -3,6 +3,7 @@ aptitude
 arj
 at
 busybox-static
+cabextract
 cpio
 cron
 debconf-utils
@@ -10,12 +11,14 @@ dmidecode
 dnsutils
 dosfstools
 ed
+ethtool
 file
 ftp
 hdparm
 info
 iptables
 language-selector-common
+lha
 logrotate
 lshw
 lsof

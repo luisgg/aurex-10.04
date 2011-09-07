@@ -12,15 +12,18 @@ aurex-transmute
 bc
 bridge-utils
 ca-certificates
+cabextract
 checkbox-gtk
 cups
 cups-bsd
 cups-client
+cups-pdf
 dc
 debconf-utils
 desktop-file-utils
 doc-base
 eog
+ethtool
 evince
 file-roller
 flashplugin-installer
@@ -68,6 +71,7 @@ language-support-es
 language-support-writing-es
 launchpad-integration
 lftp
+lha
 libdvdread4
 libgd2-xpm
 libgl1-mesa-glx
