@@ -1,0 +1,57 @@
+#!/bin/sh
+# bridge-fw: simple script to enable/disable traffic from the classroom (server acts as bridge, not router)
+#
+
+die(){
+	echo "$1" >&2
+		exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") [--disable-dhcp] {enable-internet|disable-internet}"
+}
+
+iptables_rules(){
+	ACTIONS="-D -A"
+	if [ "$1" = "enable" ] ; then
+		ACTIONS="-D"
+	fi
+	for ACTION in $ACTIONS ; do
+		if [ "$DHCP_DISABLE" ] ; then
+			iptables "$ACTION" FORWARD -p tcp --dport 67:68 -m physdev --physdev-in "$INT_IFACE" --physdev-out "$EXT_IFACE" -j ACCEPT || true
+			iptables "$ACTION" FORWARD -p udp --dport 67:68 -m physdev --physdev-in "$INT_IFACE" --physdev-out "$EXT_IFACE" -j ACCEPT || true
+		fi
+		iptables "$ACTION" FORWARD -p tcp --syn -m physdev --physdev-in "$INT_IFACE" --physdev-out "$EXT_IFACE" -j REJECT || true
+		iptables "$ACTION" FORWARD -p udp -m physdev --physdev-in "$INT_IFACE" --physdev-out "$EXT_IFACE" -j REJECT || true
+	done
+}
+
+
+
+
+DHCP_DISABLE=""
+EXT_IFACE="eth0"
+INT_IFACE="eth1"
+
+[ "$1" ] || usage
+[ $(id -u) -eq 0 ] || die "Root privileges required"
+
+for o in "$@" ; do
+	case "$o" in
+		--disable-dhcp)
+			DHCP_DISABLE="Y"
+			;;
+		enable-internet)
+			INET_ACTION="enable"
+			;;
+		disable-internet)
+			INET_ACTION="disable"
+			;;
+		*)
+			usage
+			;;
+	esac
+done
+iptables_rules "$INET_ACTION"
+exit 0
+
