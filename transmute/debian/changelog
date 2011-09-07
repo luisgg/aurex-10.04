@@ -1,3 +1,9 @@
+aurex-transmute (0.6) lucid; urgency=low
+
+  * Updated aurex mirror
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 07 Sep 2011 14:28:49 +0200
+
 aurex-transmute (0.5) unstable; urgency=low
 
   * Added (s07) repository key
