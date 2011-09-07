@@ -1,0 +1,15 @@
+#!/bin/sh
+export LANG=C
+echo "Unreferenced package list"
+echo "====================================================="
+reprepro --noskipold dumpunreferenced
+cat <<EOF
+=====================================================
+
+To remove unreferenced packages, run command:
+
+reprepro -VV --noskipold --export=force deleteunreferenced
+
+EOF
+exit 0
+

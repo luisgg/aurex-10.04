@@ -1,0 +1,21 @@
+#!/bin/sh
+export LANG=C
+REG_EXP="^\(add\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
+#REG_EXP="^\(add\|keep\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
+#TODO: interactive check
+#TODO: interactive check
+TIME_STAMP="$(date "+%Y%m%d-%H%M%S")"
+echo "Package list"
+echo "====================================================="
+reprepro --noskipold dumpupdate lucid  2>/dev/null |sed -ne "/$REG_EXP/p" |sort -u
+cat <<EOF
+=====================================================
+
+Run command:
+
+reprepro -VV --noskipold --export=force update lucid
+
+to update 'aurex' from 'the rest of the world'.
+EOF
+exit 0
+

@@ -7,8 +7,18 @@ Components: main contrib
 Description: AureX stable repository for Ubuntu 10.04 lucid
 Version: 10.04
 SignWith: 3D3CBB05
+Update: - lucid-proposed filter_http:__deb.opera.com_opera_:stable-amd64 filter_http:__deb.opera.com_opera_:stable-i386 filter_http:__download.virtualbox.org_virtualbox_debian_:lucid-amd64 filter_http:__download.virtualbox.org_virtualbox_debian_:lucid-i386 filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_libreoffice_ppa_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_libreoffice_ppa_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_sevenmachines_flash_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_sevenmachines_flash_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_tiheum_equinox_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_tiheum_equinox_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-i386 filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-amd64 filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-i386
+
+Origin: AureX
+Label: AureX
+Suite: lucid-proposed
+Codename: lucid-proposed
+Architectures: i386 amd64 source
+Components: main contrib
+Description: AureX stable repository for Ubuntu 10.04 lucid
+Version: 10.04
+SignWith: 3D3CBB05
 Pull: tau2lucid
-Update: - ppa_firefox_stable-lucid-i386 ppa_firefox_stable-lucid-amd64 ppa_libvirt-lucid-i386 ppa_libvirt-lucid-amd64
 
 Origin: AureX
 Label: AureX

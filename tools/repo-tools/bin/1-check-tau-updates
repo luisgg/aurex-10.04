@@ -1,20 +1,25 @@
 #!/bin/sh
 export LANG=C
-REG_EXP="^\(add\|keep\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
+#REG_EXP="^\(add\|keep\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
+REG_EXP="^\(add\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
 #TODO: interactive check
 #TODO: interactive check
 TIME_STAMP="$(date "+%Y%m%d-%H%M%S")"
 LIST_FILE="conf/tau2lucid.list"
 [ ! -r "$LIST_FILE" ] || mv "$LIST_FILE" "$LIST_FILE.$TIME_STAMP"
-reprepro dumppull lucid |sed -ne "/$REG_EXP/{s%$REG_EXP%\2	install%;p}" |sort -u > "$LIST_FILE"
+echo "Package list"
+echo "====================================================="
+reprepro --noskipold dumppull lucid-proposed |sed -ne "/$REG_EXP/{s%$REG_EXP%\2	install%;p}" |sort -u |tee "$LIST_FILE"
 
 cat <<EOF
+=====================================================
+
 Filter list: $LIST_FILE updated. Old filter saved as: $LIST_FILE.$TIME_STAMP
 Run command:
 
-reprepro -VV --noskipold --export=force  pull lucid
+reprepro -VV --noskipold --export=force  pull lucid-proposed
 
-to update 'aurex stable' from 'tau'.
+to update 'aurex proposed' from 'tau'.
 EOF
 exit 0
 
