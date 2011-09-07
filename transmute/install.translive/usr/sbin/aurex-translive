@@ -154,15 +154,16 @@ iso_gen(){
 
 	printf $(du -sx --block-size=1 chroot | cut -f1) > live-cd/casper/filesystem.size
 
-	VMLINUZ_FILE="$(ls -1 chroot/boot/vmlinuz-* |sort |tail -1)"
-	VMLINUZ_VERSION="${VMLINUZ_FILE#*vmlinuz-}"
-	INITRD_FILE="chroot/boot/initrd.img-$VMLINUZ_VERSION"
-	cp "$VMLINUZ_FILE" live-cd/casper/vmlinuz
-	cp "$INITRD_FILE" live-cd/casper/initrd.lz
-
+	VMLINUZ_FILE="$(ls -1 chroot/boot/vmlinuz-* 2>/dev/null |sort |tail -1)"
+	if [ "$VMLINUZ_FILE" ] && [ -r "$VMLINUZ_FILE" ] ; then
+		VMLINUZ_VERSION="${VMLINUZ_FILE#*vmlinuz-}"
+		INITRD_FILE="chroot/boot/initrd.img-$VMLINUZ_VERSION"
+		cp "$VMLINUZ_FILE" live-cd/casper/vmlinuz
+		cp "$INITRD_FILE" live-cd/casper/initrd.lz
+	fi
 	ISO_ARCH="$(chroot chroot dpkg --print-architecture)"
 	DISK_NAME="$VOLUME_LABEL \"Lucid\" - Release $ISO_ARCH"
-	echo "$DISK_NAME ($(date "+%Y%m%d.%H%M%S"))" > livecd/.disk/info
+	echo "$DISK_NAME ($(date "+%Y%m%d.%H%M%S"))" > live-cd/.disk/info
 	sed -i -e "/^#define DISKNAME/s%^.*%#define DISKNAME  $DISK_NAME%" live-cd/README.diskdefines	
 
 	rm -f live-cd/md5sum.txt
