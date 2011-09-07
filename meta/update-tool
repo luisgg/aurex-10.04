@@ -310,6 +310,10 @@ update_lists(){
 }
 
 split_lists(){
+	COMP_UPDATE=""
+	for c in $(list_components $SOURCES_BASEDIR/*.list $SOURCES_BASEDIR/*.list.in sources/*in |sort -u) ; do 
+		COMP_UPDATE="$COMP_UPDATE $c>contrib"
+	done
 	nfirst=""
 	for f in filter-lists/*.bulk ; do
 		F="$(basename "$f" .bulk)"
@@ -320,8 +324,17 @@ split_lists(){
 				REPO_URL="$(sed -ne "${nfirst}{s%^# -> %%;p}" "$f")"
 				FILENAME="$(gen_repo_basename "$REPO_URL")"
 				nlast="$n"
-				sed -ne "${nfirst},${nlast}{/^#.*$/d;p}" "$f" > "$TARGET_DIR/${FILENAME}-$F_ARCH.list"
+				sed -ne "${nfirst},${nlast}{/^#.*$/d;s%$%        install%;p}" "$f" > "$TARGET_DIR/${FILENAME}-$F_ARCH.list"
 				echo "$REPO_URL" > "$TARGET_DIR/${FILENAME}-$F_ARCH.url"
+				cat <<EOF > "$TARGET_DIR/${FILENAME}-$F_ARCH.updates"
+Name: ${FILENAME}-$F_ARCH
+Method: ${REPO_URL% *}
+Suite: ${REPO_URL#* }
+Components: $COMP_UPDATE
+Architectures: $F_ARCH source
+FilterList: purge ${FILENAME}-$F_ARCH.list
+
+EOF
 			fi
 			nfirst="$n"
 		done
