@@ -1,0 +1,300 @@
+#!/bin/sh
+# -------
+# File:        aurex-translive
+# Description: Simple script to transmute Ubuntu live cds
+#              the script works in current directory (like
+#              lliurex-livebuilder)
+# Author:      Luis Antonio Garcia Gisbert <luisgg@gmail.com> 
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+# vars
+# ----
+TR_BASE_DIR="/usr/share/aurex-transmute"
+
+if [ -r /etc/aurex/profile.sh ] ; then
+	. /etc/aurex/profile.sh
+else
+	. $TR_BASE_DIR/transmute/base-files/etc/aurex/profile.sh
+fi
+
+# funcs
+# -----
+
+die(){
+	echo "$1" >&2
+	iso_umount 2>/dev/null
+	rmdir -f "$SOURCE_DIR"
+	exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") [options] {copy|unsquash|update-chroot|pre-build|squash|geniso|post-build|build}\n\
+       Options:  --no-interactive\n\
+                 --iso-file=ISOFILE\n\
+                 --pkg-list=PKG_LIST_FILE"
+}
+
+test_dir(){
+	for d in DIR_LIST ; do
+		[ -d "$d" ] || die "Unable to find directory: \"$d\""
+	done
+	for f in FILE_LIST ; do
+		[ -e "$f" ] || die "Unable to find file: \"$f\""
+	done
+}
+
+iso_test(){
+	[ "$SOURCE_ISO" ] && [ -r "$SOURCE_ISO" ] || die "Invalid iso file: \"$SOURCE_ISO\""
+}
+
+iso_mount(){
+	mount -o loop $SOURCE_ISO $SOURCE_DIR
+}
+
+iso_umount(){
+	umount $SOURCE_DIR || true
+	rmdir -f "$SOURCE_DIR"
+}
+
+iso_copy(){
+	mkdir -p ./live-cd
+	rsync --exclude=/casper/filesystem.squashfs -a --delete $SOURCE_DIR/ ./live-cd
+}
+
+iso_unsquash(){
+	rm -fr ./chroot ./unsquashfs
+	unsquashfs $SOURCE_DIR/casper/filesystem.squashfs
+	mv squashfs-root chroot
+}
+
+squash_gen(){
+	rm -f ./live-cd/casper/filesystem.squashfs
+	mksquashfs chroot ./live-cd/casper/filesystem.squashfs
+}
+
+chroot_config(){
+	TRANS_DIR="/etc/aurex/profile.d"
+	mkdir -p chroot/$TRANS_DIR
+	cat <<EOF > chroot/$TRANS_DIR/aurex-translive-vars.sh
+UBUNTU_FORCEMIRROR="$UBUNTU_MIRROR"
+AUREX_FORCEMIRROR="$AUREX_MIRROR"
+EOF
+	# aurex-transmute install "a la vasca way ..."
+	rsync -a /usr/share/aurex-translive/chroot/ chroot/
+	if [ "$PKG_LIST" ] && [ -r "$PKG_LIST" ] ; then
+		mkdir -p $CHROOT_PKG_DIR
+		cp "$PKG_LIST" "$CHROOT_PKG_DIR/aurex-translive.pkg"
+	fi
+	for f in $HOST_COPY_FILES ; do
+		if [ -e chroot/$f ] && [ ! -e chroot/$f.aurex ] ; then
+			 mv chroot/$f chroot/$f.aurex
+		fi
+		cp $f chroot/$f
+	done
+}
+
+chroot_unconfig(){
+	for f in $HOST_COPY_FILES ; do
+		rm chroot/$f
+		[ ! -e chroot/$f.aurex ] || mv chroot/$f.aurex chroot/$f
+	done
+	rm -f chroot/$TRANS_DIR/aurex-translive-vars.sh
+	rm -f "$CHROOT_PKG_DIR/aurex-translive.pkg"
+	export HOME=/root
+	export LC_ALL=C
+	chroot chroot apt-get clean || true
+	rm -rf chroot/tmp/* || true
+
+}
+
+chroot_interactive(){
+	export HOME=/root
+	export LC_ALL=C
+	chroot chroot
+}
+
+chroot_mounts(){
+	mount --bind /dev "chroot/dev"
+	mount --bind /dev/pts "chroot/dev/pts"
+	mount --bind /proc "chroot/proc"
+	mount --bind /sys "chroot/sys"
+
+}
+
+chroot_umounts(){
+	umount "chroot/dev/pts"
+	umount "chroot/dev"
+	umount "chroot/proc"
+	umount "chroot/sys"
+}
+
+chroot_update(){
+	export HOME=/root
+	export LC_ALL=C
+	chroot chroot aurex-transmute --force transmute || true
+}
+
+chroot_test(){
+	[ -d chroot ] || die "Unable to find directory chroot"
+}
+
+test_id(){
+	[ $(id -u) -eq 0 ] || return 1
+	return 0
+}
+
+iso_gen(){
+	chroot chroot dpkg-query -W --showformat='${Package} ${Version}\n' > live-cd/casper/filesystem.manifest
+	cp live-cd/casper/filesystem.manifest live-cd/casper/filesystem.manifest-desktop
+	sed -i '/ubiquity/d;/casper/d' live-cd/casper/filesystem.manifest-desktop
+
+	printf $(du -sx --block-size=1 chroot | cut -f1) > live-cd/casper/filesystem.size
+
+	VMLINUZ_FILE="$(ls -1 chroot/boot/vmlinuz-* |sort |tail -1)"
+	VMLINUZ_VERSION="${VMLINUZ_FILE#*vmlinuz-}"
+	INITRD_FILE="chroot/boot/initrd.img-$VMLINUZ_VERSION"
+	cp "$VMLINUZ_FILE" live-cd/casper/vmlinuz
+	cp "$INITRD_FILE" live-cd/casper/initrd.lz
+
+	ISO_ARCH="$(chroot chroot dpkg --print-architecture)"
+	DISK_NAME="$VOLUME_LABEL \"Lucid\" - Release $ISO_ARCH"
+	echo "$DISK_NAME ($(date "+%Y%m%d.%H%M%S"))" > livecd/.disk/info
+	sed -i -e "/^#define DISKNAME/s%^.*%#define DISKNAME  $DISK_NAME%" live-cd/README.diskdefines	
+
+	rm -f live-cd/md5sum.txt
+	( cd live-cd; find -type f -print0 | sudo xargs -0 md5sum | grep -v isolinux/boot.cat | sudo tee md5sum.txt ; )
+	ISO_NAME="$BASE_ISONAME-$(chroot chroot dpkg --print-architecture).iso"
+	mkisofs -D -r -V "$VOLUME_LABEL" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o "$ISO_NAME" live-cd
+}
+
+# main
+# ----
+
+HOST_COPY_FILES="/etc/resolv.conf"
+INTERACTIVE_MODE="Y"
+ISO_FILE=""
+PKG_LIST="./translive.pkg"
+ACTION=""
+SOURCE_DIR="$(mktemp -d)"
+DIR_LIST="chroot live-cd live-cd/casper live-cd/isolinux"
+FILE_LIST="live-cd/casper/filesystem.manifest live-cd/casper/filesystem.manifest-desktop live-cd/casper/filesystem.size live-cd/md5sum.txt live-cd/casper/filesystem.squashfs live-cd/casper/vmlinuz live-cd/casper/initrd.lz livecd/.disk/info"
+
+CHROOT_PKG_DIR="chroot/usr/share/aurex-transmute/translive/packages"
+
+. /etc/aurex-transmute/aurex-transmute.conf 
+if [ -r ./aurex-transmute.conf ] ; then
+	echo "Using local configuration in ./aurex-transmute.conf"
+	. ./aurex-transmute.conf
+fi
+
+[ "$1" ] || usage
+test_id || die "root privileges required"
+
+for o in "$@" ; do
+	case "$o" in 
+		--no-interactive)
+			INTERACTIVE_MODE="N"
+			;;
+		--iso-file=*)
+			ISO_FILE="${1#--iso-file=}"
+			;;
+		--pkg-list=*)
+			PKG_LIST="${1#--pkg-list=}"
+			;;
+		*)
+			 [ "$ACTION" ] || ACTION="$o"
+			;;
+	esac
+done
+
+[ "$ACTION" ] || usage
+
+case "$ACTION" in
+	copy)
+		iso_test
+		iso_mount
+		iso_copy
+		iso_umount
+		;;
+	unsquash)
+		iso_test
+		iso_mount
+		iso_unsquash
+		iso_umount
+		;;
+	update-chroot)
+		chroot_test
+		chroot_config
+		chroot_mounts
+		chroot_update
+		[ "$INTERACTIVE_MODE" = "N" ] || chroot_interactive
+		chroot_unconfig
+		chroot_umounts
+		;;
+	pre-build)
+		iso_test
+		iso_mount
+		iso_copy
+		iso_unsquash
+		iso_umount
+		chroot_config
+		chroot_mounts
+		chroot_update
+		[ "$INTERACTIVE_MODE" = "N" ] || chroot_interactive
+		chroot_unconfig
+		chroot_umounts
+		;;
+	squash)
+		chroot_test
+		squash_gen
+		;;
+	geniso)
+		test_dir
+		iso_gen
+		;;
+	post-build)
+		test_dir
+		chroot_config
+		chroot_mounts
+                chroot_update
+                [ "$INTERACTIVE_MODE" = "N" ] || chroot_interactive
+                chroot_unconfig
+		chroot_umounts
+		squash_gen
+		iso_gen
+		;;
+	build)
+		iso_test
+		iso_mount
+		iso_copy
+		iso_unsquash
+		iso_umount
+		chroot_config
+		chroot_mounts
+		chroot_update
+		[ "$INTERACTIVE_MODE" = "N" ] || chroot_interactive
+		chroot_unconfig
+		chroot_umounts
+		squash_gen
+		iso_gen
+		;;
+	*)
+		usage
+		;;
+esac
+
+exit 0
