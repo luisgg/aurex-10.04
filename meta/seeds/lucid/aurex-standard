@@ -5,9 +5,11 @@ Task-Key: aurex-standard
 Task-Seeds: standard
 Task-Metapackage: aurex-standard
 
+= generic tools =
  * vim
  * tree
  * debconf-utils
+ * ethtool
 
 = network filesystem support =
  * nfs-common

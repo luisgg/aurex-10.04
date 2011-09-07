@@ -42,8 +42,9 @@ Task-Metapackage: aurex-desktop
  * (language-support-en)
  * (language-support-writing-en)
 
-= pdf viewer =
+= pdf support =
  * acroread
+ * cups-pdf
 
 = multimedia =
  * ubuntu-restricted-extras
@@ -55,4 +56,3 @@ Task-Metapackage: aurex-desktop
 = win emulation =
  * (wine)
  * (winetricks)
-
