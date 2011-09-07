@@ -21,23 +21,13 @@
 # 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
 # --------
 
-# vars
-# ----
-TR_BASE_DIR="/usr/share/aurex-transmute"
-
-if [ -r /etc/aurex/profile.sh ] ; then
-	. /etc/aurex/profile.sh
-else
-	. $TR_BASE_DIR/transmute/base-files/etc/aurex/profile.sh
-fi
-
 # funcs
 # -----
 
 die(){
 	echo "$1" >&2
 	iso_umount 2>/dev/null
-	rmdir -f "$SOURCE_DIR"
+	[ ! -d "$SOURCE_DIR" ] || rmdir --ignore-fail-on-non-empty "$SOURCE_DIR" || true
 	exit 1
 }
 
@@ -67,7 +57,7 @@ iso_mount(){
 
 iso_umount(){
 	umount $SOURCE_DIR || true
-	rmdir -f "$SOURCE_DIR"
+	[ ! -d "$SOURCE_DIR" ] || rmdir --ignore-fail-on-non-empty "$SOURCE_DIR" || true
 }
 
 iso_copy(){
@@ -181,24 +171,27 @@ iso_gen(){
 	mkisofs -D -r -V "$VOLUME_LABEL" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o "$ISO_NAME" live-cd
 }
 
-# main
+# vars
 # ----
 
 HOST_COPY_FILES="/etc/resolv.conf"
 INTERACTIVE_MODE="Y"
-ISO_FILE=""
 PKG_LIST="./translive.pkg"
 ACTION=""
 SOURCE_DIR="$(mktemp -d)"
+SOURCE_ISO=""
 DIR_LIST="chroot live-cd live-cd/casper live-cd/isolinux"
 FILE_LIST="live-cd/casper/filesystem.manifest live-cd/casper/filesystem.manifest-desktop live-cd/casper/filesystem.size live-cd/md5sum.txt live-cd/casper/filesystem.squashfs live-cd/casper/vmlinuz live-cd/casper/initrd.lz livecd/.disk/info"
 
 CHROOT_PKG_DIR="chroot/usr/share/aurex-transmute/translive/packages"
 
-. /etc/aurex-transmute/aurex-transmute.conf 
-if [ -r ./aurex-transmute.conf ] ; then
-	echo "Using local configuration in ./aurex-transmute.conf"
-	. ./aurex-transmute.conf
+# main
+# ----
+
+. /etc/aurex-translive/aurex-translive.conf 
+if [ -r ./aurex-translive.conf ] ; then
+	echo "Using local configuration in ./aurex-translive.conf"
+	. ./aurex-translive.conf
 fi
 
 [ "$1" ] || usage
@@ -210,10 +203,10 @@ for o in "$@" ; do
 			INTERACTIVE_MODE="N"
 			;;
 		--iso-file=*)
-			ISO_FILE="${1#--iso-file=}"
+			SOURCE_ISO="${o#--iso-file=}"
 			;;
 		--pkg-list=*)
-			PKG_LIST="${1#--pkg-list=}"
+			PKG_LIST="${o#--pkg-list=}"
 			;;
 		*)
 			 [ "$ACTION" ] || ACTION="$o"

@@ -5,7 +5,7 @@
 # -------------
 # AureX sources
 # -------------
-deb _@_AUREX_MIRROR_@_ lucid main
+deb _@_AUREX_MIRROR_@_ lucid main contrib
 #deb-src _@_AUREX_MIRROR_@_ lucid main contrib
 
 # -------------
@@ -33,9 +33,3 @@ deb _@_UBUNTU_MIRROR_@_ lucid-backports main restricted universe multiverse
 # partner
 deb http://archive.canonical.com/ubuntu lucid partner
 # deb-src http://archive.canonical.com/ubuntu lucid partner
-
-# -------------
-# LliureX
-# -------------
-deb http://lliurex.net/marty llx1109 main restricted universe multiverse partner
-#deb-src http://lliurex.net/marty llx1109 main restricted universe multiverse partner
