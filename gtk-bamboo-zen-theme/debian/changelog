@@ -1,9 +1,3 @@
-gtk-bamboo-zen-theme (1.4.2-0+aurex3) UNRELEASED; urgency=low
-
-  * NOT RELEASED YET
-
- -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 05 Sep 2011 20:18:01 +0200
-
 gtk-bamboo-zen-theme (1.4.2-0+aurex2) lucid; urgency=low
 
   * Dummy upgrade for the new repository
