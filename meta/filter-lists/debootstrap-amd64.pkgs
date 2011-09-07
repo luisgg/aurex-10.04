@@ -165,7 +165,7 @@ ii  tasksel                         2.73ubuntu26
 ii  tasksel-data                    2.73ubuntu26
 ii  tzdata                          2011g-0ubuntu0.10.04
 ii  ubuntu-keyring                  2010.11.09
-ii  ubuntu-minimal                  1.197
+ii  ubuntu-minimal                  1.197+aurex10.04.6
 ii  ucf                             3.0025
 ii  udev                            151-12.3
 ii  upstart                         0.6.5-8
