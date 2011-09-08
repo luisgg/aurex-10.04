@@ -1,6 +1,6 @@
-aurex-artwork (0.4) UNRELEASED; urgency=low
+aurex-artwork (0.4) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * New binary: aurex-translive-theme
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 05 Sep 2011 20:14:49 +0200
 

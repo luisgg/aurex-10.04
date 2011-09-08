@@ -45,6 +45,7 @@ build-stamp: configure-stamp
 
 	# build aurex-sunrise plymouth required files
 	space-sunrise/aurex/build-script build
+	for F in aurex-logos/translive/*.svg ; do ff=$${F%.svg}; f=$${ff##*/}; inkscape --without-gui --file=$$F --export-png=install.translive/$$f.png ; done
 
 clean:
 	dh_testdir
@@ -56,6 +57,7 @@ clean:
 	rm -f grub/*.png
 	rm -f install.aurex-icon-theme/icons
 	space-sunrise/aurex/build-script clean
+	rm -f install.translive/*.png
 	dh_clean
 
 install: build
