@@ -17,3 +17,10 @@ Depends: ${misc:Depends}, squashfs-tools, genisoimage, rsync, imagemagick, aurex
 Description: Transmute an Ubuntu live cd into aurex
  Utility to transmute Ubuntu live cd into aurex live
 
+Package: aurex-keyring
+Architecture: all
+Depends: ${misc:Depends}, aurex-transmute
+Description: GnuPG keys of the aurex archive
+ The aurex project digitally signs its Release files. This package
+ installs the archive keys used for that.
+

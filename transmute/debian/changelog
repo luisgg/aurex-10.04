@@ -1,6 +1,7 @@
 aurex-transmute (0.8) lucid; urgency=low
 
   * Added custom live splash
+  * New binary aurex-keyring
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 08 Sep 2011 13:07:06 +0200
 

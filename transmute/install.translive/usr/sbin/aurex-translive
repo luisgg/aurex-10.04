@@ -39,10 +39,10 @@ usage(){
 }
 
 test_dir(){
-	for d in DIR_LIST ; do
+	for d in $DIR_LIST ; do
 		[ -d "$d" ] || die "Unable to find directory: \"$d\""
 	done
-	for f in FILE_LIST ; do
+	for f in $FILE_LIST $* ; do
 		[ -e "$f" ] || die "Unable to find file: \"$f\""
 	done
 }
@@ -126,10 +126,10 @@ chroot_mounts(){
 }
 
 chroot_umounts(){
-	umount "chroot/dev/pts"
-	umount "chroot/dev"
-	umount "chroot/proc"
-	umount "chroot/sys"
+	umount -l "chroot/dev/pts" || true
+	umount -l "chroot/dev" || true
+	umount -l "chroot/proc" || true
+	umount -l "chroot/sys" || true
 }
 
 chroot_update(){
@@ -175,7 +175,7 @@ iso_gen(){
 	SAFE_BOOT="noapic noapm nodma nomce nolapic nosmp vga=normal"
 	for l in $LABEL_LIST ; do
 		echo "LABEL $l" >> $CFG_FILE
-		get_label "$l" >> $CFG_FILE
+		get_label "$l" live-cd/isolinux/text.cfg >> $CFG_FILE
 		case "$l" in
 			live)
 				echo "LABEL 1" >> $CFG_FILE
@@ -226,7 +226,8 @@ ACTION=""
 SOURCE_DIR="$(mktemp -d)"
 SOURCE_ISO=""
 DIR_LIST="chroot live-cd live-cd/casper live-cd/isolinux"
-FILE_LIST="live-cd/casper/filesystem.manifest live-cd/casper/filesystem.manifest-desktop live-cd/casper/filesystem.size live-cd/md5sum.txt live-cd/casper/filesystem.squashfs live-cd/casper/vmlinuz live-cd/casper/initrd.lz livecd/.disk/info"
+FILE_LIST="live-cd/casper/vmlinuz live-cd/casper/initrd.lz live-cd/.disk/info"
+EXTRA_LIST="live-cd/casper/filesystem.squashfs live-cd/casper/filesystem.manifest live-cd/casper/filesystem.manifest-desktop live-cd/casper/filesystem.size live-cd/md5sum.txt"
 
 CHROOT_PKG_DIR="chroot/usr/share/aurex-transmute/translive/packages"
 
@@ -301,7 +302,7 @@ case "$ACTION" in
 		squash_gen
 		;;
 	geniso)
-		test_dir
+		test_dir $EXTRA_LIST
 		iso_gen
 		;;
 	post-build)
