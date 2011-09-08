@@ -10,6 +10,7 @@ aurex-standard
 aurex-transmute
 aurex-wallpaper-theme
 gtk-aurex-bamboo-zen-theme
+nautilus-dropbox
 nvidia-185-kernel-source
 nvidia-185-libvdpau
 nvidia-185-libvdpau-dev
@@ -19,9 +20,6 @@ nvidia-current-dev
 nvidia-current-modaliases
 nvidia-glx-185
 nvidia-glx-185-dev
-ubuntu-desktop
-ubuntu-minimal
-ubuntu-standard
 # -> http://archive.ubuntu.com/ubuntu/ lucid-proposed
 linux-headers-2.6.35-30
 # -> http://archive.ubuntu.com/ubuntu/ lucid-updates
@@ -455,6 +453,7 @@ obexd-client
 openjdk-6-jre
 openjdk-6-jre-headless
 openjdk-6-jre-lib
+openoffice.org-common
 openoffice.org-style-human
 openssh-client
 openssl
@@ -477,6 +476,7 @@ plymouth
 plymouth-label
 plymouth-theme-script
 plymouth-theme-text
+plymouth-theme-ubuntu-logo
 plymouth-theme-ubuntu-text
 plymouth-x11
 pm-utils
@@ -1688,11 +1688,13 @@ ttf-umefont
 ttf-unfonts-core
 ttf-wqy-microhei
 ubuntu-artwork
+ubuntu-desktop
 ubuntu-docs
 ubuntu-keyring
 ubuntu-mono
 ubuntu-restricted-extras
 ubuntu-sounds
+ubuntu-standard
 ubuntu-wallpapers
 ucf
 ufw
@@ -1806,8 +1808,6 @@ opera
 # -> http://download.virtualbox.org/virtualbox/debian/ lucid
 virtualbox-4.0
 virtualbox-4.1
-# -> http://linux.dropbox.com/ubuntu/ lucid
-nautilus-dropbox
 # -> http://ppa.launchpad.net/bisigi/ppa/ubuntu/ lucid
 humanity-icon-theme
 metacity-aquadreams-theme
