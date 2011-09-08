@@ -32,20 +32,6 @@ Components:  contrib>contrib
 Architectures: i386
 FilterList: purge filter_http:__download.virtualbox.org_virtualbox_debian_:lucid-i386.list
 
-Name: filter_http:__linux.dropbox.com_ubuntu_:lucid-amd64
-Method: http://linux.dropbox.com/ubuntu/
-Suite: lucid
-Components:  main>contrib
-Architectures: amd64 
-FilterList: purge filter_http:__linux.dropbox.com_ubuntu_:lucid-amd64.list
-
-Name: filter_http:__linux.dropbox.com_ubuntu_:lucid-i386
-Method: http://linux.dropbox.com/ubuntu/
-Suite: lucid
-Components:  main>contrib
-Architectures: i386 
-FilterList: purge filter_http:__linux.dropbox.com_ubuntu_:lucid-i386.list
-
 Name: filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/bisigi/ppa/ubuntu/
 Suite: lucid
