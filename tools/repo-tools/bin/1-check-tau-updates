@@ -1,7 +1,7 @@
 #!/bin/sh
 export LANG=C
 #REG_EXP="^\(add\|keep\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
-REG_EXP="^\(add\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
+REG_EXP="^\(add\|update)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
 #TODO: interactive check
 #TODO: interactive check
 TIME_STAMP="$(date "+%Y%m%d-%H%M%S")"

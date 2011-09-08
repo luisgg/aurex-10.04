@@ -1,6 +1,6 @@
 #!/bin/sh
 export LANG=C
-REG_EXP="^\(add\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
+REG_EXP="^\(add\|update)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
 #REG_EXP="^\(add\|keep\)[[:blank:]]\+'\([^']\+\)'[^']\+'\([^']\+\)'.*$"
 #TODO: interactive check
 #TODO: interactive check
