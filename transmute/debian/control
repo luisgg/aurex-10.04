@@ -13,7 +13,7 @@ Description: Transmute plain Ubuntu into golden AureX
 
 Package: aurex-translive
 Architecture: all
-Depends: ${misc:Depends}, squashfs-tools, genisoimage, rsync
+Depends: ${misc:Depends}, squashfs-tools, genisoimage, rsync, imagemagick, aurex-translive-theme
 Description: Transmute an Ubuntu live cd into aurex
  Utility to transmute Ubuntu live cd into aurex live
 

@@ -1,6 +1,6 @@
-aurex-transmute (0.8) UNRELEASED; urgency=low
+aurex-transmute (0.8) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Added custom live splash
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 08 Sep 2011 13:07:06 +0200
 

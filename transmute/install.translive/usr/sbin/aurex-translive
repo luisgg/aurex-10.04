@@ -164,12 +164,56 @@ iso_gen(){
 	ISO_ARCH="$(chroot chroot dpkg --print-architecture)"
 	DISK_NAME="$VOLUME_LABEL \"Lucid\" - Release $ISO_ARCH"
 	echo "$DISK_NAME ($(date "+%Y%m%d.%H%M%S"))" > live-cd/.disk/info
-	sed -i -e "/^#define DISKNAME/s%^.*%#define DISKNAME  $DISK_NAME%" live-cd/README.diskdefines	
+	sed -i -e "/^#define DISKNAME/s%^.*%#define DISKNAME  $DISK_NAME%" live-cd/README.diskdefines
+
+	rsync -r /usr/share/translive/isolinux/ live-cd/isolinux/
+	SPLASH_IMAGE="/usr/share/pixmaps/aurex/livedesktop-$ISO_ARCH.png"
+	[ ! -r "$SPLASH_IMAGE" ] || convert_to_rle "$SPLASH_IMAGE" > live-cd/isolinux/aurex.rle
+	
+	LABEL_LIST="$(list_labels live-cd/isolinux/text.cfg)"
+	CFG_FILE="live-cd/isolinux/isolinux.cfg"
+	SAFE_BOOT="noapic noapm nodma nomce nolapic nosmp vga=normal"
+	for l in $LABEL_LIST ; do
+		echo "LABEL $l" >> $CFG_FILE
+		get_label "$l" >> $CFG_FILE
+		case "$l" in
+			live)
+				echo "LABEL 1" >> $CFG_FILE
+				get_label "$l" live-cd/isolinux/text.cfg >> $CFG_FILE
+				echo "LABEL 3" >> $CFG_FILE
+				get_label "$l" live-cd/isolinux/text.cfg |sed -e "/^[[:blank:]]*append[[:blank:]]/s%--.*$%$SAFE_BOOT --%" >> $CFG_FILE
+				;;
+			live-install)
+				echo "LABEL 2" >> $CFG_FILE
+				get_label "$l" live-cd/isolinux/text.cfg >> $CFG_FILE
+				;;
+		esac
+	done
 
 	rm -f live-cd/md5sum.txt
 	( cd live-cd; find -type f -print0 | sudo xargs -0 md5sum | grep -v isolinux/boot.cat | sudo tee md5sum.txt ; )
 	ISO_NAME="$BASE_ISONAME-$(chroot chroot dpkg --print-architecture).iso"
 	mkisofs -D -r -V "$VOLUME_LABEL" -cache-inodes -J -l -b isolinux/isolinux.bin -c isolinux/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -o "$ISO_NAME" live-cd
+}
+
+get_label(){
+	LABEL="$1"
+	LOCALE_SETTINGS="console-setup/layoutcode=es locale=es_ES"
+	sed -ne "/^label[[:blank:]]\+$LABEL$/,/^label/{/^label/d;/^[[:blank:]]*append[[:blank:]]/s%--.*$%$LOCALE_SETTINGS --%;p}" "$2"
+}
+
+list_labels(){
+	sed -ne "/^label/s%^label[[:blank:]]\+\([^[:blank:]]\+\).*$%\1%p" "$1"
+}
+
+convert_to_rle(){
+	local TMP_FILE
+	TMP_FILE="$(tempfile)"
+	convert -depth 8 -colors 16 "$1" "ppm:${TMP_FILE}"
+	# generate rle to stdout
+	ppmtolss16 < "$TMP_FILE"
+	# "#000000=0" "#ffffff=7" ?
+	rm -f "$TMP_FILE"
 }
 
 # vars
