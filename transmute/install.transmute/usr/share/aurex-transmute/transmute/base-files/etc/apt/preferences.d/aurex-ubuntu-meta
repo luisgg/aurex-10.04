@@ -1,0 +1,11 @@
+Package: ubuntu-minimal
+Pin: release o=aurex
+Pin-Priority: 1050
+
+Package: ubuntu-standard
+Pin: release o=aurex
+Pin-Priority: 1050
+
+Package: ubuntu-desktop
+Pin: release o=aurex
+Pin-Priority: 1050

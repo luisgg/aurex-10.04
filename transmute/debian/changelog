@@ -1,8 +1,8 @@
-aurex-transmute (0.7) UNRELEASED; urgency=low
+aurex-transmute (0.7) unreleased; urgency=low
 
-  * NOT RELEASED YET
+  * Added apt pinning for Ubuntu metapackages from aurex
 
- -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 07 Sep 2011 14:31:38 +0200
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 08 Sep 2011 13:04:25 +0200
 
 aurex-transmute (0.6) lucid; urgency=low
 
