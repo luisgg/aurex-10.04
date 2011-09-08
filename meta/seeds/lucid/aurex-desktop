@@ -56,3 +56,8 @@ Task-Metapackage: aurex-desktop
 = win emulation =
  * (wine)
  * (winetricks)
+
+= java =
+ * (sun-java6-jre)
+ * (sun-java6-plugin)
+ * (libjmf-java6-java)
