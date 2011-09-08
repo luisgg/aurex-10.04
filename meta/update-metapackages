@@ -1,2 +1,3 @@
 #!/bin/sh
-exec ./update-tool update-metapackages "$@"
+./update-tool update-metapackages "$@"
+fakeroot ./debian/rules clean
