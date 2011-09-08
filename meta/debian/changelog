@@ -1,4 +1,16 @@
-aurex-meta (1.197+aurex10.04.6) lucid; urgency=low
+aurex-meta (1.197~aurex10.04.7) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+  * Removed aurex-desktop from desktop
+  * Removed aurex-standard from standard
+  * Removed nautilus-dropbox from aurex-supported
+
+ -- depinf <depinf@s07-server>  Thu, 08 Sep 2011 13:18:34 +0200
+
+aurex-meta (1.197~aurex10.04.6) lucid; urgency=low
 
   * Refreshed dependencies
   * Added aurex-desktop to desktop
