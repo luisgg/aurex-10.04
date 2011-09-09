@@ -135,7 +135,9 @@ chroot_umounts(){
 chroot_update(){
 	export HOME=/root
 	export LC_ALL=C
-	chroot chroot aurex-transmute --force transmute || true
+	chroot chroot aurex-transmute --no-packages transmute || true
+	chroot chroot apt-get install aurex-desktop aurex-standard
+	chroot chroot aurex-transmute --force transmute packages || true
 }
 
 chroot_test(){
