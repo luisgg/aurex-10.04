@@ -153,7 +153,7 @@ kernel_purge(){
 	for k in $HEADER_GENERIC ; do
 		HEADER_PURGE="$HEADER_PURGE ${k%-generic}"
 	done
-	chroot chroot apt-get  -y --allow-unauthenticated remove --purge $KERNEL_GENERIC $HEADER_PURGE
+	chroot chroot apt-get --force-yes -y --allow-unauthenticated remove --purge $KERNEL_GENERIC $HEADER_PURGE
 }
 
 chroot_update(){
@@ -161,7 +161,7 @@ chroot_update(){
 	export LC_ALL=C
 	chroot chroot aurex-transmute --no-packages transmute || true
 	chroot chroot apt-get update
-	chroot chroot apt-get -y --allow-unauthenticated dist-upgrade || true
+	chroot chroot apt-get --force-yes -y --allow-unauthenticated dist-upgrade || true
 	kernel_purge
 }
 
