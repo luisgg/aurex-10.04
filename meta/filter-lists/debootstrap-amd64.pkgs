@@ -8,7 +8,7 @@ ii  bash                            4.1-2ubuntu3
 ii  bsdutils                        1:2.17.2-0ubuntu1.10.04.2
 ii  busybox-initramfs               1:1.13.3-1ubuntu11
 ii  bzip2                           1.0.5-4ubuntu0.1
-ii  ca-certificates                 20090814
+ii  ca-certificates                 20090814ubuntu0.10.04.1
 ii  console-setup                   1.34ubuntu15
 ii  console-terminus                4.30-2
 ii  coreutils                       7.4-2ubuntu3
