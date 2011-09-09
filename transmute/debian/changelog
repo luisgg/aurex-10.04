@@ -1,8 +1,9 @@
-aurex-transmute (0.9) UNRELEASED; urgency=low
+aurex-transmute (0.9) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Added some preseed
+  * fixed 'chroot-update' in aurex-translive
 
- -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 09 Sep 2011 09:56:56 +0200
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Sat, 10 Sep 2011 00:14:38 +0200
 
 aurex-transmute (0.8) lucid; urgency=low
 

@@ -95,6 +95,12 @@ EOF
 		fi
 		cp $f chroot/$f
 	done
+	for f in $CHROOT_DIVERT_LIST ; do
+		if [ -e "chroot/$f" ] ; then
+			chroot chroot dpkg-divert --package aurex-translive --rename --quiet --add --divert ${f}.translive-divert ${f} || true
+			ln -s /bin/true "chroot/$f"
+		fi
+	done
 }
 
 chroot_unconfig(){
@@ -106,6 +112,12 @@ chroot_unconfig(){
 	rm -f "$CHROOT_PKG_DIR/aurex-translive.pkg"
 	export HOME=/root
 	export LC_ALL=C
+	for f in $CHROOT_DIVERT_LIST ; do
+		if [ -e "chroot/$f.translive-divert" ] ; then
+			rm -f "chroot/$f"
+			chroot chroot dpkg-divert --package aurex-translive --rename --quiet --remove ${f} || true
+		fi
+	done
 	chroot chroot apt-get clean || true
 	rm -rf chroot/tmp/* || true
 
@@ -114,6 +126,8 @@ chroot_unconfig(){
 chroot_interactive(){
 	export HOME=/root
 	export LC_ALL=C
+	echo ">>>>>>> INTERACTIVE MODE <<<<<<<<"
+	echo ">>>>>>> type 'exit' to end <<<<<<<<" 
 	chroot chroot
 }
 
@@ -132,12 +146,23 @@ chroot_umounts(){
 	umount -l "chroot/sys" || true
 }
 
+kernel_purge(){
+	KERNEL_GENERIC="$(chroot chroot dpkg -l |cut -f 3 -d " " |grep "^linux-image-.*-generic" |tr "\n" " ")"
+	HEADER_GENERIC="$(chroot chroot dpkg -l |cut -f 3 -d " " |grep "^linux-headers-.*-generic" |tr "\n" " ")"
+	HEADER_PURGE="$HEADER_GENERIC"
+	for k in $HEADER_GENERIC ; do
+		HEADER_PURGE="$HEADER_PURGE ${k%-generic}"
+	done
+	chroot chroot apt-get  -y --allow-unauthenticated remove --purge $KERNEL_GENERIC $HEADER_PURGE
+}
+
 chroot_update(){
 	export HOME=/root
 	export LC_ALL=C
 	chroot chroot aurex-transmute --no-packages transmute || true
-	chroot chroot apt-get install aurex-desktop aurex-standard
-	chroot chroot aurex-transmute --force transmute packages || true
+	chroot chroot apt-get update
+	chroot chroot apt-get -y --allow-unauthenticated dist-upgrade || true
+	kernel_purge
 }
 
 chroot_test(){
@@ -222,6 +247,7 @@ convert_to_rle(){
 # ----
 
 HOST_COPY_FILES="/etc/resolv.conf"
+CHROOT_DIVERT_LIST="/usr/sbin/invoke-rc.d"
 INTERACTIVE_MODE="Y"
 PKG_LIST="./translive.pkg"
 ACTION=""
