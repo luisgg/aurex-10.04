@@ -1,3 +1,14 @@
+aurex-meta (1.197~aurex10.04.11) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added sun-java6-jre to aurex-desktop-recommends [amd64]
+  * Added sun-java6-plugin to aurex-desktop-recommends [amd64]
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 09 Sep 2011 10:20:53 +0200
+
 aurex-meta (1.197~aurex10.04.10) lucid; urgency=low
 
   * Refreshed dependencies
