@@ -10,6 +10,7 @@
 #export DH_VERBOSE=1
 
 ICON_SIZES = 16 22 24 32 48
+UBIQUITY_BASEDIR = install.aurex-ubiquity-theme/usr/share/aurex-transmute/ubiquity-theme/divert
 
 configure:configure-stamp
 
@@ -36,6 +37,12 @@ build-stamp: configure-stamp
 	for F in wallpapers/*.xcf ; do f=$${F%.xcf}; xcf2png $$F >$$f.png; basef=$${f##*/}; X=debian/$$basef.xml.in; [ -r "$$X" ] || X=debian/wallpaper.xml.in; sed -e "s%_@_basename_@_%$$basef%g;s%_@_filename_@_%$$basef.png%g" $$X >> wallpapers/aurex-wallpapers.xml; done
 	cat debian/wallpapers-bottom.xml >> wallpapers/aurex-wallpapers.xml
 
+	# aurex-ubiquity-theme:
+		# copy gdm wallwaper as replacement for ubiquity install mode background
+	mkdir -p $(UBIQUITY_BASEDIR)/usr/share/backgrounds
+	cp wallpapers/aurex-droplet-gdm.png $(UBIQUITY_BASEDIR)/usr/share/backgrounds/warty-final-ubuntu.png
+	for d in pixmaps ubiquity/pixmaps/ubuntu ; do for F in aurex-logos/ubiquity/$$d/*.svg; do fsvg=$${F##*/}; f=$${fsvg%.svg}; mkdir -p $(UBIQUITY_BASEDIR)/usr/share/$$d ; inkscape --without-gui --file=$$F --export-png=$(UBIQUITY_BASEDIR)/usr/share/$$d/$$f.png ; done ; done
+
 	# generate grub splash
 	for F in grub/*.xcf ; do f=$${F%.xcf}; xcf2png $$F >$$f.png; done
 	touch build-stamp
@@ -58,6 +65,7 @@ clean:
 	rm -f install.aurex-icon-theme/icons
 	space-sunrise/aurex/build-script clean
 	rm -f install.translive/*.png
+	rm -fr $(UBIQUITY_BASEDIR)
 	dh_clean
 
 install: build

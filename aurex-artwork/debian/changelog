@@ -1,6 +1,6 @@
-aurex-artwork (0.5) UNRELEASED; urgency=low
+aurex-artwork (0.5) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * New binary: aurex-ubiquity-theme
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 09 Sep 2011 10:00:17 +0200
 

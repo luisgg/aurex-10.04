@@ -48,3 +48,10 @@ Depends: ${misc:Depends}
 Description: Aurex 10.04 translive artwork
  This package installs aurex-translive splash images
 
+Package: aurex-ubiquity-theme
+Architecture: all
+Depends: ${misc:Depends}, ubiquity-ubuntu-artwork
+Description: Aurex artwork for Ubiquity live installer
+ This package provides aurex-themed user interface artwork
+ for the Ubiquity live CD installer.
+
