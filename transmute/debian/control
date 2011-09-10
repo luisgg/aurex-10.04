@@ -24,3 +24,8 @@ Description: GnuPG keys of the aurex archive
  The aurex project digitally signs its Release files. This package
  installs the archive keys used for that.
 
+Package: aurex-ubiquity-transmute
+Architecture: all
+Depends: ${misc:Depends}, ubiquity, aurex-transmute
+Description: Aurex transmute scripts
+ 'last minute' aurex settings after ubiquity install

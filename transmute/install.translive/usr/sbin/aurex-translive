@@ -147,8 +147,8 @@ chroot_umounts(){
 }
 
 kernel_purge(){
-	KERNEL_GENERIC="$(chroot chroot dpkg -l |cut -f 3 -d " " |grep "^linux-image-.*-generic" |tr "\n" " ")"
-	HEADER_GENERIC="$(chroot chroot dpkg -l |cut -f 3 -d " " |grep "^linux-headers-.*-generic" |tr "\n" " ")"
+	KERNEL_GENERIC="$(chroot chroot dpkg -l |cut -f 3 -d " " |grep "^linux-image-.*-generic$" |tr "\n" " ")"
+	HEADER_GENERIC="$(chroot chroot dpkg -l |cut -f 3 -d " " |grep "^linux-headers-.*-generic$" |tr "\n" " ")"
 	HEADER_PURGE="$HEADER_GENERIC"
 	for k in $HEADER_GENERIC ; do
 		HEADER_PURGE="$HEADER_PURGE ${k%-generic}"

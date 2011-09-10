@@ -1,7 +1,8 @@
 aurex-transmute (0.9) lucid; urgency=low
 
   * Added some preseed
-  * fixed 'chroot-update' in aurex-translive
+  * Fixed 'chroot-update' in aurex-translive
+  * New binary aurex-ubiquity-transmute
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Sat, 10 Sep 2011 00:14:38 +0200
 
