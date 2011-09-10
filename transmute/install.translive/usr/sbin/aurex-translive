@@ -162,6 +162,7 @@ chroot_update(){
 	chroot chroot aurex-transmute --no-packages transmute || true
 	chroot chroot apt-get update
 	chroot chroot apt-get --force-yes -y --allow-unauthenticated dist-upgrade || true
+	chroot chroot apt-get --force-yes -y --allow-unauthenticated install $LIVE_PKG_LIST || true
 	kernel_purge
 }
 
@@ -258,7 +259,7 @@ FILE_LIST="live-cd/casper/vmlinuz live-cd/casper/initrd.lz live-cd/.disk/info"
 EXTRA_LIST="live-cd/casper/filesystem.squashfs live-cd/casper/filesystem.manifest live-cd/casper/filesystem.manifest-desktop live-cd/casper/filesystem.size live-cd/md5sum.txt"
 
 CHROOT_PKG_DIR="chroot/usr/share/aurex-transmute/translive/packages"
-
+LIVE_PKG_LIST="aurex-ubiquity-transmute aurex-ubiquity-theme"
 # main
 # ----
 
