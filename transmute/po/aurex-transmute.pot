@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: install.gui/usr/sbin/aurex-transmute-gui:28
@@ -79,7 +79,7 @@ msgid "Selected aurex level:"
 msgstr ""
 
 #: install.gui/usr/sbin/aurex-transmute-gui:64
-msgid "Do you want to tupdate your system?"
+msgid "Do you want to update your system?"
 msgstr ""
 
 #: install.gui/usr/sbin/aurex-transmute-gui:111

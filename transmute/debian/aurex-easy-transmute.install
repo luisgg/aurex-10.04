@@ -1,2 +1,3 @@
 install.transmute/*	/
 po/locale.install/*	/usr/share/locale/
+install.gui/*	/

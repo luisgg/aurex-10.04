@@ -7,70 +7,85 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.1\n"
-"Report-Msgid-Bugs-To: aurex.linux@gmail.com\n"
-"POT-Creation-Date: 2011-09-11 17:44+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-12 01:14+0200\n"
 "PO-Revision-Date: 2011-09-11 17:44+0200\n"
 "Last-Translator: Luis Antonio Garcia Gisbert <luisgg@gmail.com>\n"
 "Language-Team: es <aurex.linux@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: install.gui/usr/sbin/aurex-transmute-gui:28
 msgid "System Transmutation (aurex ... and beyond)"
 msgstr "Transmutación del Sistema (aurex ... y más allá)"
 
-#: install.gui/usr/sbin/aurex-transmute-gui:30
-msgid "None"
-msgstr "Ninguno"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:31
-msgid "Minimal"
-msgstr "Mínimo"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:32
-msgid "Medium"
-msgstr "Medio"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:33
-msgid "Full"
-msgstr "Completo"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:37
-msgid "Remove all the aurex customization"
-msgstr "Elimina todas las modificaciones de aurex"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:38
-msgid "Add aurex repository to 'sources.list.d' (like a 'ppa')"
-msgstr "Añade el repositorio de aurex en 'sources.list.d' (como una 'ppa')"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:39
-msgid ""
-"Modify 'sources.list' and and set apt pinning to enable aurex, proposed and "
-"backports"
-msgstr "Modifica el 'sources.list' y establece 'apt pinning' para activar los repositorios de aurex, 'proposed' y 'backports'"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:40
-msgid "Add repositories, artwork themes and metapackages"
-msgstr "Añade repositorios, aspecto personalizado y metapaquetes"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:44
-msgid "Select"
-msgstr "Sel"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:45
-msgid "Hide"
-msgstr "Hide"
-
-#: install.gui/usr/sbin/aurex-transmute-gui:46
-msgid "Transmutation level"
-msgstr "Nivel de Trans."
-
-#: install.gui/usr/sbin/aurex-transmute-gui:47
-msgid "Description"
-msgstr "Descripción"
-
 #: install.gui/usr/sbin/aurex-transmute-gui:29
 msgid "Select desired Transmutation level"
 msgstr "Seleccione el nivel de Transmutación requerido"
 
+#: install.gui/usr/sbin/aurex-transmute-gui:32
+msgid "None"
+msgstr "Ninguno"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:33
+msgid "Minimal"
+msgstr "Mínimo"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:34
+msgid "Medium"
+msgstr "Medio"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:35
+msgid "Full"
+msgstr "Completo"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:39
+msgid "Remove all the aurex customization"
+msgstr "Elimina todas las modificaciones de aurex"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:40
+msgid "Add aurex repository to 'sources.list.d' (like a 'ppa')"
+msgstr "Añade el repositorio de aurex en 'sources.list.d' (como una 'ppa')"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:41
+msgid ""
+"Modify 'sources.list' and and set apt pinning to enable aurex, proposed and "
+"backports"
+msgstr ""
+"Modifica el 'sources.list' y establece 'apt pinning' para activar los "
+"repositorios de aurex, 'proposed' y 'backports'"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:42
+msgid "Add repositories, artwork themes and metapackages"
+msgstr "Añade repositorios, aspecto personalizado y metapaquetes"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:46
+msgid "Select"
+msgstr "Sel"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:47
+msgid "Hide"
+msgstr "Hide"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:48
+msgid "Transmutation level"
+msgstr "Nivel de Trans."
+
+#: install.gui/usr/sbin/aurex-transmute-gui:49
+msgid "Description"
+msgstr "Descripción"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:63
+#, fuzzy
+msgid "Selected aurex level:"
+msgstr "Seleccione el nivel de Transmutación requerido"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:64
+msgid "Do you want to update your system?"
+msgstr "¿Desea actualizar el sistema?""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:111
+#, fuzzy
+msgid "Transmutation completed"
+msgstr "Transmutación completada."

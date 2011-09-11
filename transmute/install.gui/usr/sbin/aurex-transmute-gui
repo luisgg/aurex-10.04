@@ -61,7 +61,7 @@ die(){
 
 confirm_msg(){
 	TXT_MSG="$(gettext "Selected aurex level:") ${MENU_OPT[$1]}"
-	TXT_MSG="$TXT_MSG. $(gettext "Do you want to tupdate your system?")" 
+	TXT_MSG="$TXT_MSG. $(gettext "Do you want to update your system?")" 
 	if zenity --title "$MAIN_TITLE" --question --text "$TXT_MSG"
 		return 0
 	fi
