@@ -1,0 +1,87 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-09-11 18:12+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: install.gui/usr/sbin/aurex-transmute-gui:28
+msgid "System Transmutation (aurex ... and beyond)"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:30
+#: install.gui/usr/sbin/aurex-transmute-gui:31
+msgid "None"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:31
+#: install.gui/usr/sbin/aurex-transmute-gui:32
+msgid "Minimal"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:32
+#: install.gui/usr/sbin/aurex-transmute-gui:33
+msgid "Medium"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:33
+#: install.gui/usr/sbin/aurex-transmute-gui:34
+msgid "Full"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:37
+#: install.gui/usr/sbin/aurex-transmute-gui:38
+msgid "Remove all the aurex customization"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:38
+#: install.gui/usr/sbin/aurex-transmute-gui:39
+msgid "Add aurex repository to 'sources.list.d' (like a 'ppa')"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:39
+#: install.gui/usr/sbin/aurex-transmute-gui:40
+msgid ""
+"Modify 'sources.list' and and set apt pinning to enable aurex, proposed and "
+"backports"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:40
+#: install.gui/usr/sbin/aurex-transmute-gui:41
+msgid "Add repositories, artwork themes and metapackages"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:44
+#: install.gui/usr/sbin/aurex-transmute-gui:45
+msgid "Select"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:45
+#: install.gui/usr/sbin/aurex-transmute-gui:46
+msgid "Hide"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:46
+#: install.gui/usr/sbin/aurex-transmute-gui:47
+msgid "Transmutation level"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:47
+#: install.gui/usr/sbin/aurex-transmute-gui:48
+msgid "Description"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:29
+msgid "Select desired Transmutation level"
+msgstr ""

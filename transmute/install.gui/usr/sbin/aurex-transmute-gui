@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # -------
 # File:        aurex-transmute-gui
 # Description: Select the transmutation level
@@ -24,17 +24,68 @@
 # vars
 # ----
 
-MAIN_TITLE="System Transmutation (aurex ... and beyond)"
-ZEN_CMD="zenity --title $MAIN_TITLE"
+export TEXTDOMAIN="aurex-transmute"
+MAIN_TITLE="$(gettext "System Transmutation (aurex ... and beyond)")"
+MENU_TEXT="$(gettext "Select desired Transmutation level")"
+declare -a MENU_OPT=( \
+"$(gettext "None")" \
+"$(gettext "Minimal")" \
+"$(gettext "Medium")" \
+"$(gettext "Full")" \
+ )
+
+declare -a MENU_DES=( \
+"$(gettext "Remove all the aurex customization")" \
+"$(gettext "Add aurex repository to 'sources.list.d' (like a 'ppa')")" \
+"$(gettext "Modify 'sources.list' and and set apt pinning to enable aurex, proposed and backports")" \
+"$(gettext "Add repositories, artwork themes and metapackages")" \
+ )
+
+declare -a MENU_TIT=( \
+"$(gettext "Select")" \
+"$(gettext "Hide")" \
+"$(gettext "Transmutation level")" \
+"$(gettext "Description")" \
+)
+
+DEFAULT_OPT=1
 
 # funcs
 # -----
 
 die(){
-	$ZEN_CMD --error --text "$1"
+	zenity --title "$MAIN_TITLE" --error --text "$1"
 	exit 1
 }
 
-# main
+zsay(){
+	echo -ne "$1\0000"
+}
 
+menu_options(){
+	i=0
+	while [ $i -lt ${#MENU_TIT[@]} ] ; do
+		zsay "--column"
+		zsay "${MENU_TIT[$i]}"
+		i=$(($i + 1))
+	done
+	i=0
+	while [ $i -lt ${#MENU_DES[@]} ] ; do
+		if [ $DEFAULT_OPT -eq $i ] ; then
+			zsay "TRUE"
+		else
+			zsay "FALSE"
+		fi
+		zsay "$i"
+		zsay "${MENU_OPT[$i]}"
+		zsay "${MENU_DES[$i]}"
+		i=$(($i + 1))
+	done
+}
+
+show_menu(){
+	menu_options |xargs -0 zenity --width=750 --height=300 --text "$MENU_TEXT" --title "$MAIN_TITLE" --list --radiolist --print-column=2 --hide-column=2
+}
+# main
+show_menu
 exit 0
