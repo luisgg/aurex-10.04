@@ -30,7 +30,7 @@ build-stamp: configure-stamp
 	#docbook-to-man docs/$i  >  $i
 	#done
 	#touch $@
-	for f in po/*.po ; do lang=$${f%.po}; lang=$${lang#*/}; mkdir -p po/locale.install/$$lang/LC_MESSAGES ; msgfmt $f -o po/locale.install/$$lang/LC_MESSAGES/aurex-transmute.mo ; done
+	for f in po/*.po ; do lang=$${f%.po}; lang=$${lang#*/}; mkdir -p po/locale.install/$$lang/LC_MESSAGES ; msgfmt $$f -o po/locale.install/$$lang/LC_MESSAGES/aurex-transmute.mo ; done
 
 clean:
 	dh_testdir

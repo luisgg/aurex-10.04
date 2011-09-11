@@ -2,7 +2,7 @@ Source: aurex-transmute
 Section: admin
 Priority: optional
 Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
-Build-Depends: debhelper (>= 7.0)
+Build-Depends: debhelper (>= 7.0), gettext
 Standards-Version: 3.8.4
 
 Package: aurex-transmute
