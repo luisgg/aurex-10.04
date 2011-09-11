@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-11 18:12+0200\n"
+"POT-Creation-Date: 2011-09-12 01:14+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,68 +20,68 @@ msgstr ""
 msgid "System Transmutation (aurex ... and beyond)"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:30
-#: install.gui/usr/sbin/aurex-transmute-gui:31
+#: install.gui/usr/sbin/aurex-transmute-gui:29
+msgid "Select desired Transmutation level"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:32
 msgid "None"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:31
-#: install.gui/usr/sbin/aurex-transmute-gui:32
+#: install.gui/usr/sbin/aurex-transmute-gui:33
 msgid "Minimal"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:32
-#: install.gui/usr/sbin/aurex-transmute-gui:33
+#: install.gui/usr/sbin/aurex-transmute-gui:34
 msgid "Medium"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:33
-#: install.gui/usr/sbin/aurex-transmute-gui:34
+#: install.gui/usr/sbin/aurex-transmute-gui:35
 msgid "Full"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:37
-#: install.gui/usr/sbin/aurex-transmute-gui:38
+#: install.gui/usr/sbin/aurex-transmute-gui:39
 msgid "Remove all the aurex customization"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:38
-#: install.gui/usr/sbin/aurex-transmute-gui:39
+#: install.gui/usr/sbin/aurex-transmute-gui:40
 msgid "Add aurex repository to 'sources.list.d' (like a 'ppa')"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:39
-#: install.gui/usr/sbin/aurex-transmute-gui:40
+#: install.gui/usr/sbin/aurex-transmute-gui:41
 msgid ""
 "Modify 'sources.list' and and set apt pinning to enable aurex, proposed and "
 "backports"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:40
-#: install.gui/usr/sbin/aurex-transmute-gui:41
+#: install.gui/usr/sbin/aurex-transmute-gui:42
 msgid "Add repositories, artwork themes and metapackages"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:44
-#: install.gui/usr/sbin/aurex-transmute-gui:45
+#: install.gui/usr/sbin/aurex-transmute-gui:46
 msgid "Select"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:45
-#: install.gui/usr/sbin/aurex-transmute-gui:46
+#: install.gui/usr/sbin/aurex-transmute-gui:47
 msgid "Hide"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:46
-#: install.gui/usr/sbin/aurex-transmute-gui:47
+#: install.gui/usr/sbin/aurex-transmute-gui:48
 msgid "Transmutation level"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:47
-#: install.gui/usr/sbin/aurex-transmute-gui:48
+#: install.gui/usr/sbin/aurex-transmute-gui:49
 msgid "Description"
 msgstr ""
 
-#: install.gui/usr/sbin/aurex-transmute-gui:29
-msgid "Select desired Transmutation level"
+#: install.gui/usr/sbin/aurex-transmute-gui:63
+msgid "Selected aurex level:"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:64
+msgid "Do you want to tupdate your system?"
+msgstr ""
+
+#: install.gui/usr/sbin/aurex-transmute-gui:111
+msgid "Transmutation completed"
 msgstr ""

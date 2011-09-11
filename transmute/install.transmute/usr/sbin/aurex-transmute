@@ -320,14 +320,16 @@ do_test(){
 		test_rc=$(($test_rc + 4))
 	fi
 	if [ "$TFILES" = "Y" ] ; then
-		CURDIR="$(pwd)"
-		FILELIST=$(cd /usr/share/aurex/base-files/etc/ 2>/dev/null && find  -xtype f)
+		[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 		test_rc_files=0
-		for f in $FILELIST ; do
-			if [ ! -r "/etc/$f" ] ; then
-				echo "file: /etc/$f not installed" >&2
-				test_rc_files=8
-			fi
+		for pdir in $BASE_NAME_LIST ; do
+                	PDIR="$TR_BASE_DIR/$pdir/base-files/"
+			for f in $(find "$PDIR" -xtype f -printf "/%P\n") ; do
+				if [ ! -r "$f" ] ; then
+					echo "file: $f not installed" >&2
+					test_rc_files=8
+				fi
+			done
 		done
 		test_rc=$(($test_rc + $test_rc_files))
 	fi
