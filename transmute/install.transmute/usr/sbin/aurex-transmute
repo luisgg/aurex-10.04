@@ -137,17 +137,21 @@ trans_sources(){
 	[ "$UBUNTU_MIRROR" ] || UBUNTU_MIRROR="$UBUNTU_DEFMIRROR"
 	UBUNTU_MIRROR=${UBUNTU_FORCEMIRROR:-$UBUNTU_MIRROR}
 	AUREX_MIRROR=${AUREX_FORCEMIRROR:-$AUREX_DEFMIRROR}
-	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/transmute/etc/apt/sources.list > "$TMPFILE"
+	for t in aurex-sources ubuntu-sources ; do
+		sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/transmute/etc/apt/$t.list >> "$TMPFILE"
+	done
 	TIMESTAMP="$(date "+%Y%m%d.%H%M%S")"
 	[ "$FORCE" ] || cp /etc/apt/sources.list /etc/apt/sources.list.aurex.$TIMESTAMP
 	mv "$TMPFILE" /etc/apt/sources.list
+	rm -f /etc/apt/sources.list.d/aurex-sources.list
 }
 
 untrans_sources(){
 	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	FIRST_SOURCES="$(ls -1 /etc/apt/sources.list.aurex.* 2>/dev/null |sort |head -1)"
-	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/transmute/templates/etc/apt/sources.list.ubuntu
+	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/transmute/templates/etc/apt/standard-sources.list
 	cp "$FIRST_SOURCES" /etc/apt/sources.list
+	rm -f /etc/apt/sources.list.d/aurex-sources.list
 }
 
 trans_preseed(){

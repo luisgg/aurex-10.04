@@ -1,0 +1,65 @@
+#!/bin/sh
+# -------
+# File:        aurex-upgrade
+# Description: Install required sytem trasmutation level
+# Author:      Luis Antonio Garcia Gisbert <luisgg@gmail.com> 
+# 
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+# vars
+# ----
+
+# funcs
+# -----
+
+die(){
+	echo "$1" >&2
+	exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") {none|minimal|medium|full|get-level}"
+}
+
+do_apt(){
+        apt-get update || true
+        apt-get --force-yes -y --allow-unauthenticated dist-upgrade || true
+}
+
+set_level_none(){
+	aurex-transmute untransmute || true
+	do_apt
+}
+
+set_level_minimal(){
+	aurex-transmute untransmute || true
+	aurex-transmute transmute keys
+	TMPFILE="$(tempfile)"
+        cp -a /etc/apt/sources.list "$TMPFILE"
+	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/transmute/etc/apt/aurex-sources.list >> "$TMPFILE"
+	mv "$TMPFILE" /etc/apt/sources.list.d/aurex-sources.list
+	do_apt
+}
+
+set_level_medium(){
+}
+
+# main
+
+if [ -r /etc/aurex/profile.sh ] ; then
+        . /etc/aurex/profile.sh
+fi
+
