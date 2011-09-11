@@ -1,4 +1,0 @@
-linux-image-server-lts-backport-maverick		install
-linux-headers-server-lts-backport-maverick		install
-linux-headers-generic					purge
-linux-image-generic					purge
