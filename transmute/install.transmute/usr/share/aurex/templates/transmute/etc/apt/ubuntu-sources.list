@@ -3,12 +3,6 @@
 # newer versions of the distribution.
 
 # -------------
-# AureX sources
-# -------------
-deb _@_AUREX_MIRROR_@_ lucid main contrib
-#deb-src _@_AUREX_MIRROR_@_ lucid main contrib
-
-# -------------
 # Ubuntu sources
 # -------------
 deb _@_UBUNTU_MIRROR_@_ lucid main restricted universe multiverse
