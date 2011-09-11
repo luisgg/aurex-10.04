@@ -55,6 +55,15 @@ set_level_minimal(){
 }
 
 set_level_medium(){
+	aurex-transmute untransmute || true
+	aurex-transmute transmute keys || true
+	aurex-transmute --module=apt-preferences transmute || true
+	do_apt
+}
+
+set_level_full(){
+	aurex-transmute transmute || true
+	do_apt
 }
 
 # main
@@ -62,4 +71,27 @@ set_level_medium(){
 if [ -r /etc/aurex/profile.sh ] ; then
         . /etc/aurex/profile.sh
 fi
+
+[ "$1" ] || usage
+case "$1" in
+	none)
+		set_level_none
+		;;
+	minimal)
+		set_level_minimal
+		;;
+	medium)
+		set_level_medium
+		;;
+	full)
+		set_level_full
+		;;
+	get-level)
+		;;
+	*)
+		usage
+		;;
+esac
+
+exit 0
 

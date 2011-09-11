@@ -182,9 +182,7 @@ kernel_purge(){
 chroot_update(){
 	export HOME=/root
 	export LC_ALL=C
-	chroot chroot aurex-transmute --no-packages transmute || true
-	chroot chroot apt-get update
-	chroot chroot apt-get --force-yes -y --allow-unauthenticated dist-upgrade || true
+	chroot chroot aurex-upgrade full || true
 	chroot chroot apt-get --force-yes -y --allow-unauthenticated install $LIVE_PKG_LIST || true
 	kernel_purge
 }
