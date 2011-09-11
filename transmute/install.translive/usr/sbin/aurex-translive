@@ -76,13 +76,31 @@ squash_gen(){
 	mksquashfs chroot ./live-cd/casper/filesystem.squashfs
 }
 
-chroot_config(){
+chroot_translive_vars(){
+	# $1: {create|delete}
+	# $2: {build-mode|live-mode}
 	TRANS_DIR="/etc/aurex/profile.d"
+	if [ "$1" = "delete" ] ; then
+		rm -f chroot/$TRANS_DIR/aurex-translive-vars.sh
+		return 0
+	fi
 	mkdir -p chroot/$TRANS_DIR
+	if [ "$2" = build-mode ] ; then
+		UBUNTU_FORCEMIRROR="${UBUNTU_MIRROR_BUILD:-$UBUNTU_MIRROR}"
+		AUREX_FORCEMIRROR="${AUREX_MIRROR_BUILD:-$AUREX_MIRROR}"
+	else
+		UBUNTU_FORCEMIRROR="${UBUNTU_MIRROR_LIVE:-$UBUNTU_MIRROR}"
+		AUREX_FORCEMIRROR="${AUREX_MIRROR_LIVE:-$AUREX_MIRROR}"
+	fi
 	cat <<EOF > chroot/$TRANS_DIR/aurex-translive-vars.sh
-UBUNTU_FORCEMIRROR="$UBUNTU_MIRROR"
-AUREX_FORCEMIRROR="$AUREX_MIRROR"
+UBUNTU_FORCEMIRROR="$UBUNTU_FORCEMIRROR"
+AUREX_FORCEMIRROR="$AUREX_FORCEMIRROR"
 EOF
+
+}
+
+chroot_config(){
+	chroot_translive_vars create build-mode
 	# aurex-transmute install "a la vasca way ..."
 	rsync -a /usr/share/aurex-translive/chroot/ chroot/
 	if [ "$PKG_LIST" ] && [ -r "$PKG_LIST" ] ; then
@@ -108,8 +126,13 @@ chroot_unconfig(){
 		rm chroot/$f
 		[ ! -e chroot/$f.aurex ] || mv chroot/$f.aurex chroot/$f
 	done
+
+        chroot_translive_vars create live-mode
+	chroot chroot aurex-transmute transmute sources
+        chroot_translive_vars delete
+
 	rm -f chroot/$TRANS_DIR/aurex-translive-vars.sh
-	rm -f "$CHROOT_PKG_DIR/aurex-translive.pkg"
+	rm -fr "$CHROOT_PKG_DIR"
 	export HOME=/root
 	export LC_ALL=C
 	for f in $CHROOT_DIVERT_LIST ; do
@@ -248,7 +271,7 @@ convert_to_rle(){
 # ----
 
 HOST_COPY_FILES="/etc/resolv.conf"
-CHROOT_DIVERT_LIST="/usr/sbin/invoke-rc.d"
+CHROOT_DIVERT_LIST="/usr/sbin/invoke-rc.d /usr/sbin/lpadmin"
 INTERACTIVE_MODE="Y"
 PKG_LIST="./translive.pkg"
 ACTION=""
