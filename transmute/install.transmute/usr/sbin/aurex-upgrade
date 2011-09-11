@@ -66,6 +66,14 @@ set_level_full(){
 	do_apt
 }
 
+get_level(){
+	aurex_transmute test keys >/dev/null 2>/dev/null || echo "none"
+	[ ! -r /etc/apt/sources.list.d/aurex-sources.list ] || echo "minimal"
+	aurex-transmute -module=apt-preferences test files >/dev/null 2>/dev/null || echo "minimal"
+	aurex-transmute -module=transmute test files >/dev/null 2>/dev/null || echo "medium"
+	echo "full"
+}
+
 # main
 
 if [ -r /etc/aurex/profile.sh ] ; then
@@ -73,6 +81,7 @@ if [ -r /etc/aurex/profile.sh ] ; then
 fi
 
 [ "$1" ] || usage
+
 case "$1" in
 	none)
 		set_level_none
@@ -87,6 +96,7 @@ case "$1" in
 		set_level_full
 		;;
 	get-level)
+		get_level
 		;;
 	*)
 		usage

@@ -27,6 +27,7 @@
 export TEXTDOMAIN="aurex-transmute"
 MAIN_TITLE="$(gettext "System Transmutation (aurex ... and beyond)")"
 MENU_TEXT="$(gettext "Select desired Transmutation level")"
+declare -a MENU_RET=( "none" "minimal" "medium" "full" )
 declare -a MENU_OPT=( \
 "$(gettext "None")" \
 "$(gettext "Minimal")" \
@@ -58,6 +59,20 @@ die(){
 	exit 1
 }
 
+confirm_msg(){
+	TXT_MSG="$(gettext "Selected aurex level:") ${MENU_OPT[$1]}"
+	TXT_MSG="$TXT_MSG. $(gettext "Do you want to tupdate your system?")" 
+	if zenity --title "$MAIN_TITLE" --question --text "$TXT_MSG"
+		return 0
+	fi
+	return 1
+}
+
+info_msg(){
+	zenity --title "$MAIN_TITLE" --info --text "$1"
+
+}
+
 zsay(){
 	echo -ne "$1\0000"
 }
@@ -71,7 +86,7 @@ menu_options(){
 	done
 	i=0
 	while [ $i -lt ${#MENU_DES[@]} ] ; do
-		if [ $DEFAULT_OPT -eq $i ] ; then
+		if [ "$CURRENT_LEVEL" = "${MENU_RET[$i]}" ] ; then
 			zsay "TRUE"
 		else
 			zsay "FALSE"
@@ -84,8 +99,18 @@ menu_options(){
 }
 
 show_menu(){
-	menu_options |xargs -0 zenity --width=750 --height=300 --text "$MENU_TEXT" --title "$MAIN_TITLE" --list --radiolist --print-column=2 --hide-column=2
+	menu_options |xargs -0 zenity --width=750 --height=300 --text "$MENU_TEXT" --title "$MAIN_TITLE" --list --radiolist --print-column=2 --hide-column=2 || echo "-1"
 }
+
 # main
-show_menu
+CURRENT_LEVEL="$(aurex-upgrade get-level)"
+menu_item=$(show_menu)
+if [ $menu_item -ge 0 ] & [ $menu_item -lt ${#MENU_RET[@]} ] ; then
+	if confirm_msg $menu_item ; then
+		aurex-upgrade "${MENU_RET[$i]}" |zenity --auto-close --progress --pulsate || true
+		info_msg "$(gettext "Transmutation completed")"
+	fi
+fi
+	
+echo $menu_item
 exit 0
