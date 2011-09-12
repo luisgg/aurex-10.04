@@ -77,3 +77,25 @@ Description: Aurex generic desktop system
  It is also used to help ensure proper upgrades, so it is recommended that
  it not be removed.
 
+Package: aurex-smr
+Architecture: any
+Depends: ${misc:Depends}, ${germinate:Depends}
+Recommends: ${germinate:Recommends}
+Description: Aurex smr extensions
+ This (meta)package depends on the packages for the smr aurex
+ desktop system
+ .
+ It is also used to help ensure proper upgrades, so it is recommended that
+ it not be removed.
+
+Package: aurex-asir
+Architecture: any
+Depends: ${misc:Depends}, ${germinate:Depends}
+Recommends: ${germinate:Recommends}
+Description: Aurex asir extensions
+ This (meta)package depends on the packages for the asir aurex
+ desktop system
+ .
+ It is also used to help ensure proper upgrades, so it is recommended that
+ it not be removed.
+
