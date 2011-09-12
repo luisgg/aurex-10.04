@@ -95,6 +95,7 @@ list_modules(){
 }
 
 test_keys(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/keys"
@@ -112,6 +113,7 @@ get_ubuntu_mirror(){
 }
 
 trans_base_files(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/base-files/"
@@ -122,6 +124,7 @@ trans_base_files(){
 }
 
 untrans_base_files(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/base-files/"
@@ -130,6 +133,7 @@ untrans_base_files(){
 }
 
 trans_sources(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	TMPFILE="$(tempfile)"
 	cp -a /etc/apt/sources.list "$TMPFILE"
@@ -147,6 +151,7 @@ trans_sources(){
 }
 
 untrans_sources(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	FIRST_SOURCES="$(ls -1 /etc/apt/sources.list.aurex.* 2>/dev/null |sort |head -1)"
 	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/transmute/templates/etc/apt/standard-sources.list
@@ -155,6 +160,7 @@ untrans_sources(){
 }
 
 trans_preseed(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/preseed"
@@ -168,6 +174,7 @@ trans_preseed(){
 
 trans_packages(){
 	UPDATE_REQUIRED=""
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/packages"
@@ -184,6 +191,7 @@ trans_packages(){
 }
 
 trans_keys(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/keys"
@@ -204,6 +212,7 @@ trans_keys(){
 }
 
 untrans_keys(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="/var/lib/aurex/keys/$pdir"
@@ -220,6 +229,7 @@ untrans_keys(){
 
 
 trans_divert(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/divert"
@@ -234,6 +244,7 @@ trans_divert(){
 }
 
 untrans_divert(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/divert"
@@ -249,6 +260,7 @@ untrans_divert(){
 }
 
 trans_reconfigure(){
+	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/reconfigure"
@@ -270,7 +282,7 @@ do_transmute(){
 	if [ "$TFILES" = "Y" ] ; then
 		trans_base_files || die "Error: Unable to install AureX base-files"
 	fi
-	if [ "$TSOURCES" = "Y" ] && [ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] ; then
+	if [ "$TSOURCES" = "Y" ] && [ -z "$GBASE_NAME_LIST" -o "$GBASE_NAME_LIST" = "transmute" ] ; then
 		if [ "$FORCE" ] || ! test_ubuntu_sources || ! test_aurex_sources  ; then
 			trans_sources || die "Error: Unable to fix sources.list"
 		fi
@@ -320,6 +332,7 @@ do_test(){
 		test_rc=$(($test_rc + 4))
 	fi
 	if [ "$TFILES" = "Y" ] ; then
+		BASE_NAME_LIST="$GBASE_NAME_LIST"
 		[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 		test_rc_files=0
 		for pdir in $BASE_NAME_LIST ; do
@@ -360,6 +373,8 @@ force_fixvars(){
 # main
 # ----
 
+GBASE_NAME_LIST=""
+
 [ "$1" ] || usage
 while [ -z "$END_PARAMETERS" ] ; do
 	case "$1" in 
@@ -396,8 +411,8 @@ while [ -z "$END_PARAMETERS" ] ; do
 			shift
 			;;
 		--module=*)
-			BASE_NAME_LIST="${1#--module=}"
-			BASE_NAME_LIST="$(echo "$BASE_NAME_LIST" |tr "," " ")"
+			GBASE_NAME_LIST="${1#--module=}"
+			GBASE_NAME_LIST="$(echo "$GBASE_NAME_LIST" |tr "," " ")"
 			shift
 			;;
 		*)
