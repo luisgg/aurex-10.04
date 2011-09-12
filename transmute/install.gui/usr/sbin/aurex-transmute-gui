@@ -105,7 +105,7 @@ show_menu(){
 # main
 CURRENT_LEVEL="$(aurex-upgrade get-level)"
 menu_item=$(show_menu)
-if [ $menu_item -ge 0 ] & [ $menu_item -lt ${#MENU_RET[@]} ] ; then
+if [ $menu_item != "-1" ] ; then
 	if confirm_msg $menu_item ; then
 		aurex-upgrade "${MENU_RET[$i]}" |zenity --auto-close --progress --pulsate || true
 		info_msg "$(gettext "Transmutation completed")"

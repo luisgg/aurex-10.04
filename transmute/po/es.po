@@ -77,15 +77,13 @@ msgid "Description"
 msgstr "Descripción"
 
 #: install.gui/usr/sbin/aurex-transmute-gui:63
-#, fuzzy
 msgid "Selected aurex level:"
-msgstr "Seleccione el nivel de Transmutación requerido"
+msgstr "Nivel 'de aurex' seleccionado:"
 
 #: install.gui/usr/sbin/aurex-transmute-gui:64
 msgid "Do you want to update your system?"
 msgstr "¿Desea actualizar el sistema?"
 
 #: install.gui/usr/sbin/aurex-transmute-gui:111
-#, fuzzy
 msgid "Transmutation completed"
 msgstr "Transmutación completada."
