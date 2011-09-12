@@ -5,3 +5,6 @@ aurex-minimal aurex-minimal
 aurex-standard aurex-standard
 aurex-desktop aurex-desktop
 aurex-supported exclude-aurex-support
+aurex-inf exclude-aurex-inf
+aurex-smr aurex-smr
+aurex-asir aurex-asir

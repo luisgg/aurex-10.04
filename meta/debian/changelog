@@ -1,3 +1,22 @@
+aurex-meta (1.197~aurex10.04.18) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added virtualbox-4.1 to aurex-asir, aurex-inf, aurex-smr
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 19:36:25 +0200
+
+aurex-meta (1.197~aurex10.04.17) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 19:28:28 +0200
+
 aurex-meta (1.197~aurex10.04.16) lucid; urgency=low
 
   * Refreshed dependencies
