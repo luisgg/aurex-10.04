@@ -50,6 +50,9 @@ Task-Metapackage: exclude-aurex-support
  * aurex-instant
  * germinate
  * aurex-translive
+== aurex live ==
+ * aurex-ubiquity-transmute
+ * aurex-ubiquity-theme
 
 = Language support =
  * Languages: es ca en fr de it
