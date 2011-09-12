@@ -24,8 +24,10 @@ lshw
 lsof
 ltrace
 man-db
+mc
 memtest86+
 mime-support
+netcat
 nfs-common
 parted
 pciutils

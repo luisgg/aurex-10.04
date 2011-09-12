@@ -9,6 +9,7 @@ aurex-boot-theme
 aurex-gnome-theme
 aurex-plymouth-theme
 aurex-transmute
+aurex-transmute-gui
 bc
 bridge-utils
 ca-certificates
@@ -83,9 +84,11 @@ libsdl1.2debian-pulseaudio
 libxp6
 linux-headers-server-lts-backport-maverick
 linux-image-server-lts-backport-maverick
+mc
 metacity
 nautilus
 nautilus-sendto
+netcat
 nfs-common
 notify-osd
 openprinting-ppds

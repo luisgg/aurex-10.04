@@ -1,3 +1,20 @@
+aurex-meta (1.197~aurex10.04.12) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added aurex-instant to aurex-supported
+  * Added aurex-translive to aurex-supported
+  * Added aurex-transmute-gui to aurex-desktop
+  * Added germinate to aurex-supported
+  * Added mc to aurex-desktop, aurex-standard
+  * Added netcat to aurex-desktop, aurex-standard
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+  * Removed linux-headers-generic from aurex-desktop-recommends,
+    desktop-recommends
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 11:25:35 +0200
+
 aurex-meta (1.197~aurex10.04.11) lucid; urgency=low
 
   * Refreshed dependencies
