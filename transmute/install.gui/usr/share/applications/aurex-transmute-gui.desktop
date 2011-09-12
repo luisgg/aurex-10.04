@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=aurex transmute
-Name[es]=Transmutador aurex
-GenericName=aurex transmute
-GenericName[es]=Transmutador aurex
+Name=Aurex settings
+Name[es]=Ajustes de aurex 
+GenericName=Aurex settings
+GenericName[es]=Ajustes de aurex
 Comment=Configure aurex customizations
 Comment[es]=Configura las personalizaciones de aurex
 Exec=gksu --desktop /usr/sbin/aurex-transmute-gui
