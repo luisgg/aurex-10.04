@@ -66,12 +66,16 @@ set_level_full(){
 	do_apt
 }
 
+say_level(){
+	echo "$1"
+	exit 0
+}
 get_level(){
-	aurex_transmute test keys >/dev/null 2>/dev/null || echo "none"
-	[ ! -r /etc/apt/sources.list.d/aurex-sources.list ] || echo "minimal"
-	aurex-transmute -module=apt-preferences test files >/dev/null 2>/dev/null || echo "minimal"
-	aurex-transmute -module=transmute test files >/dev/null 2>/dev/null || echo "medium"
-	echo "full"
+	aurex_transmute test keys >/dev/null 2>/dev/null || say_level "none"
+	[ ! -r /etc/apt/sources.list.d/aurex-sources.list ] || say_level "minimal"
+	aurex-transmute -module=apt-preferences test files >/dev/null 2>/dev/null || say_level "minimal"
+	aurex-transmute -module=transmute test files >/dev/null 2>/dev/null || say_level "medium"
+	say_level "full"
 }
 
 # main
