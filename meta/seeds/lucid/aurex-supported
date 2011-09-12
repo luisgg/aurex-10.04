@@ -46,6 +46,11 @@ Task-Metapackage: exclude-aurex-support
  * nvidia-185-libvdpau
  * nvidia-185-libvdpau-dev
 
+= aurex =
+ * aurex-instant
+ * germinate
+ * aurex-translive
+
 = Language support =
  * Languages: es ca en fr de it
 
@@ -73,3 +78,4 @@ Task-Metapackage: exclude-aurex-support
 
 = opera =
  * opera
+

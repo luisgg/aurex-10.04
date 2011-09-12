@@ -11,10 +11,11 @@ Task-Metapackage: aurex-standard
  * debconf-utils
  * ethtool
 
-= network filesystem support =
+= network filesystem support and tools =
  * nfs-common
  * smbclient
  * smbfs
+ * netcat
 
 = archivers/pkg managers =
  * zip
@@ -25,3 +26,6 @@ Task-Metapackage: aurex-standard
  * cabextract
  * rpm
  * alien
+
+= file managers =
+ * mc

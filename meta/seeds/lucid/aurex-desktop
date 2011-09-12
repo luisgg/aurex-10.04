@@ -6,6 +6,9 @@ Task-Key: aurex-desktop
 Task-Seeds: desktop-common desktop aurex-minimal aurex-standard
 Task-Metapackage: aurex-desktop
 
+= aurex stuff =
+ * aurex-transmute-gui
+
 = Wallpapers and themes =
  * aurex-gnome-theme
  * aurex-boot-theme
