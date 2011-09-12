@@ -49,6 +49,7 @@ set_level_minimal(){
 	aurex-transmute transmute keys
 	TMPFILE="$(tempfile)"
         cp -a /etc/apt/sources.list "$TMPFILE"
+	:> "$TMPFILE"
 	sed -e "s%_@_UBUNTU_MIRROR_@_%$UBUNTU_MIRROR%g;s%_@_AUREX_MIRROR_@_%$AUREX_MIRROR%" /usr/share/aurex/templates/transmute/etc/apt/aurex-sources.list >> "$TMPFILE"
 	mv "$TMPFILE" /etc/apt/sources.list.d/aurex-sources.list
 	do_apt
@@ -80,8 +81,11 @@ get_level(){
 
 # main
 
+TR_BASE_DIR="/usr/share/aurex-transmute"
 if [ -r /etc/aurex/profile.sh ] ; then
-        . /etc/aurex/profile.sh
+	. /etc/aurex/profile.sh
+else
+	. $TR_BASE_DIR/transmute/base-files/etc/aurex/profile.sh
 fi
 
 [ "$1" ] || usage
