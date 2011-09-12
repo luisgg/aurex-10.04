@@ -72,7 +72,7 @@ say_level(){
 	exit 0
 }
 get_level(){
-	aurex_transmute test keys >/dev/null 2>/dev/null || say_level "none"
+	aurex-transmute test keys >/dev/null 2>/dev/null || say_level "none"
 	[ ! -r /etc/apt/sources.list.d/aurex-sources.list ] || say_level "minimal"
 	aurex-transmute -module=apt-preferences test files >/dev/null 2>/dev/null || say_level "minimal"
 	aurex-transmute -module=transmute test files >/dev/null 2>/dev/null || say_level "medium"
