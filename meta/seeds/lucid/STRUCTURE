@@ -3,6 +3,7 @@ aurex-minimal:
 aurex-standard:
 aurex-desktop: aurex-minimal desktop
 aurex-supported:
+aurex-inf:
 aurex-smr:
 aurex-asir:
 supported: aurex-supported

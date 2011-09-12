@@ -4,6 +4,6 @@ Task-Description: aurex asir
 Task-Extended-Description: This task provides asir addons to aurex desktop environment.
 Task-Key: aurex-asir
 Task-Metapackage: aurex-asir
-Task-Seeds: aurex-ciclos-inf
+Task-Seeds: aurex-inf
 
 = nothing to do =

@@ -4,6 +4,6 @@ Task-Description: aurex smr
 Task-Extended-Description: This task provides smr addons to aurex desktop environment.
 Task-Key: aurex-smr
 Task-Metapackage: aurex-smr
-Task-Seeds: aurex-ciclos-inf
+Task-Seeds: aurex-inf
 
 = nothing to do =
