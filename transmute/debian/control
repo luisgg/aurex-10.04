@@ -36,12 +36,12 @@ Depends: ${misc:Depends}, aurex-transmute, zenity
 Description: Aurex transmute GTK interface
  Simple GTK interface for aurex-transmute
 
-Package: aurex-easy-transmute
+Package: aurex-instant
 Architecture: all
 Depends: ${misc:Depends}, rsync, apt, zenity
 Provides: aurex-transmute, aurex-transmute-gui
 Replaces: aurex-transmute, aurex-transmute-gui
 Conflicts: aurex-transmute, aurex-transmute-gui
-Description: easy way to transmute Ubuntu into aurex
+Description: Quick and easy way to transmute Ubuntu into aurex
  Just install this package in Ubuntu and click
 
