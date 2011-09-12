@@ -4,5 +4,5 @@ aurex-standard:
 aurex-desktop: aurex-minimal desktop
 aurex-supported:
 aurex-smr:
-aure-asir:
+aurex-asir:
 supported: aurex-supported

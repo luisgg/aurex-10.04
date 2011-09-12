@@ -1,3 +1,21 @@
+aurex-meta (1.197~aurex10.04.16) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 16:19:54 +0200
+
+aurex-meta (1.197~aurex10.04.15) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 16:08:44 +0200
+
 aurex-meta (1.197~aurex10.04.14) lucid; urgency=low
 
   * Refreshed dependencies
