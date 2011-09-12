@@ -87,6 +87,9 @@ if [ -r /etc/aurex/profile.sh ] ; then
 else
 	. $TR_BASE_DIR/transmute/base-files/etc/aurex/profile.sh
 fi
+UBUNTU_MIRROR=${UBUNTU_FORCEMIRROR:-$UBUNTU_DEFMIRROR}
+AUREX_MIRROR=${AUREX_FORCEMIRROR:-$AUREX_DEFMIRROR}
+
 
 [ "$1" ] || usage
 
