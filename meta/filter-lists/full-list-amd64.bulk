@@ -1,14 +1,23 @@
 # -> http://192.168.10.40/aurex/ lucid
+aurex-asir
 aurex-boot-theme
 aurex-desktop
 aurex-gdm-theme
 aurex-gnome-theme
 aurex-icon-theme
+aurex-instant
 aurex-minimal
 aurex-plymouth-theme
+aurex-smr
 aurex-standard
+aurex-translive
+aurex-translive-theme
 aurex-transmute
+aurex-transmute-gui
+aurex-ubiquity-theme
+aurex-ubiquity-transmute
 aurex-wallpaper-theme
+germinate
 gtk-aurex-bamboo-zen-theme
 nautilus-dropbox
 nvidia-185-kernel-source
@@ -99,6 +108,7 @@ dpkg
 dpkg-dev
 e2fslibs
 e2fsprogs
+ecryptfs-utils
 ejabberd
 empathy
 empathy-common
@@ -268,6 +278,7 @@ libdns64
 libebackend1.2-0
 libebook1.2-9
 libecal1.2-7
+libecryptfs0
 libedata-book1.2-2
 libedata-cal1.2-6
 libedataserver1.2-11
@@ -457,6 +468,7 @@ openjdk-6-jre-lib
 openoffice.org-common
 openoffice.org-style-human
 openssh-client
+openssh-server
 openssl
 openvpn
 parted
@@ -554,6 +566,10 @@ ttf-mscorefonts-installer
 ttf-thai-tlwg
 tzdata
 tzdata-java
+ubiquity
+ubiquity-casper
+ubiquity-frontend-debconf
+ubiquity-ubuntu-artwork
 ubuntu-system-service
 ubuntuone-client
 ubuntuone-client-gnome
@@ -613,6 +629,7 @@ bluez
 bluez-alsa
 bluez-cups
 bluez-gstreamer
+bogl-bterm
 branding-ubuntu
 bridge-utils
 brltty
@@ -638,6 +655,7 @@ cpp
 cpp-4.4
 cpu-checker
 cron
+cryptsetup
 cups-pdf
 cvs
 dansguardian
@@ -656,6 +674,7 @@ desktop-file-utils
 dictionaries-common
 diffutils
 dmidecode
+dmraid
 dmz-cursor-theme
 doc-base
 docbook-xml
@@ -938,6 +957,8 @@ libdbi-perl
 libdbi0
 libdc1394-22
 libdca0
+libdebconfclient0
+libdebian-installer4
 libdevel-caller-perl
 libdevel-lexalias-perl
 libdevel-stacktrace-perl
@@ -948,6 +969,7 @@ libdigest-md4-perl
 libdigest-sha1-perl
 libdirac-encoder0
 libdirectfb-1.2-0
+libdmraid1.0.0.rc16
 libdotconf1.0
 libdrm-intel1
 libdrm-nouveau1
@@ -1458,6 +1480,7 @@ makedev
 manpages
 manpages-dev
 mawk
+mc
 memcached
 memtest86+
 mime-support
@@ -1588,6 +1611,7 @@ python-problem-report
 python-protobuf
 python-pycurl
 python-pygoocanvas
+python-pyicu
 python-pyinotify
 python-pyorbit
 python-rdflib
@@ -1617,8 +1641,10 @@ quadrapassel
 quota
 radeontool
 rarian-compat
+rdate
 re2c
 readline-common
+reiserfsprogs
 renattach
 rhythmbox-ubuntuone-music-store
 rpm
@@ -1648,6 +1674,7 @@ spamc
 speech-dispatcher
 splix
 sqlite
+squashfs-tools
 squid-langpack
 sshpass
 ssl-cert
