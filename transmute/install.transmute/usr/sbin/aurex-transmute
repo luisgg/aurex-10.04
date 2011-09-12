@@ -128,7 +128,9 @@ untrans_base_files(){
 	[ "$BASE_NAME_LIST" ] || BASE_NAME_LIST="$(list_modules)"
 	for pdir in $BASE_NAME_LIST ; do
 		PDIR="$TR_BASE_DIR/$pdir/base-files/"
-		( cd "$PDIR" 2>/dev/null && find  -xtype f -exec  rm "/{}" \; || true ; )
+		if [ -d "$PDIR" ] ; then
+			( cd "$PDIR" 2>/dev/null; for f in $(find  -xtype f -printf "/%P\n") ; do rm -f "$f" ; done ; )
+		fi
 	done
 }
 
@@ -155,7 +157,7 @@ untrans_sources(){
 	BASE_NAME_LIST="$GBASE_NAME_LIST"
 	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	FIRST_SOURCES="$(ls -1 /etc/apt/sources.list.aurex.* 2>/dev/null |sort |head -1)"
-	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/transmute/templates/etc/apt/standard-sources.list
+	[ "$FIRST_SOURCES" ] || FIRST_SOURCES=/usr/share/aurex/templates/transmute/etc/apt/standard-sources.list
 	cp "$FIRST_SOURCES" /etc/apt/sources.list
 	rm -f /etc/apt/sources.list.d/aurex-sources.list
 }

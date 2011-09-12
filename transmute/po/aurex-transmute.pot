@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: install.gui/usr/sbin/aurex-transmute-gui:28
-msgid "System Transmutation (aurex ... and beyond)"
+msgid "Where do you want to go today?"
 msgstr ""
 
 #: install.gui/usr/sbin/aurex-transmute-gui:29

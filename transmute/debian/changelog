@@ -1,6 +1,6 @@
-aurex-transmute (0.11) UNRELEASED; urgency=low
+aurex-transmute (0.11) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * more fixes for aurex-transmute and aurex-upgrade
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 19:54:43 +0200
 

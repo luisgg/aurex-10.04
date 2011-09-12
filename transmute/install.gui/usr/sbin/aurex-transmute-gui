@@ -25,7 +25,7 @@
 # ----
 
 export TEXTDOMAIN="aurex-transmute"
-MAIN_TITLE="$(gettext "System Transmutation (aurex ... and beyond)")"
+MAIN_TITLE="$(gettext "Where do you want to go today?")"
 MENU_TEXT="$(gettext "Select desired Transmutation level")"
 declare -a MENU_RET=( "none" "minimal" "medium" "full" )
 declare -a MENU_OPT=( \
