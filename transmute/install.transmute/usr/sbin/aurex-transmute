@@ -137,6 +137,7 @@ trans_sources(){
 	[ -z "$BASE_NAME_LIST" -o "$BASE_NAME_LIST" = "transmute" ] || return 0
 	TMPFILE="$(tempfile)"
 	cp -a /etc/apt/sources.list "$TMPFILE"
+	:> "$TMPFILE"
 	UBUNTU_MIRROR="$(get_ubuntu_mirror)"
 	[ "$UBUNTU_MIRROR" ] || UBUNTU_MIRROR="$UBUNTU_DEFMIRROR"
 	UBUNTU_MIRROR=${UBUNTU_FORCEMIRROR:-$UBUNTU_MIRROR}
