@@ -1,6 +1,7 @@
 aurex-transmute (0.11) lucid; urgency=low
 
-  * more fixes for aurex-transmute and aurex-upgrade
+  * more fixes for aurex-transmute
+  * aurex-upgrade renamed to aurex-system-transmute
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 19:54:43 +0200
 
