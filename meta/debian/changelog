@@ -1,3 +1,13 @@
+aurex-meta (1.197~aurex10.04.21) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+  * Moved vlc to aurex-desktop-recommends
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 13 Sep 2011 10:37:06 +0200
+
 aurex-meta (1.197~aurex10.04.20) lucid; urgency=low
 
   * Refreshed dependencies
