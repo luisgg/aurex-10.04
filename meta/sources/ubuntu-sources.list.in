@@ -2,23 +2,23 @@
 # Ubuntu sources
 # -------------
 deb _@_UBUNTU_MIRROR_@_ lucid main restricted universe multiverse
-#deb-src _@_UBUNTU_MIRROR_@_ lucid main restricted universe multiverse
+#deb-NOsrc _@_UBUNTU_MIRROR_@_ lucid main restricted universe multiverse
 
 # updates
 deb _@_UBUNTU_MIRROR_@_ lucid-updates main restricted universe multiverse
-#deb-src _@_UBUNTU_MIRROR_@_ lucid-updates main restricted universe multiverse
+#deb-NOsrc _@_UBUNTU_MIRROR_@_ lucid-updates main restricted universe multiverse
 
 # security
 deb _@_UBUNTU_MIRROR_@_ lucid-security main restricted universe multiverse
-#deb-src _@_UBUNTU_MIRROR_@_ lucid-security main restricted universe multiverse
+#deb-NOsrc _@_UBUNTU_MIRROR_@_ lucid-security main restricted universe multiverse
 
 # proposed
 deb _@_UBUNTU_MIRROR_@_ lucid-proposed main restricted universe multiverse
-#deb-src _@_UBUNTU_MIRROR_@_ lucid-proposed main restricted universe multiverse
+#deb-NOsrc _@_UBUNTU_MIRROR_@_ lucid-proposed main restricted universe multiverse
 
 # backports
 deb _@_UBUNTU_MIRROR_@_ lucid-backports main restricted universe multiverse
-#deb-src _@_UBUNTU_MIRROR_@_ lucid-backports main restricted universe multiverse
+#deb-NOsrc _@_UBUNTU_MIRROR_@_ lucid-backports main restricted universe multiverse
 
 # partner
 deb _@_PARTNER_MIRROR_@_ lucid partner
