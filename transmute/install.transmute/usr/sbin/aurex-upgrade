@@ -1,6 +1,6 @@
 #!/bin/sh
 # -------
-# File:        aurex-upgrade
+# File:        aurex-system-transmute
 # Description: Install required sytem trasmutation level
 # Author:      Luis Antonio Garcia Gisbert <luisgg@gmail.com> 
 # 
