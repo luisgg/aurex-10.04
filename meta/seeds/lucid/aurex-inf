@@ -1,4 +1,5 @@
-Task-Metapackage: exclude-aurex-inf
+Task-Key: aurex-inf
+# Task-Metapackage: exclude-aurex-inf
 # 'exclude' prefix in metapackage name to avoid installation in update-lists script
 
 
