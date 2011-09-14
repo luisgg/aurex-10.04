@@ -29,9 +29,20 @@ nvidia-current-dev
 nvidia-current-modaliases
 nvidia-glx-185
 nvidia-glx-185-dev
-# -> http://archive.ubuntu.com/ubuntu/ lucid-proposed
+# -> http://192.168.10.40/firefox-ppa/ lucid
+firefox
+firefox-gnome-support
+firefox-locale-ca
+firefox-locale-de
+firefox-locale-en
+firefox-locale-es
+firefox-locale-fr
+firefox-locale-it
+ubufox
+xul-ext-ubufox
+# -> http://192.168.10.40/ubuntu/ lucid-proposed
 linux-headers-2.6.35-30
-# -> http://archive.ubuntu.com/ubuntu/ lucid-updates
+# -> http://192.168.10.40/ubuntu/ lucid-updates
 acpi-support
 acpid
 alien
@@ -410,6 +421,8 @@ libudev0
 libupsclient1
 libusb-0.1-4
 libuuid1
+libvlc2
+libvlccore2
 libvte-common
 libvte9
 libwebkit-1.0-2
@@ -587,6 +600,10 @@ util-linux
 uuid-runtime
 vinagre
 vino
+vlc
+vlc-data
+vlc-nox
+vlc-plugin-pulse
 vsftpd
 w3m
 wget
@@ -596,7 +613,7 @@ xkb-data
 xserver-common
 xserver-xorg-core
 xulrunner-1.9.2
-# -> http://archive.ubuntu.com/ubuntu/ lucid
+# -> http://192.168.10.40/ubuntu/ lucid
 acl
 adduser
 adium-theme-ubuntu
@@ -900,6 +917,7 @@ libcap-ng0
 libcap2
 libcarp-clan-perl
 libcdaudio1
+libcddb2
 libcdio-cdda0
 libcdio-paranoia0
 libcdio10
@@ -976,8 +994,10 @@ libdrm-nouveau1
 libdrm-radeon1
 libdrm2
 libdv4
+libdvbpsi5
 libdvdnav4
 libdvdread4
+libebml0
 libedit2
 libeggdbus-1-0
 libelf1
@@ -1129,6 +1149,7 @@ libio-string-perl
 libio-stringy-perl
 libipc-sharelite-perl
 libiptcdata0
+libiso9660-7
 libiw30
 libjack0
 libjasper1
@@ -1172,6 +1193,7 @@ libmail-rfc822-address-perl
 libmail-sendmail-perl
 libmail-spf-perl
 libmailtools-perl
+libmatroska0
 libmcrypt4
 libmeanwhile1
 libmemcached2
@@ -1316,6 +1338,7 @@ libsasl2-2
 libsasl2-modules
 libschroedinger-1.0-0
 libsctp1
+libsdl-image1.2
 libsdl-ttf2.0-0
 libselinux1
 libsensors4
@@ -1354,6 +1377,7 @@ libsys-hostname-long-perl
 libsysfs2
 libt1-5
 libtalloc2
+libtar
 libtask-weaken-perl
 libtasn1-3
 libtdb1
@@ -1384,12 +1408,14 @@ libunicode-maputf8-perl
 libunicode-string-perl
 libunique-1.0-0
 libunix-syslog-perl
+libupnp3
 libupower-glib1
 liburi-perl
 libusb-1.0-0
 libusbmuxd1
 libuuid-perl
 libv4l-0
+libvcdinfo0
 libvisual-0.4-0
 libvisual-0.4-plugins
 libvorbis0a
@@ -1416,6 +1442,7 @@ libxaw7
 libxcb-atom1
 libxcb-aux0
 libxcb-event1
+libxcb-keysyms1
 libxcb-render-util0
 libxcb-render0
 libxcb1
@@ -1882,14 +1909,6 @@ ttf-opensymbol
 uno-libs3
 ure
 # -> http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu/ lucid
-firefox
-firefox-gnome-support
-firefox-locale-ca
-firefox-locale-de
-firefox-locale-en
-firefox-locale-es
-firefox-locale-fr
-firefox-locale-it
 language-pack-ca
 language-pack-ca-base
 language-pack-de
@@ -1902,8 +1921,6 @@ language-pack-fr
 language-pack-fr-base
 language-pack-it
 language-pack-it-base
-ubufox
-xul-ext-ubufox
 # -> http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu/ lucid
 libvirt-bin
 libvirt0
