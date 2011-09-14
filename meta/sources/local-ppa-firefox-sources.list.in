@@ -4,5 +4,5 @@
 #    http://ppa.launchpad.net/mozillateam/firefox-next/ubuntu/
 
 deb _@_LOCAL_MIRROR_@_/firefox-ppa/ubuntu/ lucid main
-#deb-src _@_LOCAL_MIRROR_@_/firefox-ppa/ubuntu/ lucid main
+#deb-src _@_LOCAL_MIRROR_@_/firefox-ppa/ lucid main
 
