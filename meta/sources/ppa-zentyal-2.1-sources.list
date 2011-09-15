@@ -1,4 +1,4 @@
-# Zentyal 2.1 series from “Zentyal developers” team
-deb http://ppa.launchpad.net/zentyal/2.1/ubuntu lucid main
-#deb-src http://ppa.launchpad.net/zentyal/2.1/ubuntu lucid main
+# Zentyal 2.2 series from “Zentyal developers” team
+deb http://ppa.launchpad.net/zentyal/2.2/ubuntu lucid main
+#deb-src http://ppa.launchpad.net/zentyal/2.2/ubuntu lucid main
 
