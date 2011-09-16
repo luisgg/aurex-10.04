@@ -74,6 +74,20 @@ Components:  main>contrib
 Architectures: i386 
 FilterList: purge filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-i386.list
 
+Name: filter_http:__192.168.10.40_firefox-ppa_:lucid-amd64
+Method: http://192.168.10.40/firefox-ppa/
+Suite: lucid
+Components:  main>contrib
+Architectures: amd64
+FilterList: purge filter_http:__192.168.10.40_firefox-ppa_:lucid-amd64.list
+
+Name: filter_http:__192.168.10.40_firefox-ppa_:lucid-i386
+Method: http://192.168.10.40/firefox-ppa/
+Suite: lucid
+Components:  main>contrib
+Architectures: amd64
+FilterList: purge filter_http:__192.168.10.40_firefox-ppa_:lucid-i386.list
+
 Name: filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu/
 Suite: lucid
@@ -130,16 +144,31 @@ Components:  main>contrib
 Architectures: i386 
 FilterList: purge filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-i386.list
 
-Name: filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-amd64
-Method: http://ppa.launchpad.net/zentyal/2.1/ubuntu/
+Name: filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-amd64
+Method: http://ppa.launchpad.net/zentyal/2.2/ubuntu/
 Suite: lucid
 Components:  main>contrib
 Architectures: amd64 
-FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-amd64.list
+FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-amd64.list
 
-Name: filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-i386
-Method: http://ppa.launchpad.net/zentyal/2.1/ubuntu/
+Name: filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-i386
+Method: http://ppa.launchpad.net/zentyal/2.2/ubuntu/
 Suite: lucid
 Components:  main>contrib
 Architectures: i386 
 FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-i386.list
+
+Name: filter_http:__archive.zentyal.com_zentyal_:2.2-amd64
+Method: http://archive.zentyal.com/zentyal/
+Suite: 2.2
+Components:  extra>contrib
+Architectures: amd64 source
+FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-amd64.list
+
+Name: filter_http:__archive.zentyal.com_zentyal_:2.2-i386
+Method: http://archive.zentyal.com/zentyal/
+Suite: 2.2
+Components:  extra>contrib
+Architectures: i386 source
+FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-i386.list
+

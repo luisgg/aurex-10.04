@@ -3,5 +3,4 @@ IncomingDir: incoming
 Cleanup: on_deny on_error
 Tempdir: incomingtmp
 Default: tau
-Allow: tau lucid>tau unstable>tau UNRELEASED>tau
-
+Allow: tau unstable>tau UNRELEASED>tau
