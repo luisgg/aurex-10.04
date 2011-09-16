@@ -156,19 +156,19 @@ Method: http://ppa.launchpad.net/zentyal/2.2/ubuntu/
 Suite: lucid
 Components:  main>contrib
 Architectures: i386 
-FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.1_ubuntu_:lucid-i386.list
+FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-i386.list
 
 Name: filter_http:__archive.zentyal.com_zentyal_:2.2-amd64
 Method: http://archive.zentyal.com/zentyal/
 Suite: 2.2
 Components:  extra>contrib
-Architectures: amd64 source
+Architectures: amd64
 FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-amd64.list
 
 Name: filter_http:__archive.zentyal.com_zentyal_:2.2-i386
 Method: http://archive.zentyal.com/zentyal/
 Suite: 2.2
 Components:  extra>contrib
-Architectures: i386 source
+Architectures: i386
 FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-i386.list
 
