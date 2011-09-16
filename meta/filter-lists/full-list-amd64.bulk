@@ -458,6 +458,7 @@ man-db
 media-player-info
 metacity
 metacity-common
+mktemp
 mobile-broadband-provider-info
 modemmanager
 mount
@@ -465,7 +466,12 @@ mountall
 myspell-en-gb
 myspell-en-za
 myspell-it
+mysql-client-5.1
+mysql-client-core-5.1
 mysql-common
+mysql-server
+mysql-server-5.1
+mysql-server-core-5.1
 nautilus
 nautilus-data
 nautilus-sendto-empathy
@@ -641,6 +647,7 @@ bash
 bash-completion
 bc
 bcmwl-modaliases
+bcrelay
 binfmt-support
 bluez
 bluez-alsa
@@ -656,6 +663,7 @@ build-essential
 busybox-initramfs
 busybox-static
 ca-certificates-java
+catdoc
 cdparanoia
 cli-common
 command-not-found
@@ -902,6 +910,8 @@ libbonobo2-0
 libbonobo2-common
 libbonoboui2-0
 libbonoboui2-common
+libboost-filesystem1.40.0
+libboost-system1.40.0
 libbrlapi0.5
 libbsd-resource-perl
 libbsd0
@@ -970,6 +980,7 @@ libdb4.7
 libdb4.7-java
 libdb4.7-java-gcj
 libdb4.8
+libdbd-mysql-perl
 libdbd-pg-perl
 libdbi-perl
 libdbi0
@@ -1121,11 +1132,11 @@ libhsqldb-java
 libhtml-format-perl
 libhtml-parser-perl
 libhtml-tagset-perl
+libhtml-template-perl
 libhtml-tree-perl
 libhunspell-1.2-0
 libhyphen0
 libibus1
-libical0
 libice6
 libicu42
 libicu4j-java
@@ -1554,6 +1565,7 @@ oinkmaster
 onboard
 openprinting-ppds
 openssl-blacklist
+openswan
 openvpn-blacklist
 os-prober
 p7zip
@@ -1581,6 +1593,7 @@ ppp
 pppconfig
 pppoeconf
 pptp-linux
+pptpd
 procmail
 procps
 protobuf-compiler
@@ -1858,6 +1871,25 @@ yelp
 zenity
 zip
 zlib1g
+# -> http://archive.zentyal.com/zentyal/ 2.2
+libical0
+libvmime0
+php5-mapi
+zarafa
+zarafa-client
+zarafa-common
+zarafa-dagent
+zarafa-gateway
+zarafa-ical
+zarafa-indexer
+zarafa-libarchiver
+zarafa-libs
+zarafa-monitor
+zarafa-server
+zarafa-spooler
+zarafa-utils
+zarafa-webaccess
+zarafa-webaccess-mobile
 # -> http://deb.opera.com/opera/ stable
 opera
 # -> http://download.virtualbox.org/virtualbox/debian/ lucid
@@ -1944,7 +1976,7 @@ wine1.2
 wine1.3
 wine1.3-gecko
 winetricks
-# -> http://ppa.launchpad.net/zentyal/2.1/ubuntu/ lucid
+# -> http://ppa.launchpad.net/zentyal/2.2/ubuntu/ lucid
 asterisk
 asterisk-config
 asterisk-modules
@@ -1997,6 +2029,7 @@ liblog-any-perl
 libredis-perl
 libsmbclient
 libwbclient0
+novnc
 p3scan
 php-mail-mime
 php-net-smtp
@@ -2013,11 +2046,13 @@ samba-vscan
 smbclient
 smbfs
 winbind
+z-push
 zentyal
 zentyal-all
 zentyal-antivirus
 zentyal-asterisk
 zentyal-ca
+zentyal-captiveportal
 zentyal-common
 zentyal-communication
 zentyal-core
@@ -2029,6 +2064,7 @@ zentyal-ftp
 zentyal-gateway
 zentyal-ids
 zentyal-infrastructure
+zentyal-ipsec
 zentyal-jabber
 zentyal-l7-protocols
 zentyal-mail
@@ -2039,6 +2075,7 @@ zentyal-ntp
 zentyal-objects
 zentyal-office
 zentyal-openvpn
+zentyal-pptp
 zentyal-printers
 zentyal-radius
 zentyal-remoteservices
@@ -2050,5 +2087,7 @@ zentyal-squid
 zentyal-trafficshaping
 zentyal-usercorner
 zentyal-users
+zentyal-virt
 zentyal-webmail
 zentyal-webserver
+zentyal-zarafa
