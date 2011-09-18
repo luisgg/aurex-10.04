@@ -1,4 +1,6 @@
-# Backport of Natty KVM/Qemu and libvirt to Ubuntu 10.04 LTS "Lucid Lynx".
-deb http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu lucid main
-#deb-src http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu lucid main
+# Jacob Zimmermann
+# virt
+# Up-to-date virtualisation tools
+deb http://ppa.launchpad.net/jacob/virt/ubuntu lucid main 
+#deb-src http://ppa.launchpad.net/jacob/virt/ubuntu lucid main
 
