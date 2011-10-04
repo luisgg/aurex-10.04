@@ -1,8 +1,8 @@
-aurex-artwork (0.6) UNRELEASED; urgency=low
+aurex-artwork (0.6) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Dummy upgrade for public repo
 
- -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 12 Sep 2011 11:02:23 +0200
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 04 Oct 2011 22:59:40 +0200
 
 aurex-artwork (0.5) lucid; urgency=low
 
