@@ -1,8 +1,8 @@
-aurex-transmute (0.13) UNRELEASED; urgency=low
+aurex-transmute (0.13) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Added (new) public repository key
 
- -- depinf <depinf@s07-server>  Wed, 14 Sep 2011 11:50:08 +0200
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 04 Oct 2011 22:24:13 +0200
 
 aurex-transmute (0.12) lucid; urgency=low
 
