@@ -1,6 +1,6 @@
-gtk-bamboo-zen-theme (1.4.2-0+aurex3) UNRELEASED; urgency=low
+gtk-bamboo-zen-theme (1.4.2-0+aurex3) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Dummy upgrade for the public repository
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 05 Sep 2011 20:18:01 +0200
 
