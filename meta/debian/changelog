@@ -1,3 +1,11 @@
+aurex-meta (1.197~aurex10.04.23) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added aurex-desktop to desktop
+  * Added aurex-standard to standard
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 06 Oct 2011 11:22:49 +0200
+
 aurex-meta (1.197~aurex10.04.22) lucid; urgency=low
 
   * Refreshed dependencies
