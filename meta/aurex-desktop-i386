@@ -7,6 +7,7 @@ anacron
 arj
 aurex-boot-theme
 aurex-gnome-theme
+aurex-openvpn-nm
 aurex-plymouth-theme
 aurex-transmute
 aurex-transmute-gui
@@ -87,6 +88,7 @@ linux-image-server-lts-backport-maverick
 mc
 metacity
 nautilus
+nautilus-gksu
 nautilus-sendto
 netcat
 nfs-common

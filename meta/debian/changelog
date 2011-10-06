@@ -1,3 +1,14 @@
+aurex-meta (1.197~aurex10.04.24) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added aurex-openvpn-nm to aurex-desktop
+  * Added nautilus-gksu to aurex-desktop
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 06 Oct 2011 22:10:24 +0200
+
 aurex-meta (1.197~aurex10.04.23) lucid; urgency=low
 
   * Refreshed dependencies
