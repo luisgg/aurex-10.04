@@ -3,7 +3,7 @@ Section: universe/net
 Priority: optional
 Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
 Standards-Version: 3.8.4
-Build-Depends: debhelper (>= 7.0.50~), germinate (>= 1.21-0aurex3), rsync, bzr, debootstrap
+Build-Depends: debhelper (>= 7.0.50~)
 
 Package: aurex-openvpn-nm
 Architecture: all
