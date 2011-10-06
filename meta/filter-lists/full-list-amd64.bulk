@@ -1,48 +1,4 @@
-# -> http://192.168.10.40/aurex/ lucid
-aurex-asir
-aurex-boot-theme
-aurex-desktop
-aurex-gdm-theme
-aurex-gnome-theme
-aurex-icon-theme
-aurex-instant
-aurex-minimal
-aurex-plymouth-theme
-aurex-smr
-aurex-standard
-aurex-translive
-aurex-translive-theme
-aurex-transmute
-aurex-transmute-gui
-aurex-ubiquity-theme
-aurex-ubiquity-transmute
-aurex-wallpaper-theme
-germinate
-gtk-aurex-bamboo-zen-theme
-nautilus-dropbox
-nvidia-185-kernel-source
-nvidia-185-libvdpau
-nvidia-185-libvdpau-dev
-nvidia-185-modaliases
-nvidia-current
-nvidia-current-dev
-nvidia-current-modaliases
-nvidia-glx-185
-nvidia-glx-185-dev
-# -> http://192.168.10.40/firefox-ppa/ lucid
-firefox
-firefox-gnome-support
-firefox-locale-ca
-firefox-locale-de
-firefox-locale-en
-firefox-locale-es
-firefox-locale-fr
-firefox-locale-it
-ubufox
-xul-ext-ubufox
-# -> http://192.168.10.40/ubuntu/ lucid-proposed
-linux-headers-2.6.35-30
-# -> http://192.168.10.40/ubuntu/ lucid-updates
+# -> ftp://mirror.ovh.net/mirrors/ftp.ubuntu.com/ubuntu/ lucid-updates
 acpi-support
 acpid
 alien
@@ -180,6 +136,7 @@ gnome-keyring
 gnome-orca
 gnome-panel
 gnome-panel-data
+gnome-power-manager
 gnome-screensaver
 gnome-settings-daemon
 gnome-system-tools
@@ -404,7 +361,6 @@ librsvg2-common
 libsdl1.2debian
 libsdl1.2debian-alsa
 libsdl1.2debian-pulseaudio
-libservlet2.5-java
 libslp1
 libsndfile1
 libsnmp-base
@@ -433,8 +389,9 @@ libxml2
 libxml2-utils
 light-themes
 linux-firmware
-linux-headers-2.6.32-33
-linux-headers-2.6.32-33-generic
+linux-headers-2.6.32-34
+linux-headers-2.6.32-34-generic
+linux-headers-2.6.35-30
 linux-headers-2.6.35-30-generic
 linux-headers-2.6.35-30-server
 linux-headers-2.6.35-30-virtual
@@ -443,7 +400,7 @@ linux-headers-generic-lts-backport-maverick
 linux-headers-server-lts-backport-maverick
 linux-headers-virtual-lts-backport-maverick
 linux-image
-linux-image-2.6.32-33-generic
+linux-image-2.6.32-34-generic
 linux-image-2.6.35-30-generic
 linux-image-2.6.35-30-server
 linux-image-2.6.35-30-virtual
@@ -535,7 +492,6 @@ python-desktopcouch-records
 python-farsight
 python-gnomeapplet
 python-gnomekeyring
-python-gtk-vnc
 python-gtksourceview2
 python-imaging
 python-lazr.restfulclient
@@ -619,7 +575,7 @@ xkb-data
 xserver-common
 xserver-xorg-core
 xulrunner-1.9.2
-# -> http://192.168.10.40/ubuntu/ lucid
+# -> ftp://mirror.ovh.net/mirrors/ftp.ubuntu.com/ubuntu/ lucid
 acl
 adduser
 adium-theme-ubuntu
@@ -773,7 +729,6 @@ gnome-media-common
 gnome-menus
 gnome-mime-data
 gnome-nettool
-gnome-power-manager
 gnome-session
 gnome-session-bin
 gnome-session-canberra
@@ -905,6 +860,7 @@ libavc1394-0
 libbeagle1
 libberkeleydb-perl
 libbit-vector-perl
+libblas3gf
 libbluetooth3
 libbonobo2-0
 libbonobo2-common
@@ -1062,6 +1018,7 @@ libgdict-1.0-6
 libgdu-gtk0
 libgdu0
 libgeoip1
+libgfortran3
 libgif4
 libglade2-0
 libglade2.0-cil
@@ -1178,6 +1135,7 @@ libjtidy-java
 libkate1
 libkeyutils1
 libklibc
+liblapack3gf
 liblaunchpad-integration1
 liblaunchpad-integration1.0-cil
 liblexical-persistence-perl
@@ -1537,6 +1495,7 @@ myspell-ca
 myspell-en-au
 myspell-es
 nano
+nautilus-gksu
 nautilus-sendto
 nautilus-share
 ncftp
@@ -1546,6 +1505,8 @@ net-tools
 netbase
 netcat-openbsd
 network-manager-gnome
+network-manager-openvpn
+network-manager-openvpn-gnome
 network-manager-pptp
 network-manager-pptp-gnome
 nmap
@@ -1642,6 +1603,7 @@ python-louis
 python-minimal
 python-newt
 python-notify
+python-numpy
 python-oauth
 python-openssl
 python-pam
@@ -1759,6 +1721,7 @@ ubuntu-artwork
 ubuntu-desktop
 ubuntu-docs
 ubuntu-keyring
+ubuntu-minimal
 ubuntu-mono
 ubuntu-restricted-extras
 ubuntu-sounds
@@ -1781,6 +1744,7 @@ vim
 vim-common
 vim-runtime
 vim-tiny
+virt-viewer
 vlan
 vpb-driver-source
 wamerican
@@ -1871,6 +1835,45 @@ yelp
 zenity
 zip
 zlib1g
+# -> http://172.16.0.40/aurex/ lucid
+aurex-asir
+aurex-boot-theme
+aurex-desktop
+aurex-gdm-theme
+aurex-gnome-theme
+aurex-icon-theme
+aurex-instant
+aurex-minimal
+aurex-openvpn-nm
+aurex-plymouth-theme
+aurex-smr
+aurex-standard
+aurex-translive
+aurex-translive-theme
+aurex-transmute
+aurex-transmute-gui
+aurex-ubiquity-theme
+aurex-ubiquity-transmute
+aurex-wallpaper-theme
+germinate
+gtk-aurex-bamboo-zen-theme
+libservlet2.5-java
+libvirt-bin
+libvirt0
+nautilus-dropbox
+nvidia-185-kernel-source
+nvidia-185-libvdpau
+nvidia-185-libvdpau-dev
+nvidia-185-modaliases
+nvidia-current
+nvidia-current-dev
+nvidia-current-modaliases
+nvidia-glx-185
+nvidia-glx-185-dev
+python-libvirt
+qemu-common
+qemu-kvm
+seabios
 # -> http://archive.zentyal.com/zentyal/ 2.2
 libical0
 libvmime0
@@ -1890,6 +1893,7 @@ zarafa-spooler
 zarafa-utils
 zarafa-webaccess
 zarafa-webaccess-mobile
+zentyal-core
 # -> http://deb.opera.com/opera/ stable
 opera
 # -> http://download.virtualbox.org/virtualbox/debian/ lucid
@@ -1898,6 +1902,8 @@ virtualbox-4.1
 # -> http://ppa.launchpad.net/bisigi/ppa/ubuntu/ lucid
 humanity-icon-theme
 metacity-aquadreams-theme
+# -> http://ppa.launchpad.net/jacob/virt/ubuntu/ lucid
+virtinst
 # -> http://ppa.launchpad.net/libreoffice/ppa/ubuntu/ lucid
 libreoffice
 libreoffice-base
@@ -1941,6 +1947,14 @@ ttf-opensymbol
 uno-libs3
 ure
 # -> http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu/ lucid
+firefox
+firefox-gnome-support
+firefox-locale-ca
+firefox-locale-de
+firefox-locale-en
+firefox-locale-es
+firefox-locale-fr
+firefox-locale-it
 language-pack-ca
 language-pack-ca-base
 language-pack-de
@@ -1953,16 +1967,8 @@ language-pack-fr
 language-pack-fr-base
 language-pack-it
 language-pack-it-base
-# -> http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu/ lucid
-libvirt-bin
-libvirt0
-python-libvirt
-qemu-common
-qemu-kvm
-seabios
-virt-manager
-virt-viewer
-virtinst
+ubufox
+xul-ext-ubufox
 # -> http://ppa.launchpad.net/sevenmachines/flash/ubuntu/ lucid
 flashplugin64-installer
 # -> http://ppa.launchpad.net/tiheum/equinox/ubuntu/ lucid
@@ -2055,7 +2061,6 @@ zentyal-ca
 zentyal-captiveportal
 zentyal-common
 zentyal-communication
-zentyal-core
 zentyal-dhcp
 zentyal-dns
 zentyal-ebackup

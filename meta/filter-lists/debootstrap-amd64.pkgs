@@ -1,6 +1,6 @@
 ii  adduser                         3.112ubuntu1
-ii  apt                             0.7.25.3ubuntu9.6
-ii  apt-utils                       0.7.25.3ubuntu9.6
+ii  apt                             0.7.25.3ubuntu9.7
+ii  apt-utils                       0.7.25.3ubuntu9.7
 ii  aptitude                        0.4.11.11-1ubuntu10
 ii  base-files                      5.0.0ubuntu20.10.04.4
 ii  base-passwd                     3.5.22
@@ -163,9 +163,9 @@ ii  sysvinit-utils                  2.87dsf-4ubuntu17.4
 ii  tar                             1.22-2ubuntu1
 ii  tasksel                         2.73ubuntu26
 ii  tasksel-data                    2.73ubuntu26
-ii  tzdata                          2011g-0ubuntu0.10.04
+ii  tzdata                          2011j-0ubuntu0.10.04
 ii  ubuntu-keyring                  2010.11.09
-ii  ubuntu-minimal                  1.197+aurex10.04.6
+ii  ubuntu-minimal                  1.197
 ii  ucf                             3.0025
 ii  udev                            151-12.3
 ii  upstart                         0.6.5-8
