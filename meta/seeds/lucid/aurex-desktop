@@ -53,6 +53,7 @@ Task-Metapackage: aurex-desktop
  * ubuntu-restricted-extras
  * libdvdread4
  * (vlc)
+
 == flash ==
  * flashplugin-installer [i386]
  * flashplugin64-installer [amd64]
@@ -65,3 +66,9 @@ Task-Metapackage: aurex-desktop
  * (sun-java6-jre)
  * (sun-java6-plugin)
  * (libjmf-java6-java)
+
+= networking =
+ * aurex-openvpn-nm
+
+= other =
+ * nautilus-gksu
