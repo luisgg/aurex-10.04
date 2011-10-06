@@ -492,6 +492,7 @@ python-desktopcouch-records
 python-farsight
 python-gnomeapplet
 python-gnomekeyring
+python-gtk-vnc
 python-gtksourceview2
 python-imaging
 python-lazr.restfulclient
@@ -1874,6 +1875,8 @@ python-libvirt
 qemu-common
 qemu-kvm
 seabios
+virt-manager
+virtinst
 # -> http://archive.zentyal.com/zentyal/ 2.2
 libical0
 libvmime0
@@ -1902,8 +1905,6 @@ virtualbox-4.1
 # -> http://ppa.launchpad.net/bisigi/ppa/ubuntu/ lucid
 humanity-icon-theme
 metacity-aquadreams-theme
-# -> http://ppa.launchpad.net/jacob/virt/ubuntu/ lucid
-virtinst
 # -> http://ppa.launchpad.net/libreoffice/ppa/ubuntu/ lucid
 libreoffice
 libreoffice-base
