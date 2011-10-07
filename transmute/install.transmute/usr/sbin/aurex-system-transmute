@@ -95,6 +95,24 @@ update_level(){
 	[ "$NEW_LEVEL" = "$CURRENT_LEVEL" ] || echo "$NEW_LEVEL" > "$AUREX_TR_LEVEL"
 }
 
+
+pkg_script(){
+	CURRENT_LEVEL="$(get_level)"
+	case "$CURRENT_LEVEL" in
+		minimal)
+			aurex-transmute --module=transmute "$1" keys || true
+			;;
+		medium)
+			aurex-transmute --module=transmute "$1" keys || true
+			aurex-transmute --module=apt-preferences "$1" || true
+			;;
+		full)
+			aurex-transmute --module=transmute "$1" || true
+			;;
+	esac
+}
+
+
 # main
 
 TR_BASE_DIR="/usr/share/aurex-transmute"
@@ -129,10 +147,10 @@ case "$1" in
 		update_level
 		;;
 	pkg-update)
-		pkg_update
+		pkg_script transmute
 		;;
 	pkg-remove)
-		pkg_remove
+		pkg_script untransmute
 		;;
 	*)
 		usage
