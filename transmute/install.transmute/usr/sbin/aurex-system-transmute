@@ -76,7 +76,7 @@ say_level(){
 	exit 0
 }
 get_level(){
-	[ -r "$AUREX_TR_LEVEL" ] || say_level "$(head -1 "$AUREX_TR_LEVEL")"
+	[ ! -r "$AUREX_TR_LEVEL" ] || say_level "$(head -1 "$AUREX_TR_LEVEL")"
 	# try to guess ...
 	[ ! -r /etc/apt/preferences.d/aurex-ubuntu-meta ] || say_level "full"
 	[ ! -r /etc/apt/sources.list.d/aurex-sources.list ] || say_level "minimal"
@@ -86,7 +86,7 @@ get_level(){
 
 update_level(){
 	CURRENT_LEVEL=""
-	[ -r "$AUREX_TR_LEVEL" ] || CURRENT_LEVEL="$(head -1 "$AUREX_TR_LEVEL")"
+	[ ! -r "$AUREX_TR_LEVEL" ] || CURRENT_LEVEL="$(head -1 "$AUREX_TR_LEVEL")"
 	if [ "$1" ] ; then
 		NEW_LEVEL="$1"
 	else
@@ -97,6 +97,7 @@ update_level(){
 
 
 pkg_script(){
+	update_level
 	CURRENT_LEVEL="$(get_level)"
 	case "$CURRENT_LEVEL" in
 		minimal)

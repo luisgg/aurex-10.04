@@ -1,6 +1,6 @@
-aurex-transmute (0.15) UNRELEASED; urgency=low
+aurex-transmute (0.15) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Fixed aurex-system-transmute
 
  -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 07 Oct 2011 23:14:11 +0200
 
