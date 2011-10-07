@@ -31,7 +31,7 @@ die(){
 }
 
 usage(){
-	die "Usage: $(basename "$0") {none|minimal|medium|full|get-level}"
+	die "Usage: $(basename "$0") {none|minimal|medium|full|get-level|update-level|pkg-update|pkg-remove}"
 }
 
 do_apt(){
@@ -40,11 +40,13 @@ do_apt(){
 }
 
 set_level_none(){
+	update_level "none"
 	aurex-transmute untransmute || true
 	do_apt
 }
 
 set_level_minimal(){
+	update_level "minimal"
 	aurex-transmute untransmute || true
 	aurex-transmute transmute keys
 	TMPFILE="$(tempfile)"
@@ -56,6 +58,7 @@ set_level_minimal(){
 }
 
 set_level_medium(){
+	update_level "medium"
 	aurex-transmute untransmute || true
 	aurex-transmute transmute keys || true
 	aurex-transmute --module=apt-preferences transmute || true
@@ -63,6 +66,7 @@ set_level_medium(){
 }
 
 set_level_full(){
+	update_level "full"
 	aurex-transmute transmute || true
 	do_apt
 }
@@ -72,11 +76,23 @@ say_level(){
 	exit 0
 }
 get_level(){
+	[ -r "$AUREX_TR_LEVEL" ] || say_level "$(head -1 "$AUREX_TR_LEVEL")"
+	# try to guess ...
+	[ ! -r /etc/apt/preferences.d/aurex-ubuntu-meta ] || say_level "full"
 	[ ! -r /etc/apt/sources.list.d/aurex-sources.list ] || say_level "minimal"
-	aurex-transmute test keys >/dev/null 2>/dev/null || say_level "none"
-	aurex-transmute --module=apt-preferences test files >/dev/null 2>/dev/null || say_level "none"
-	aurex-transmute --module=transmute test files >/dev/null 2>/dev/null || say_level "medium"
-	say_level "full"
+	[ ! -r /etc/apt/preferences.d/aurex-ubuntu ] || say_level "medium"
+	say_level "none"
+}
+
+update_level(){
+	CURRENT_LEVEL=""
+	[ -r "$AUREX_TR_LEVEL" ] || CURRENT_LEVEL="$(head -1 "$AUREX_TR_LEVEL")"
+	if [ "$1" ] ; then
+		NEW_LEVEL="$1"
+	else
+		NEW_LEVEL="$(get_level)"
+	fi
+	[ "$NEW_LEVEL" = "$CURRENT_LEVEL" ] || echo "$NEW_LEVEL" > "$AUREX_TR_LEVEL"
 }
 
 # main
@@ -89,7 +105,7 @@ else
 fi
 UBUNTU_MIRROR=${UBUNTU_FORCEMIRROR:-$UBUNTU_DEFMIRROR}
 AUREX_MIRROR=${AUREX_FORCEMIRROR:-$AUREX_DEFMIRROR}
-
+AUREX_TR_LEVEL="/etc/aurex/system-transmute"
 
 [ "$1" ] || usage
 
@@ -108,6 +124,15 @@ case "$1" in
 		;;
 	get-level)
 		get_level
+		;;
+	update-level)
+		update_level
+		;;
+	pkg-update)
+		pkg_update
+		;;
+	pkg-remove)
+		pkg_remove
 		;;
 	*)
 		usage
