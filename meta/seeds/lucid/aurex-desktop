@@ -56,7 +56,8 @@ Task-Metapackage: aurex-desktop
 
 == flash ==
  * flashplugin-installer [i386]
- * flashplugin64-installer [amd64]
+ * flashplugin-installer [amd64]
+# * flashplugin64-installer [amd64]
 
 = win emulation =
  * (wine)
