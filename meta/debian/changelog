@@ -1,3 +1,39 @@
+aurex-meta (1.197~aurex10.04.26) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added libreoffice-calc to aurex-desktop-recommends, desktop-
+    recommends
+  * Added libreoffice-gnome to desktop-recommends
+  * Added libreoffice-help-en-us to aurex-desktop-recommends, desktop-
+    recommends
+  * Added libreoffice-impress to aurex-desktop-recommends, desktop-
+    recommends
+  * Added libreoffice-math to aurex-desktop-recommends, desktop-
+    recommends
+  * Added libreoffice-style-human to aurex-desktop-recommends, desktop-
+    recommends
+  * Added libreoffice-writer to aurex-desktop-recommends, desktop-
+    recommends
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+  * Removed openoffice.org-calc from aurex-desktop-recommends, desktop-
+    recommends
+  * Removed openoffice.org-gnome from aurex-desktop-recommends, desktop-
+    recommends
+  * Removed openoffice.org-help-en-us from aurex-desktop-recommends,
+    desktop-recommends
+  * Removed openoffice.org-impress from aurex-desktop-recommends,
+    desktop-recommends
+  * Removed openoffice.org-math from aurex-desktop-recommends, desktop-
+    recommends
+  * Removed openoffice.org-style-human from aurex-desktop-recommends,
+    desktop-recommends
+  * Removed openoffice.org-writer from aurex-desktop-recommends,
+    desktop-recommends
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 20 Oct 2011 09:52:35 +0200
+
 aurex-meta (1.197~aurex10.04.25) lucid; urgency=low
 
   * Refreshed dependencies
