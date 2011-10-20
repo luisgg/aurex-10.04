@@ -1,3 +1,27 @@
+aurex-meta (1.197~aurex10.04.25) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added libpam-smbpass to aurex-supported
+  * Added libsmbclient to aurex-supported
+  * Added libsmbclient-dev to aurex-supported
+  * Added libwbclient0 to aurex-supported
+  * Added samba to aurex-supported
+  * Added samba-common to aurex-supported
+  * Added samba-common-bin to aurex-supported
+  * Added samba-dbg to aurex-supported
+  * Added samba-doc to aurex-supported
+  * Added samba-doc-pdf to aurex-supported
+  * Added samba-tools to aurex-supported
+  * Added smbclient to aurex-desktop, aurex-supported
+  * Added smbfs to aurex-supported
+  * Added swat to aurex-supported
+  * Added unzip to aurex-desktop
+  * Added winbind to aurex-supported
+  * Added zip to aurex-desktop
+  * Removed flashplugin64-installer from aurex-desktop [amd64]
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Thu, 20 Oct 2011 09:12:35 +0200
+
 aurex-meta (1.197~aurex10.04.24) lucid; urgency=low
 
   * Refreshed dependencies
