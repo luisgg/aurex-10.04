@@ -239,6 +239,7 @@ libdbusmenu-glib1
 libdbusmenu-gtk1
 libdecoration0
 libdesktopcouch-glib-1.0-2
+libdevkit-power-gobject1
 libdevmapper1.02.1
 libdjvulibre-text
 libdjvulibre21
@@ -374,6 +375,7 @@ libtag1-vanilla
 libtag1c2a
 libtiff4
 libudev0
+libupower-glib1
 libupsclient1
 libusb-0.1-4
 libuuid1
@@ -437,6 +439,7 @@ nfs-common
 nspluginwrapper
 ntp
 ntpdate
+nvidia-96-modaliases
 obexd-client
 openjdk-6-jre
 openjdk-6-jre-headless
@@ -555,6 +558,7 @@ unattended-upgrades
 update-inetd
 update-manager
 update-manager-core
+upower
 upstart
 ureadahead
 usb-creator-common
@@ -949,7 +953,6 @@ libdevel-caller-perl
 libdevel-lexalias-perl
 libdevel-stacktrace-perl
 libdevel-symdump-perl
-libdevkit-power-gobject1
 libdigest-hmac-perl
 libdigest-md4-perl
 libdigest-sha1-perl
@@ -1379,7 +1382,6 @@ libunicode-string-perl
 libunique-1.0-0
 libunix-syslog-perl
 libupnp3
-libupower-glib1
 liburi-perl
 libusb-1.0-0
 libusbmuxd1
@@ -1517,7 +1519,6 @@ notify-osd-icons
 ntfs-3g
 ntfsprogs
 nvidia-173-modaliases
-nvidia-96-modaliases
 nvidia-common
 nvidia-settings
 obex-data-server
@@ -1525,6 +1526,7 @@ odbcinst
 odbcinst1debian1
 oinkmaster
 onboard
+openbsd-inetd
 openprinting-ppds
 openssl-blacklist
 openswan
@@ -1736,7 +1738,6 @@ unrar-free
 unzip
 update-notifier
 update-notifier-common
-upower
 usbmuxd
 usbutils
 vbetool
@@ -1896,7 +1897,6 @@ zarafa-spooler
 zarafa-utils
 zarafa-webaccess
 zarafa-webaccess-mobile
-zentyal-core
 # -> http://deb.opera.com/opera/ stable
 opera
 # -> http://download.virtualbox.org/virtualbox/debian/ lucid
@@ -1970,8 +1970,6 @@ language-pack-it
 language-pack-it-base
 ubufox
 xul-ext-ubufox
-# -> http://ppa.launchpad.net/sevenmachines/flash/ubuntu/ lucid
-flashplugin64-installer
 # -> http://ppa.launchpad.net/tiheum/equinox/ubuntu/ lucid
 faenza-icon-theme
 # -> http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu/ lucid
@@ -2033,8 +2031,10 @@ language-packs-zentyal-all
 libhtml-mason-perl
 libjs-jquery
 liblog-any-perl
+libpam-smbpass
 libredis-perl
 libsmbclient
+libsmbclient-dev
 libwbclient0
 novnc
 p3scan
@@ -2049,9 +2049,14 @@ roundcube-sqlite
 samba
 samba-common
 samba-common-bin
+samba-dbg
+samba-doc
+samba-doc-pdf
+samba-tools
 samba-vscan
 smbclient
 smbfs
+swat
 winbind
 z-push
 zentyal
@@ -2062,6 +2067,7 @@ zentyal-ca
 zentyal-captiveportal
 zentyal-common
 zentyal-communication
+zentyal-core
 zentyal-dhcp
 zentyal-dns
 zentyal-ebackup
