@@ -82,3 +82,20 @@ Task-Metapackage: exclude-aurex-support
 = opera =
  * opera
 
+= samba related (get all actual stuff from zentyal) =
+ * samba
+ * samba-common-bin
+ * samba-common
+ * samba-tools
+ * smbclient
+ * swat
+ * samba-doc
+ * samba-doc-pdf
+ * smbfs
+ * libpam-smbpass
+ * libsmbclient
+ * libsmbclient-dev
+ * winbind
+ * samba-dbg
+ * libwbclient0
+
