@@ -1,3 +1,14 @@
+aurex-meta (1.197~aurex10.04.28) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added adobe-flashplugin to aurex-desktop [amd64]
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+  * Removed flashplugin-installer from aurex-desktop [amd64]
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Sat, 22 Oct 2011 09:29:03 +0200
+
 aurex-meta (1.197~aurex10.04.27) lucid; urgency=low
 
   * Refreshed dependencies

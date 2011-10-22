@@ -1,4 +1,5 @@
 acroread
+adobe-flashplugin
 alacarte
 alien
 alsa-base
@@ -28,7 +29,6 @@ eog
 ethtool
 evince
 file-roller
-flashplugin-installer
 foomatic-db
 foomatic-db-engine
 foomatic-filters
