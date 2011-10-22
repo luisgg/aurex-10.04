@@ -1878,6 +1878,14 @@ qemu-kvm
 seabios
 virt-manager
 virtinst
+# -> http://archive.canonical.com/ubuntu/ lucid
+acroread
+acroread-common
+adobe-flash-properties-gtk
+adobe-flashplugin
+sun-java6-bin
+sun-java6-jre
+sun-java6-plugin
 # -> http://archive.zentyal.com/zentyal/ 2.2
 libical0
 libvmime0

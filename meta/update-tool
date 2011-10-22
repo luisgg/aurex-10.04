@@ -239,7 +239,8 @@ update_lists(){
 		FULL_LIST="filter-lists/full-list-$a.bulk"
 		APT_CMD="chroot $CHROOT_DIR apt-get --allow-unauthenticated -ysV "
 		chroot_mounts
-		INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
+		#INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\))"
+		INST_REG_EX="^Inst \([^[:blank:]]\+\) (\([^[:blank:]]\+\) \([^[:blank:]]\+\).*)"
 		TMP_FILE="$(tempfile)"
 		for s in $SEED_LIST ; do
 			echo "Processing seed: $s"
@@ -300,7 +301,8 @@ update_lists(){
 		else
 			echo "Se encontraron cambios"
 		fi
-		rm -f "$TMP_FILE"
+		#rm -f "$TMP_FILE"
+		ln -fs "$TMP_FILE" "/tmp/${a}.tmp" 
 		rm -fr "$LISTS_DIR"
 		chroot_umounts
 	done
