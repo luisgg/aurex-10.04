@@ -1,0 +1,12 @@
+check_virt
+config.h.in
+configure.ac
+COPYING
+.cvsignore
+INSTALL
+install-sh
+Makefile.in
+MANIFEST
+nagios-virt.c
+README
+virt-library.cfg

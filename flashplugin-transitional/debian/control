@@ -1,0 +1,13 @@
+Source: flashplugin-transitional
+Section: multiverse/web
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+
+Package: flashplugin64-installer
+Architecture: amd64
+Depends: ${misc:Depends}, adobe-flashplugin
+Description: Transitional package for 64bits flashplugin
+ Transitional package to adobe-flashplugin.
+ Safe to remove after upgrade

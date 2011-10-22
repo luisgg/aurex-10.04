@@ -1,0 +1,20 @@
+Source: nagios-virt
+Section: net
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0), libxml2-dev, libvirt-dev
+Standards-Version: 3.8.4
+Homepage: http://people.redhat.com/~rjones/nagios-virt/
+
+Package: nagios-virt
+Architecture: all
+Depends: ${misc:Depends}
+Recommends: nagios3
+Description: Nagios configuration tool for virtualised domains
+ Nagios-virt is a configuration tool for adding monitoring of your virtualised
+ domains to Nagios. You can use this tool to either set up a new Nagios
+ installation for your Xen or QEMU/KVM guests, or to integrate with your
+ existing Nagios installation.
+ .
+ Nagios-virt is built on top of libvirt so it works with several different
+ virtualisation systems. 

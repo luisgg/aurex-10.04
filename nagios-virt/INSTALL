@@ -1,0 +1,38 @@
+nagios-virt by Richard W.M. Jones <rjones@redhat.com>
+----------------------------------------------------------------------
+$Id: INSTALL,v 1.1 2007/09/25 11:53:44 rjones Exp $
+
+Prerequisites
+-------------
+
+* gcc
+* GNU-ish programming environment (we depend on some
+	_GNU_SOURCE features of glibc)
+* libvirt (http://libvirt.org/)
+* libxml2 (http://xmlsoft.org/)
+* nagios (http://nagios.org/)
+
+Build
+-----
+
+First run:
+
+  ./configure
+
+There are a number of options you can give to ./configure.  To see
+them, do ./configure --help.
+
+Then do:
+
+  make
+
+To carry out some checks that nagios-virt is likely to work, you can do:
+
+  make check
+
+Install
+-------
+
+As root, do:
+
+  make install

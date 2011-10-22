@@ -1,0 +1,65 @@
+# $Id: Makefile.in,v 1.3 2007/09/25 12:05:09 rjones Exp $
+# @configure_input@
+
+prefix		= @prefix@
+exec_prefix	= @exec_prefix@
+sbindir		= @sbindir@
+datarootdir	= @datarootdir@
+datadir		= @datadir@
+libdir		= @libdir@
+
+PACKAGE		= @PACKAGE_NAME@
+VERSION		= @PACKAGE_VERSION@
+
+INSTALL		= @INSTALL@
+
+CC		= @CC@
+CFLAGS		= @CFLAGS@
+LDFLAGS		= @LDFLAGS@
+LIBS		= @LIBS@
+
+NAGIOS		= @NAGIOS@
+
+NV_DATADIR	= $(datadir)/$(PACKAGE)-$(VERSION)
+CFLAGS		+= -DNV_DATADIR=\"$(NV_DATADIR)\"
+
+all:	nagios-virt
+
+nagios-virt: nagios-virt.o
+	$(CC) $(CFLAGS) $^ $(LDFLAGS) $(LIBS) -o $@
+
+clean:
+	rm -f core *~ *.o
+	rm -f nagios-virt
+
+install:
+	mkdir -p $(DESTDIR)$(libdir)/nagios/plugins
+	install -m 0755 check_virt $(DESTDIR)$(libdir)/nagios/plugins/
+	mkdir -p $(DESTDIR)$(sbindir)/nagios-virt
+	install -m 0755 nagios-virt $(DESTDIR)$(sbindir)/nagios-virt/
+	mkdir -p $(DESTDIR)$(NV_DATADIR)
+	install -m 0755 virt-library.cfg $(DESTDIR)$(NV_DATADIR)/
+
+# Distribution.
+
+dist:
+	$(MAKE) check-manifest
+	rm -rf $(PACKAGE)-$(VERSION)
+	mkdir $(PACKAGE)-$(VERSION)
+	tar -cf - -T MANIFEST | tar -C $(PACKAGE)-$(VERSION) -xf -
+	$(INSTALL) -m 0755 configure $(PACKAGE)-$(VERSION)/
+	tar zcf $(PACKAGE)-$(VERSION).tar.gz $(PACKAGE)-$(VERSION)
+	rm -rf $(PACKAGE)-$(VERSION)
+	ls -l $(PACKAGE)-$(VERSION).tar.gz
+
+check-manifest:
+	@for d in `find -type d -name CVS | grep -v '^\./debian/'`; \
+	do \
+	b=`dirname $$d`/; \
+	awk -F/ '$$1 != "D" {print $$2}' $$d/Entries | \
+	sed -e "s|^|$$b|" -e "s|^\./||"; \
+	done | sort > .check-manifest; \
+	sort MANIFEST > .orig-manifest; \
+	diff -u .orig-manifest .check-manifest; rv=$$?; \
+	rm -f .orig-manifest .check-manifest; \
+	exit $$rv

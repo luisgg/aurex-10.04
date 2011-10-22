@@ -1,0 +1,9 @@
+nagios-virt by Richard W.M. Jones <rjones@redhat.com>
+----------------------------------------------------------------------
+$Id: README,v 1.1 2007/09/25 11:53:44 rjones Exp $
+
+Nagios (http://www.nagios.org/) is a system monitoring package.
+
+Nagios-virt is a tool for configuring Nagios so that it can monitor
+guests on a Xen-, QEMU- or KVM-based host.  It takes care of setting
+up the complicated configuration files for you.
