@@ -1,7 +1,7 @@
 ii  adduser                         3.112ubuntu1
 ii  apt                             0.7.25.3ubuntu9.8
 ii  apt-utils                       0.7.25.3ubuntu9.8
-ii  aptitude                        0.4.11.11-1ubuntu10
+ii  aptitude                        0.4.11.11-1ubuntu10lucid1
 ii  base-files                      5.0.0ubuntu20.10.04.4
 ii  base-passwd                     3.5.22
 ii  bash                            4.1-2ubuntu3
@@ -92,9 +92,9 @@ ii  libncursesw5                    5.7+20090803-2ubuntu3
 ii  libnewt0.52                     0.52.10-5ubuntu1
 ii  libnih-dbus1                    1.0.1-1
 ii  libnih1                         1.0.1-1
-ii  libpam-modules                  1.1.1-2ubuntu5.3
-ii  libpam-runtime                  1.1.1-2ubuntu5.3
-ii  libpam0g                        1.1.1-2ubuntu5.3
+ii  libpam-modules                  1.1.1-2ubuntu5.4
+ii  libpam-runtime                  1.1.1-2ubuntu5.4
+ii  libpam0g                        1.1.1-2ubuntu5.4
 ii  libparse-debianchangelog-perl   1.1.1-2ubuntu2
 ii  libpcre3                        7.8-3build1
 ii  libplymouth2                    0.8.2-2ubuntu2.2
@@ -163,7 +163,7 @@ ii  sysvinit-utils                  2.87dsf-4ubuntu17.4
 ii  tar                             1.22-2ubuntu1
 ii  tasksel                         2.73ubuntu26
 ii  tasksel-data                    2.73ubuntu26
-ii  tzdata                          2011l-0ubuntu0.10.04
+ii  tzdata                          2011m-0ubuntu0.10.04
 ii  ubuntu-keyring                  2010.11.09
 ii  ubuntu-minimal                  1.197
 ii  ucf                             3.0025
