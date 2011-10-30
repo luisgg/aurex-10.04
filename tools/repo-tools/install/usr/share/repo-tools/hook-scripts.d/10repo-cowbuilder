@@ -1,7 +1,7 @@
 #!/bin/sh
 
 build_binary(){
-	cowbuilder  --buildresult "$PRESULTPATH" --debbuildopts "$PBUILDOPTS" --build $DSC_FILE --basepath $PBASEPATH || return $?
+	cowbuilder  --buildresult "$PRESULTPATH" --debbuildopts "$PBUILDOPTS" --build $DSC_FILE --basepath $PBASEPATH $PBUILDCONF || return $?
 }
 
 upload_binary(){
@@ -83,6 +83,7 @@ DIST=lucid
 PRESULTBASE="$PBASEDIR/result/"
 #PBUILDOPTS="-b"
 PBUILDOPTS="-B"
+PBUILDCONF="--configfile /var/cache/pbuilder/pbuilder-aurex.config/rc-aurex"
 RBASEDIR="/srv/repo/aurex/"
 RDIST="tau"
 HOME=/root

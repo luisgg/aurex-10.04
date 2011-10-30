@@ -1,0 +1,6 @@
+#!/bin/sh
+echo "adding own repository"
+echo "deb file:///srv/repo/aurex/ lucid main contrib" >> /etc/apt/sources.list
+
+echo "updating index"
+apt-get update
