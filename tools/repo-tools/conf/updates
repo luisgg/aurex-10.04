@@ -1,8 +1,37 @@
 Name: lucid-proposed
-Method: http://localhost/aurex/
+#Method: http://localhost/aurex/
+Method: file:///srv/repo/aurex/
 Suite: lucid-proposed
 Components: main
 Architectures: amd64 i386 source
+
+Name: filter_http:__archive.canonical.com_ubuntu_:lucid-amd64
+method: http://archive.canonical.com/ubuntu/
+Suite: lucid
+Components: partner>contrib
+Architectures: amd64
+FilterList: purge filter_http:__archive.canonical.com_ubuntu_:lucid-amd64.list
+
+Name: filter_http:__archive.canonical.com_ubuntu_:lucid-i386
+method: http://archive.canonical.com/ubuntu/
+Suite: lucid
+Components: partner>contrib
+Architectures: i386
+FilterList: purge filter_http:__archive.canonical.com_ubuntu_:lucid-i386.list
+
+Name: filter_http:__archive.zentyal.com_zentyal_:2.2-amd64
+Method: http://archive.zentyal.com/zentyal/
+Suite: 2.2
+Components:  extra>contrib
+Architectures: amd64
+FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-amd64.list
+
+Name: filter_http:__archive.zentyal.com_zentyal_:2.2-i386
+Method: http://archive.zentyal.com/zentyal/
+Suite: 2.2
+Components:  extra>contrib
+Architectures: i386
+FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-i386.list
 
 Name: filter_http:__deb.opera.com_opera_:stable-amd64
 Method: http://deb.opera.com/opera/
@@ -36,139 +65,83 @@ Name: filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/bisigi/ppa/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: amd64 
+Architectures: amd64
 FilterList: purge filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-amd64.list
 
 Name: filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-i386
 Method: http://ppa.launchpad.net/bisigi/ppa/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: i386 
+Architectures: i386
 FilterList: purge filter_http:__ppa.launchpad.net_bisigi_ppa_ubuntu_:lucid-i386.list
 
 Name: filter_http:__ppa.launchpad.net_libreoffice_ppa_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/libreoffice/ppa/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: amd64 
+Architectures: amd64
 FilterList: purge filter_http:__ppa.launchpad.net_libreoffice_ppa_ubuntu_:lucid-amd64.list
 
 Name: filter_http:__ppa.launchpad.net_libreoffice_ppa_ubuntu_:lucid-i386
 Method: http://ppa.launchpad.net/libreoffice/ppa/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: i386 
+Architectures: i386
 FilterList: purge filter_http:__ppa.launchpad.net_libreoffice_ppa_ubuntu_:lucid-i386.list
 
 Name: filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: amd64 
+Architectures: amd64
 FilterList: purge filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-amd64.list
 
 Name: filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-i386
 Method: http://ppa.launchpad.net/mozillateam/firefox-stable/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: i386 
+Architectures: i386
 FilterList: purge filter_http:__ppa.launchpad.net_mozillateam_firefox-stable_ubuntu_:lucid-i386.list
-
-Name: filter_http:__192.168.10.40_firefox-ppa_:lucid-amd64
-Method: http://192.168.10.40/firefox-ppa/
-Suite: lucid
-Components:  main>contrib
-Architectures: amd64
-FilterList: purge filter_http:__192.168.10.40_firefox-ppa_:lucid-amd64.list
-
-Name: filter_http:__192.168.10.40_firefox-ppa_:lucid-i386
-Method: http://192.168.10.40/firefox-ppa/
-Suite: lucid
-Components:  main>contrib
-Architectures: amd64
-FilterList: purge filter_http:__192.168.10.40_firefox-ppa_:lucid-i386.list
-
-Name: filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-amd64
-Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu/
-Suite: lucid
-Components:  main>contrib
-Architectures: amd64 
-FilterList: purge filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-amd64.list
-
-Name: filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-i386
-Method: http://ppa.launchpad.net/nutznboltz/kvm-libvirt-lts/ubuntu/
-Suite: lucid
-Components:  main>contrib
-Architectures: i386 
-FilterList: purge filter_http:__ppa.launchpad.net_nutznboltz_kvm-libvirt-lts_ubuntu_:lucid-i386.list
-
-Name: filter_http:__ppa.launchpad.net_sevenmachines_flash_ubuntu_:lucid-amd64
-Method: http://ppa.launchpad.net/sevenmachines/flash/ubuntu/
-Suite: lucid
-Components:  main>contrib
-Architectures: amd64 
-FilterList: purge filter_http:__ppa.launchpad.net_sevenmachines_flash_ubuntu_:lucid-amd64.list
-
-Name: filter_http:__ppa.launchpad.net_sevenmachines_flash_ubuntu_:lucid-i386
-Method: http://ppa.launchpad.net/sevenmachines/flash/ubuntu/
-Suite: lucid
-Components:  main>contrib
-Architectures: i386 
-FilterList: purge filter_http:__ppa.launchpad.net_sevenmachines_flash_ubuntu_:lucid-i386.list
 
 Name: filter_http:__ppa.launchpad.net_tiheum_equinox_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/tiheum/equinox/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: amd64 
+Architectures: amd64
 FilterList: purge filter_http:__ppa.launchpad.net_tiheum_equinox_ubuntu_:lucid-amd64.list
 
 Name: filter_http:__ppa.launchpad.net_tiheum_equinox_ubuntu_:lucid-i386
 Method: http://ppa.launchpad.net/tiheum/equinox/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: i386 
+Architectures: i386
 FilterList: purge filter_http:__ppa.launchpad.net_tiheum_equinox_ubuntu_:lucid-i386.list
 
 Name: filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: amd64 
+Architectures: amd64
 FilterList: purge filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-amd64.list
 
 Name: filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-i386
 Method: http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: i386 
+Architectures: i386
 FilterList: purge filter_http:__ppa.launchpad.net_ubuntu-wine_ppa_ubuntu_:lucid-i386.list
 
 Name: filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-amd64
 Method: http://ppa.launchpad.net/zentyal/2.2/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: amd64 
+Architectures: amd64
 FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-amd64.list
 
 Name: filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-i386
 Method: http://ppa.launchpad.net/zentyal/2.2/ubuntu/
 Suite: lucid
 Components:  main>contrib
-Architectures: i386 
-FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-i386.list
-
-Name: filter_http:__archive.zentyal.com_zentyal_:2.2-amd64
-Method: http://archive.zentyal.com/zentyal/
-Suite: 2.2
-Components:  extra>contrib
-Architectures: amd64
-FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-amd64.list
-
-Name: filter_http:__archive.zentyal.com_zentyal_:2.2-i386
-Method: http://archive.zentyal.com/zentyal/
-Suite: 2.2
-Components:  extra>contrib
 Architectures: i386
-FilterList: purge filter_http:__archive.zentyal.com_zentyal_:2.2-i386.list
+FilterList: purge filter_http:__ppa.launchpad.net_zentyal_2.2_ubuntu_:lucid-i386.list
 
