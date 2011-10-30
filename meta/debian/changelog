@@ -1,3 +1,36 @@
+aurex-meta (1.197~aurex10.04.29) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added gnome-disk-utility to aurex-supported
+  * Added gtk-doc-tools to aurex-supported
+  * Added libgdu-dev to aurex-supported
+  * Added libgdu-gtk-dev to aurex-supported
+  * Added libgdu-gtk0 to aurex-supported
+  * Added libgdu0 to aurex-supported
+  * Added libgio-fam to aurex-supported
+  * Added libglib2.0-0 to aurex-supported
+  * Added libglib2.0-0-dbg to aurex-supported
+  * Added libglib2.0-0-refdbg to aurex-supported
+  * Added libglib2.0-data to aurex-supported
+  * Added libglib2.0-dev to aurex-supported
+  * Added libglib2.0-doc to aurex-supported
+  * Added libgpod-common to aurex-supported
+  * Added libgpod-dev to aurex-supported
+  * Added libgpod-doc to aurex-supported
+  * Added libgpod-nogtk-dev to aurex-supported
+  * Added libgpod4 to aurex-supported
+  * Added libgpod4-nogtk to aurex-supported
+  * Added libimobiledevice-dev to aurex-supported
+  * Added libimobiledevice-doc to aurex-supported
+  * Added libimobiledevice-utils to aurex-supported
+  * Added python-gpod to aurex-supported
+  * Added python-imobiledevice to aurex-supported
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Sun, 30 Oct 2011 22:54:44 +0100
+
 aurex-meta (1.197~aurex10.04.28) lucid; urgency=low
 
   * Refreshed dependencies
