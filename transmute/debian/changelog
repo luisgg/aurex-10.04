@@ -1,3 +1,9 @@
+aurex-transmute (0.18) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 31 Oct 2011 08:21:57 +0100
+
 aurex-transmute (0.17) lucid; urgency=low
 
   * Fixed depends of aurex-keyring
