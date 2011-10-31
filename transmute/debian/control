@@ -19,7 +19,7 @@ Description: Transmute an Ubuntu live cd into aurex
 
 Package: aurex-keyring
 Architecture: all
-Depends: ${misc:Depends}, aurex-transmute (= ${binary:Version})
+Depends: ${misc:Depends}, aurex-transmute (= ${binary:Version}) | aurex-instant (= ${binary:Version})
 Description: GnuPG keys of the aurex archive
  The aurex project digitally signs its Release files. This package
  installs the archive keys used for that.
