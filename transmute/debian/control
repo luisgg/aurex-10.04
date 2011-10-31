@@ -19,20 +19,20 @@ Description: Transmute an Ubuntu live cd into aurex
 
 Package: aurex-keyring
 Architecture: all
-Depends: ${misc:Depends}, aurex-transmute
+Depends: ${misc:Depends}, aurex-transmute (= ${binary:Version})
 Description: GnuPG keys of the aurex archive
  The aurex project digitally signs its Release files. This package
  installs the archive keys used for that.
 
 Package: aurex-ubiquity-transmute
 Architecture: all
-Depends: ${misc:Depends}, ubiquity, aurex-transmute
+Depends: ${misc:Depends}, ubiquity, aurex-transmute (= ${binary:Version})
 Description: Aurex transmute scripts
  'last minute' aurex settings after ubiquity install
 
 Package: aurex-transmute-gui
 Architecture: all
-Depends: ${misc:Depends}, aurex-transmute, zenity
+Depends: ${misc:Depends}, aurex-transmute (= ${binary:Version}), zenity
 Description: Aurex transmute GTK interface
  Simple GTK interface for aurex-transmute
 

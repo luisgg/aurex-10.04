@@ -1,8 +1,8 @@
-aurex-transmute (0.16) UNRELEASED; urgency=low
+aurex-transmute (0.16) lucid; urgency=low
 
-  * NOT RELEASED YET
+  * Updated dependencies
 
- -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Fri, 07 Oct 2011 23:23:49 +0200
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 31 Oct 2011 08:13:52 +0100
 
 aurex-transmute (0.15) lucid; urgency=low
 
