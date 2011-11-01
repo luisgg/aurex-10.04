@@ -1,0 +1,12 @@
+# Alin Andrei . Web Upd8: http://www.webupd8.org/
+# Tons of tools: indicator-virtualbox, audacious, autotrash, awn-applet-radio,
+# awn-applet-wm, bluetile, cmus, defrag, dockbarx, dockbarx-themes-extra,
+# dropbox-share, ekiga, exaile, fatrat, gimp, gimp-plugin-registry, gnome-globalmenu,
+# gnome-subtitles, gnome-window-applets, grsync, gthumb, launchpad-getkeys, mc (Midnight Commander),
+# minitunes, minitube, mintmenu, n2n, nautilus-columns, newsbeuter, pinta, ppa-purge,
+# fixed pulseaudio-equalizer, specto, subtitleeditor, switcher, talika, terminator,
+# turpial, update-java, watchvideo, youtube-dl and za
+# 
+deb http://ppa.launchpad.net/nilarimogard/webupd8/ubuntu/ lucid main 
+#deb-src http://ppa.launchpad.net/nilarimogard/webupd8/ubuntu/ lucid main 
+

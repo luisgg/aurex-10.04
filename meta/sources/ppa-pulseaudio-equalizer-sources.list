@@ -1,0 +1,6 @@
+# Conn O Griofa
+# ppa:psyke83/ppa
+# Up-to-date pulseaudio-equalizer for lucid
+deb http://ppa.launchpad.net/psyke83/ppa/ubuntu/ lucid main 
+# deb-src http://ppa.launchpad.net/psyke83/ppa/ubuntu/ lucid main 
+

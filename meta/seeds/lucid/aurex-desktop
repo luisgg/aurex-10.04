@@ -53,6 +53,7 @@ Task-Metapackage: aurex-desktop
  * ubuntu-restricted-extras
  * libdvdread4
  * (vlc)
+ * (pulseaudio-equalizer)
 
 == flash ==
  * flashplugin-installer [i386]
