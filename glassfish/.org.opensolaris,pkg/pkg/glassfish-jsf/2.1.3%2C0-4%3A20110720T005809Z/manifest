@@ -1,0 +1,11 @@
+set name=fmri value=pkg:/glassfish-jsf@2.1.3,0-4:20110720T005809Z
+set name=info.classification value="Application Servers"
+set name=pkg.description value="GlassFish Java Server Faces Technology (JSF) module simplifies building user interfaces for JavaServer applications. Developers of various skill levels can quickly build web applications by: assembling reusable UI components in a page; connecting these components to an application data source; and wiring client-generated events to server-side event handlers. For more information, see https://javaserverfaces.dev.java.net/.  GlassFish Server is a modular, lightweight, and extensible Java EE 6 application server built on OSGi. Key features include fast startup time, improved developer productivity, hybrid OSGi/Java EE applications, high availability clustering, centralized administration, and overall ease-of-use."
+set name=pkg.summary value="GlassFish JSF"
+depend fmri=pkg:/glassfish-web type=require
+license 8741fa556feea4ca58ec28abc47de0bf9d5b39a3 chash=28b7cfba8f297b99296afc231955dc90e8d76d47 license="CDDL and GPL v2 with classpath exception" pkg.csize=12394 pkg.size=38052
+dir group=sys mode=0755 owner=root path=glassfish
+dir group=sys mode=0755 owner=root path=glassfish/modules
+file a696eed8ae443353e309489aa83247a5a064b437 chash=56a337287e173d5cd98bbdcd854531523341750f group=sys mode=0664 owner=root path=glassfish/modules/jsf-api.jar pkg.csize=563310 pkg.size=619917
+file 61b45bedfc4a17f99956f395f788ed417682b35e chash=0c7b025a2d7e8bf9e53b4d403bcd0fd5a7d6386c group=sys mode=0664 owner=root path=glassfish/modules/jsf-impl.jar pkg.csize=1774060 pkg.size=1907106
+set name=publisher value=stable.glassfish.org

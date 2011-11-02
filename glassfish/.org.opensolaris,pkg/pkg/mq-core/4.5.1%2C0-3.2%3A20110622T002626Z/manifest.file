@@ -1,0 +1,7 @@
+file 88cafa2135d0e1da7677c7f8d2e64573edc69601 chash=e7820307d881a41b475cc37c0c8ddec13699556e group=sys mode=0755 owner=root path=mq/lib/jms.jar pkg.csize=42528 pkg.size=55440
+file 125eb9a254269e342a168f783f7b4c877de362da chash=941ebf4ce54a3a0c607cb558d7a1d337149be57a group=sys mode=0755 owner=root path=mq/lib/imq.jar pkg.csize=474112 pkg.size=520064
+file 1150e77e308f51f8017e5e161c1374e11b631c84 chash=5b39b3fb08a8272dc1138b42f3d72cc6b351670b group=sys mode=0755 owner=root path=mq/lib/imqjmx.jar pkg.csize=44615 pkg.size=53622
+file 3f3a1fd735022bd6d3c581a603553db7b6577330 chash=e69ec611bd8c4113ebc9c93041ba86ea070d8ae1 group=sys mode=0755 owner=root path=mq/lib/imqxm.jar pkg.csize=28446 pkg.size=29950
+file c701ff582930f7ab7849b410f89f8ca3cfce48da chash=4d858f2f299caaf05f2e3d620b0a1051c87c5bec group=sys mode=0755 owner=root path=mq/lib/jaxm-api.jar pkg.csize=19742 pkg.size=21874
+file 357ce4ed293bdc8f421874870d04b1d035a0b8db chash=8e78ea3ff40c26a4092b2d5acf77e0f87f9e5449 group=sys mode=0644 owner=root path=mq/lib/fscontext.jar pkg.csize=90497 pkg.size=99926
+file aa63a9a614ab25ae767917c5ad19e06dd2dce27c chash=40d2eec3af946628a2529ae2dab763ca8a193cf8 group=sys mode=0644 owner=root path=mq/lib/imqjmsra.rar pkg.csize=3746214 pkg.size=3745315

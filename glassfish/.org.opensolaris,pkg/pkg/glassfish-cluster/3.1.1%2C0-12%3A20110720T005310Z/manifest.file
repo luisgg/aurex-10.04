@@ -1,0 +1,9 @@
+file 4f62ba1be9cc5a2460231f33c10687eac6b2a9db chash=75252fd6cb79791c4152698b3bc442da36e9937f group=sys mode=0664 owner=root path=glassfish/modules/cluster-admin.jar pkg.csize=187955 pkg.size=201913
+file 87de55d13d583747d5655df6e473c5d66eb1214f chash=838a5a07b949fbaa7786a54514d76750f9fe8b19 group=sys mode=0664 owner=root path=glassfish/modules/trilead-ssh2-repackaged.jar pkg.csize=234622 pkg.size=253431
+file 391e0fbe7378f4f9bc28c57bc83c580b2811adc7 chash=8da76c9024f7a769b052fa481959eabdb717bf2d group=sys mode=0664 owner=root path=glassfish/modules/console-cluster-plugin.jar pkg.csize=110409 pkg.size=117848
+file 35adcb2ab67f80a5869280427093e7eddb79abb4 chash=b9586ed114a0ed165addf16d00296439ab20da81 group=sys mode=0664 owner=root path=glassfish/modules/cluster-common.jar pkg.csize=12079 pkg.size=13989
+file 0222acc2c3415cfe0f049bb2a3abfcbd9baf7d86 chash=c366862d50b295979924bd7b31d767e90fbc3b7b group=sys mode=0664 owner=root path=glassfish/modules/cluster-cli.jar pkg.csize=93684 pkg.size=99665
+file c7464d6d1ee3f1a22d1c24f1ca8369cded7a7ea8 chash=4c2eaab8f4a6e76f53a11e9cd4fa9f7c609a6a1b group=sys mode=0664 owner=root path=glassfish/modules/cluster-ssh.jar pkg.csize=26941 pkg.size=29918
+file 9cb0866fe9e0c8649fc118f42de6255d17f0da03 chash=35350fe99cec4f8e0fefd4dbad70a7aa50c78c29 group=sys mode=0664 owner=root path=glassfish/modules/load-balancer-admin.jar pkg.csize=127730 pkg.size=142515
+file 29507c095dc7b21e097f1b32f020e56126bdb991 chash=aedb2b01b98d13050addbf75089fd66a5376ea81 group=sys mode=0664 owner=root path=glassfish/modules/console-cluster-plugin-help.jar pkg.csize=118586 pkg.size=131366
+file cb7372d577ed93a69be9b5605b8e00688d877af3 chash=c81302ef943ef2f9d5e2dc8699efc06cad9c0380 group=sys mode=0664 owner=root path=glassfish/modules/gms-adapter.jar pkg.csize=37421 pkg.size=40702

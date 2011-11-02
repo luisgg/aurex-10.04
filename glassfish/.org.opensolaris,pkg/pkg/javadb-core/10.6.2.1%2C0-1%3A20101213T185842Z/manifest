@@ -1,0 +1,47 @@
+set name=fmri value=pkg:/javadb-core@10.6.2.1,0-1:20101213T185842Z
+set name=pkg.summary value="Java DB Server"
+set name=pkg.description value="Java DB is Sun's supported distribution of the open source Apache Derby 100% Java technology database. It is fully transactional, secure, easy-to-use, standards-based (SQL, JDBC API, and Java EE) yet small, only 2MB. The Apache Derby project has a strong and growing community that includes developers from large companies such as Sun Microsystems and IBM as well as individual contributors."
+set name=info.classification value="Databases and Tools"
+license 2b8b815229aa8a61e483fb4ba0588b8b6c491890 chash=06741e61703647014fca12c4e203a0f3b6c06bf9 license="Apache License Version 2.0" pkg.csize=3968 pkg.size=11358
+depend fmri=javadb-common@10.6.2.1,0-1 type=require
+dir group=sys mode=0755 owner=nobody path=javadb
+dir group=sys mode=0755 owner=nobody path=javadb/bin
+dir group=sys mode=0755 owner=nobody path=javadb/lib
+file d7aea94cc80ea2418ee477d5e2dc6c52b1f27e83 chash=681b08d5951225c51a2561fed5e0ca206e2f2cc1 group=sys mode=0755 owner=nobody path=javadb/bin/dblook pkg.csize=2036 pkg.size=5740
+file d528247295abf1e47fa78b91344646798d98fafe chash=d2c93daafb38dbcf12c571614305814e6b1729d0 group=sys mode=0755 owner=nobody path=javadb/bin/dblook.bat pkg.csize=673 pkg.size=1387
+file c8a0b7f5efcae2b16edb002dbee324cb6e87420f chash=5c6ffdcd67f10067eb829226a5d27bd84401041e group=sys mode=0755 owner=nobody path=javadb/bin/derby_common.bat pkg.csize=1088 pkg.size=2426
+file 2a7a028f5dcbd8733422ecd400c1841c227409aa chash=b362cd1e74a5a17c301ea478049d5dd0464b1154 group=sys mode=0755 owner=nobody path=javadb/bin/ij pkg.csize=2102 pkg.size=5876
+file dff7b556859b54c0d110a2b50e9e843d383fb29f chash=875ebfe4961ff4c4552f87768bad43ca8075c0c5 group=sys mode=0755 owner=nobody path=javadb/bin/ij.bat pkg.csize=670 pkg.size=1379
+file 6e93cc610124582c8fedf0bbb531ef54df16f8bc chash=545d3adc8e1af3a825045cb168373563bafc05c8 group=sys mode=0755 owner=nobody path=javadb/bin/NetworkServerControl pkg.csize=2067 pkg.size=5801
+file e8597291d32ab1d431c4f770e7ddb73cc0140dff chash=f5c6c265c74ce2b87e22b9ad0b1cea700e924cc0 group=sys mode=0755 owner=nobody path=javadb/bin/NetworkServerControl.bat pkg.csize=682 pkg.size=1413
+file d4e1f60b97103f40fc4b2cc34f6ba839eb94c2a3 chash=f2c57e50b239c19e5bc7b91219d6ffe5429f5a28 group=sys mode=0755 owner=nobody path=javadb/bin/setEmbeddedCP pkg.csize=629 pkg.size=1073
+file 6033d19b4e214abe6f36971dab115541904466c9 chash=63f196784ba5c8ff828d24fb01e9fe649db41eaf group=sys mode=0755 owner=nobody path=javadb/bin/setEmbeddedCP.bat pkg.csize=670 pkg.size=1278
+file 993e82edd597a8939a34c9de78d5bdc605966eaa chash=de025a9f8bb28a50a6edad0cb7482a934a2172a3 group=sys mode=0755 owner=nobody path=javadb/bin/setNetworkClientCP pkg.csize=632 pkg.size=1079
+file 69c99f71e3c75905be687bb48fa1ffbb28c5e089 chash=c237e65973b7cfcd0f23083c492602f1ee65b236 group=sys mode=0755 owner=nobody path=javadb/bin/setNetworkClientCP.bat pkg.csize=674 pkg.size=1284
+file c96c63f15970e93fd2e6c48476d20351bbefcbae chash=0ef23205a50c2847250d8a35770637d593af2972 group=sys mode=0755 owner=nobody path=javadb/bin/setNetworkServerCP pkg.csize=630 pkg.size=1075
+file 0ef65786b4076eb7bc5d7ee7d60d0df27fb5e2ec chash=ae535246ec51c18bd4288dea8ab22b70ac6e6eb4 group=sys mode=0755 owner=nobody path=javadb/bin/setNetworkServerCP.bat pkg.csize=673 pkg.size=1273
+file 3dabe6c790e17d319a1651ffd8a69be52d0eebc2 chash=f26180f70fe945acf369a3073136a71d99b95aeb group=sys mode=0755 owner=nobody path=javadb/bin/startNetworkServer pkg.csize=2072 pkg.size=5807
+file bb3bb45fd7cba3d435e30c78e2daf751994a6675 chash=98aa4f6d5a38fe5fcf0219e3dd88f4e508bafb0b group=sys mode=0755 owner=nobody path=javadb/bin/startNetworkServer.bat pkg.csize=681 pkg.size=1397
+file ff32895e7c1356cc0959b1c0cf4040bec9fba1aa chash=e7d83eeb2b78b18cdb510ff7e06daeb111e4d06c group=sys mode=0755 owner=nobody path=javadb/bin/stopNetworkServer pkg.csize=2074 pkg.size=5810
+file 9bcc68624875b27d2f5ac0748f14ed6ea7b902ac chash=8a9ae2577d72481430e253b16df736cc85af1454 group=sys mode=0755 owner=nobody path=javadb/bin/stopNetworkServer.bat pkg.csize=684 pkg.size=1403
+file a467887ad36b5e49919b85ede4cfcfbe218b6ad2 chash=06e89947b0921ecfe03df5db1e1850013a6053e9 group=sys mode=0755 owner=nobody path=javadb/bin/sysinfo pkg.csize=2058 pkg.size=5789
+file 0399ace01ee5abc3b4880d52932d002394ecbf11 chash=d9dc815291295c8bbd432d6ec0e52a63720a693a group=sys mode=0755 owner=nobody path=javadb/bin/sysinfo.bat pkg.csize=673 pkg.size=1389
+file 211c06ddbf09cfc9015d2711911f94930c7dcb9c chash=ee7c0bc01a49045cf92f06c8ea0a92cab4813592 group=sys mode=0644 owner=nobody path=javadb/lib/derby.jar pkg.csize=2417321 pkg.size=2628039
+file d071c1cc0b7a9bb5b834f8d201b11854cca2d096 chash=70a9e58cca18743aa081208728310f1fc389624d group=sys mode=0644 owner=nobody path=javadb/lib/derby.war pkg.csize=1442 pkg.size=1476
+file ad7cb259839bd172ba00a660d43d9c37cb885f1f chash=01a6b49d154f8352db3198300a26d82defbf8aa0 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_cs.jar pkg.csize=86166 pkg.size=92513
+file 032538e2e078f55676e89f941e500ecedf372555 chash=6d12f757beafb888728923d910f427280723b442 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_de_DE.jar pkg.csize=96126 pkg.size=102707
+file 856fc00a34e66f9da1091677279581fad7897518 chash=1ee83180e138b1b173b162c8627f4af0ec352478 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_es.jar pkg.csize=90910 pkg.size=97238
+file 2098627839e05a7412c9e2cd0ba7ddb60bb2618e chash=1e626a2f6e032d6377fa47b658f6d82904682d58 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_fr.jar pkg.csize=96440 pkg.size=102702
+file 8c929fc1c41aaf4a996d578be1da2458ccff2928 chash=be5d5e835ced8bb647d82b3798c378aba7e62445 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_hu.jar pkg.csize=86950 pkg.size=93285
+file 01ccfff7daa66391f893898fdf503f1a23418a67 chash=cf19aaafbc9b02cfdb37dd6aff0b1d3d99288f0b group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_it.jar pkg.csize=89637 pkg.size=95964
+file 90be5d2e2cc471bc2f71e3ecc6ab2b2f1d205e0f chash=fb99750c1acc027ae82a88ef6cfd73423dd420ac group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_ja_JP.jar pkg.csize=107574 pkg.size=114178
+file e8f85ef0557d5638faf6ed373624f2fb1a932c0a chash=f48bb46323c467400082b74acad4a78ece8b4eff group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_ko_KR.jar pkg.csize=99683 pkg.size=106315
+file 8461896ec57aafaae9c117a8d6508b0443b8c8e5 chash=54b6f0832e3b180d5577273586f6baf473e1bdce group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_pl.jar pkg.csize=85042 pkg.size=91267
+file 1b8a2fc5c393e0cea51375642f5111b7c0d579e9 chash=10a50ce5acb3b58e744e57a7a6975d2df8d97a75 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_pt_BR.jar pkg.csize=81814 pkg.size=88466
+file 49085b5c3550975245b6543cbb3a06dbf063dc19 chash=7c29a76242918fb69771f2cecd7e9d5f7dd746fb group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_ru.jar pkg.csize=113004 pkg.size=119182
+file 58886548f15c749b1fc75b7bc5ddd616d8366cea chash=a9cad3f79748f8cf981088a1451975de8b5475c8 group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_zh_CN.jar pkg.csize=91223 pkg.size=97849
+file 7b2759ed7fce7a152c8b7c42e9a5e2354296e7f3 chash=f0602804fe9cfe9e2c00d3e14fc3d63c96de2e0f group=sys mode=0644 owner=nobody path=javadb/lib/derbyLocale_zh_TW.jar pkg.csize=93619 pkg.size=100206
+file 2809c359613e895eef01f8fd7ff525a966027aa8 chash=1f5f73e1aecc6a8a06c701e4bce656e7f2ec102f group=sys mode=0644 owner=nobody path=javadb/lib/derbynet.jar pkg.csize=223068 pkg.size=235431
+file bcd759ce684a9531574a57236c831c47230d6973 chash=afc40ee71361371f75e99eedea914ebc54cc4c57 group=sys mode=0644 owner=nobody path=javadb/lib/derbyrun.jar pkg.csize=6850 pkg.size=7034
+file b3fcadb28ce525b3f24a7c1e562b421bb50f476f chash=e438be3b11486e5af0dec26e4fe4031fd53faae6 group=sys mode=0644 owner=nobody path=javadb/lib/derbytools.jar pkg.csize=157811 pkg.size=169090
+set name=publisher value=stable.glassfish.org

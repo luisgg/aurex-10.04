@@ -1,0 +1,8 @@
+file 9a1a4fac712135188489cce5a1e7c70126ca28b0 chash=4e90d8c090baeb82966f692e2467133757c0f66f group=sys mode=0664 owner=root path=glassfish/lib/deployment/sun-as-jsr88-dm.jar pkg.csize=2417 pkg.size=3132
+file 7c1ee3fb18a7f83acb2af16824541c1660cd1330 chash=8d29c9673421a6b54702955c8e764132b40d73d5 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/mejb.jar pkg.csize=23139 pkg.size=25749
+file 481c7247a8e2c7af4af8bedce9d9beab109499ac chash=3d918a1aaba91256e579b1cdf116cf1b4ee9f3d1 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jaxr-ra/jaxr-ra.jar pkg.csize=13043 pkg.size=14554
+file 56e165ed7a765e7029d6609cc7e242345196cfc4 chash=dea9593687a5f1b8d335e4457ed534b544d7ede7 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jaxr-ra/META-INF/ra.xml pkg.csize=485 pkg.size=1344
+file d78a843ea13343ec70e16ceed230db0fef511550 chash=e46897eda3261b30203e455def28c707dbb95357 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jaxr-ra/META-INF/MANIFEST.MF pkg.csize=107 pkg.size=102
+file fd6673c1e484f0417f91bcb778e44f33932eb75e chash=37f1f292751370efb2306ba21efe1f920ccf87ae group=sys mode=0664 owner=root path=glassfish/modules/console-common-full-plugin-help.jar pkg.csize=30087 pkg.size=34713
+file 03c7a01d198c93c997c0d2ad90a9550f40fd3943 chash=452c488ee563eec4757101a7448db7e78e9e75a1 group=sys mode=0664 owner=root path=glassfish/modules/console-common-full-plugin.jar pkg.csize=57017 pkg.size=61353
+file 2af153938a84131ff5caafdc0cb2f22c8ec73ad6 chash=994b6657e78530d73f06a31068abdfc5c501b7ad group=sys mode=0664 owner=root path=glassfish/modules/deployment-javaee-full.jar pkg.csize=32581 pkg.size=36865

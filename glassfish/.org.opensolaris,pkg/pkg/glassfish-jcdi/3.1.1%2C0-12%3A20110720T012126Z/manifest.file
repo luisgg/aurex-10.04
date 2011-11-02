@@ -1,0 +1,4 @@
+file e72ab2a639f9c29078eee2d52111f095efa86bef chash=7b8993929bee2a49dcb6b0c5fecdd21ca168eea2 group=sys mode=0664 owner=root path=glassfish/modules/weld-osgi-bundle.jar pkg.csize=2329348 pkg.size=2597052
+file 2fe75eb52041e2acd59b780f92ed86fcc2912535 chash=179ae0b062eeb1d0deec42edb726ff046ea2d157 group=sys mode=0664 owner=root path=glassfish/modules/weld-integration-fragment.jar pkg.csize=2677 pkg.size=3397
+file eaa22435b6f6dbcc49f389d66325994256f3eecf chash=33ddc152082ff68461ed9d7ca431be204b993656 group=sys mode=0664 owner=root path=glassfish/modules/weld-integration.jar pkg.csize=69429 pkg.size=75678
+file 8bc0a7c513d4231b90a9299f957b4de46614593b chash=2ef365584f0dc2a6fbdc653b764303262167a865 group=sys mode=0664 owner=root path=glassfish/modules/autostart/osgi-cdi.jar pkg.csize=18335 pkg.size=21621

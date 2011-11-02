@@ -1,0 +1,22 @@
+set name=fmri value=pkg:/glassfish-cmp@3.1.1,0-12:20110720T012051Z
+set name=info.classification value="Application Servers"
+set name=pkg.description value="Support for CMP entity beans. GlassFish Server is a modular, lightweight, and extensible Java EE 6 application server built on OSGi. Key features include fast startup time, improved developer productivity, hybrid OSGi/Java EE applications, high availability clustering, centralized administration, and overall ease-of-use."
+set name=pkg.summary value="GlassFish CMP"
+depend fmri=pkg:/glassfish-ejb type=require
+license 8741fa556feea4ca58ec28abc47de0bf9d5b39a3 chash=28b7cfba8f297b99296afc231955dc90e8d76d47 license="CDDL and GPL v2 with classpath exception" pkg.csize=12394 pkg.size=38052
+dir group=sys mode=0755 owner=root path=glassfish
+dir group=sys mode=0755 owner=root path=glassfish/bin
+dir group=sys mode=0755 owner=root path=glassfish/modules
+file 10f888a9fee4a9af37c0d7efb216de591b47a2ee chash=d10295bf52ff47c4d04f8d89e82737eb0d88ad33 group=sys mode=0775 owner=root path=glassfish/bin/capture-schema.bat pkg.csize=1174 pkg.size=2485
+file d912f831b6b9733de5e7534f8e4acf4dab9c00fd chash=84d5584f9edbde4c269228c3f5669c9c6a368740 group=sys mode=0775 owner=root path=glassfish/bin/capture-schema pkg.csize=1179 pkg.size=2626
+file 3fc4ea781f31601a00eaea379e095b3d2d247000 chash=34e6e54362c4622282e9c5e1e94722a96a39c3ce group=sys mode=0664 owner=root path=glassfish/modules/cmp-utility.jar pkg.csize=59070 pkg.size=67276
+file ee3cb0086bd18b582905eeca86b51529e16d99c0 chash=992f82089d2468e125963726d2cf1c17fcb46495 group=sys mode=0664 owner=root path=glassfish/modules/antlr-repackaged.jar pkg.csize=416068 pkg.size=436897
+file 3fd473c610b5f143c0d9d0c787694e03eaae2384 chash=e4292cbaec15210cb3abf4c3d9e28aba4e210660 group=sys mode=0664 owner=root path=glassfish/modules/cmp-generator-database.jar pkg.csize=63461 pkg.size=68887
+file 261f32b062294ce61480d0c78ce1e952d6ce6fd9 chash=1880465e537a5a68775b40d3989f8b8ec808ff25 group=sys mode=0664 owner=root path=glassfish/modules/cmp-ejb-mapping.jar pkg.csize=68761 pkg.size=73572
+file 17caea7d449bc69cfeb318f4a074560ce466e2d8 chash=de55117b920c411cdb83377f15ae8aadcc1983ed group=sys mode=0664 owner=root path=glassfish/modules/cmp-model.jar pkg.csize=133535 pkg.size=148441
+file 2e7f4e776b5275bd5dcc5d48bfd14869b6f88fc0 chash=570d4daf149014e770cdf249190523ae851eb4b2 group=sys mode=0664 owner=root path=glassfish/modules/cmp-support-ejb.jar pkg.csize=245486 pkg.size=259408
+file 5e34033998479df7fb4b6ee51bb00bc208cdf019 chash=8a03ae92cb601e46357fb832929e998787cc88dd group=sys mode=0664 owner=root path=glassfish/modules/dbschema-repackaged.jar pkg.csize=233910 pkg.size=269238
+file bd1db20975576e43348295c1363a4a2cd9d76b55 chash=5cc3054f7aea88fc4c8910f55a0004d85ae5d86b group=sys mode=0664 owner=root path=glassfish/modules/cmp-enhancer.jar pkg.csize=210425 pkg.size=230951
+file 4e2a57122cfe9195a321a273a1f19192b83be9db chash=f87f2ee4cce5942ff74be49e19e30882cd18c533 group=sys mode=0664 owner=root path=glassfish/modules/cmp-internal-api.jar pkg.csize=16624 pkg.size=21606
+file e8a7847373ab1b32c8c516bdfea130d8443e9b2e chash=b35fc4c8b6359a4531de234fc50b65985a5b74cf group=sys mode=0664 owner=root path=glassfish/modules/cmp-support-sqlstore.jar pkg.csize=547107 pkg.size=591300
+set name=publisher value=stable.glassfish.org

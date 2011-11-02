@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="ascii"?>
+<history><client name="pkg" version="1.122.2-54.2834"><args><arg><![CDATA[/znfs/repine/export3/UC2.0/pkg-toolkit-sunos-sparc-uc2.3-u4-b54/pkg/bin/client.py]]></arg><arg><![CDATA[install]]></arg><arg><![CDATA[glassfish-grizzly]]></arg></args></client><operation end_time="20110720T014201Z" name="refresh-publishers" result="Succeeded" start_time="20110720T014201Z" userid="10" username="java_re"/></history>

@@ -1,0 +1,24 @@
+set name=fmri value=pkg:/felix@3.0.8,0-0:20110720T004612Z
+set name=info.classification value="OSGi Service Platform Release 4"
+set name=pkg.description value="Apache Felix is a community effort to implement the OSGi R4 Service Platform, which includes the OSGi framework and standard services, as well as providing and supporting other interesting OSGi-related technologies. For more information, see: http://felix.apache.org/site/index.html."
+set name=pkg.summary value="Apache Felix"
+file 2d1d15c97e6293a77ab36068ca810220dd9f4218 chash=00672968d462099d5fb1c97c29c8c5e3e2c5cf22 group=sys mode=0664 owner=root path=glassfish/modules/autostart/org.apache.felix.fileinstall-autodeploy-bundles.cfg pkg.csize=1147 pkg.size=2382 preserve=renameold
+file 7831611412634a51abfba496771d9a5fc2e16a6d chash=e221a21e714d9243453fb495e218b51556405f35 group=sys mode=0664 owner=root path=glassfish/modules/autostart/org.apache.felix.webconsole.internal.servlet.OsgiManager.cfg pkg.csize=1113 pkg.size=2238 preserve=renameold
+file 749fce288ff850a2103469344a4575bdca9978e1 chash=41cd7683ae36dbad7b325faed3c22d38fbda375b group=sys mode=0664 owner=root path=glassfish/osgi/felix/conf/config.properties pkg.csize=4537 pkg.size=13893 preserve=renameold
+file 447bd27ba034d82c21223b07952341a7fa2b6508 chash=a9c84a1312cce37ad3ea1e81cbf3c59ebb641b3a group=sys mode=0664 owner=root path=glassfish/osgi/felix/conf/system.properties pkg.csize=1282 pkg.size=2726 preserve=renameold
+license be86a8dd962083a273ca3800af37cf2cb63d6f8b chash=eb0e8e735c1496a40ea6599e83a5ead93f900343 license=ApacheV2 pkg.csize=3964 pkg.size=11324
+dir group=sys mode=0755 owner=root path=glassfish/osgi/felix/conf
+dir group=sys mode=0755 owner=root path=glassfish/osgi/felix/bin
+file 16e930822171e521c10102f67548ac10a9c2b825 chash=2a1e69e8ee657aea15583347dd5b954fe567ba17 group=sys mode=0664 owner=root path=glassfish/osgi/felix/bin/felix.jar pkg.csize=371924 pkg.size=403654
+dir group=sys mode=0755 owner=root path=glassfish/modules
+file 3eff4327831b4c158d792927d49c04e8baa257ac chash=664d5f2156207ce6f7b90dacf1097ab3ecde6137 group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.shell.tui.jar pkg.csize=10727 pkg.size=12407
+file 8cd9ebce3e639bbec3eb25e622c44125137fc8ad chash=19567a6c4774f1f4148938724817c9942e203e52 group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.configadmin.jar pkg.csize=74943 pkg.size=82740
+file 4130220230c527d110c83d8ef045c2c0fe68e438 chash=562104c4af02caa40ef7c5394052540d1127c58e group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.gogo.command.jar pkg.csize=41422 pkg.size=44387
+file 1653b47be26474a985190fd39679d4e18ad17f61 chash=61b6ad7ad77cdeb3c1b2fa861850761e35849f98 group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.shell.remote.jar pkg.csize=19109 pkg.size=21620
+file 64c190887b7e91b67ef902b9f251833699739612 chash=6ee3c5bf1d30eb0d008771025e8439767cafa84d group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.shell.jar pkg.csize=54583 pkg.size=61023
+file b5c822216adf7f5319d549639cff63d199cb2c30 chash=9ba11036739b427a0de20be872c11eb0cfcfd37f group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.gogo.runtime.jar pkg.csize=58407 pkg.size=64932
+file b1eb9d22a6f0e482c8337194a8c03d4d2d2b8b11 chash=29e6326d7355084d01430b30003ef28b92272292 group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.gogo.shell.jar pkg.csize=44914 pkg.size=47741
+file df4813f4dc90aa02171838be218d2d94a7d03509 chash=eedefcaf9dbc313ddba13406b7bc1cafa79946ed group=sys mode=0664 owner=root path=glassfish/modules/org.apache.felix.fileinstall.jar pkg.csize=64240 pkg.size=70638
+dir group=sys mode=0755 owner=root path=glassfish/modules/autostart
+file 0bc375dd89d29ba785658244766a502c94114847 chash=4216cb22a8c911cdc6d30002c09f17857958491a group=sys mode=0664 owner=root path=glassfish/modules/autostart/org.apache.felix.scr.jar pkg.csize=166630 pkg.size=181501
+set name=publisher value=stable.glassfish.org

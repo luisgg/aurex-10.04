@@ -1,0 +1,64 @@
+#!/bin/sh
+
+die(){
+	echo "$1"
+	exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") {activate|status|deactivate|postinst|prerm|start|stop}"
+}
+
+test_root(){
+	[ $(id -u) -eq 0 ] || die "You must be root, my friend"
+}
+
+# main
+
+GLASSFISH_ACTIVATION=/var/lib/glassfish/glassfish-activation-done
+GLASSFISH_HOME=/usr/share/glassfish/bin
+
+test_root
+
+case "$1" in
+	activate)
+		touch $GLASSFISH_ACTIVATION
+		invoke-rc.d glassfish-server start || true
+		echo "Access http://localhost:4848 and change admin password"
+	;;
+	status)
+		[ -e "$GLASSFISH_ACTIVATION" ] || die "glassfish-server not initialized. Please activate server running \"$(basename $0) activate\""
+		echo "glassfish-server initialized"
+	;;
+	deactivate)
+		invoke-rc.d glassfish-server stop || true
+		rm -f $GLASSFISH_ACTIVATION
+	;;
+	postinst)
+		useradd --system glassfish -d $GLASSFISH_HOME || true
+		chown -R glassfish:glassfish $GLASSFISH_HOME
+		chmod -R +x $GLASSFISH_HOME/bin/
+		chmod -R +x $GLASSFISH_HOME/glassfish/bin/
+	;;
+	prerm)
+		$0 deactivate
+		userdel glassfish || true
+		groupdel glassfish || true
+	;;
+	start)
+		if $0 status ; then
+			echo "starting glassfish from $GLASSFISHPATH/bin"
+			su - glassfish -c "$GLASSFISH_HOME/bin/asadmin start-domain domain1"
+		fi
+	;;
+	stop)
+		if $0 status ; then
+			echo "stopping glassfish from $GLASSFISHPATH/bin"
+			su - glassfish -c "$GLASSFISH_HOME/bin/asadmin stop-domain domain1"
+		fi
+	;;
+	*)
+		usage
+	;;
+esac
+exit 0

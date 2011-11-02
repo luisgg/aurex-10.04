@@ -1,0 +1,13 @@
+depend fmri=pkg:/glassfish-cmp@3.1.1,0-12 type=incorporate
+depend fmri=pkg:/glassfish-web-incorporation@3.1.1,0-12 type=require
+depend fmri=pkg:/glassfish-corba@3.1.0,0-30 type=incorporate
+depend fmri=pkg:/mq-locale@4.5 type=incorporate
+depend fmri=pkg:/metro@2.1.1,0-9 type=incorporate
+depend fmri=pkg:/glassfish-common-full@3.1.1,0-12 type=incorporate
+depend fmri=pkg:/mq-server@4.5 type=incorporate
+depend fmri=pkg:/glassfish-jms@3.1.1,0-12 type=incorporate
+depend fmri=pkg:/glassfish-appclient@3.1.1,0-12 type=incorporate
+depend fmri=pkg:/mq-bin-exe@4.5 type=incorporate
+depend fmri=pkg:/glassfish-ejb@3.1.1,0-12 type=incorporate
+depend fmri=pkg:/mq-bin-sh@4.5 type=incorporate
+depend fmri=pkg:/mq-config-gf@4.5 type=incorporate

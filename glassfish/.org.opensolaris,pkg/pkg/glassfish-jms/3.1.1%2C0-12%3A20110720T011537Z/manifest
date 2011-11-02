@@ -1,0 +1,28 @@
+set name=fmri value=pkg:/glassfish-jms@3.1.1,0-12:20110720T011537Z
+set name=info.classification value="Application Servers"
+set name=pkg.description value="The Java Message Service is a messaging standard that allows application components based on the Java EE to create, send, receive, and read messages. It enables distributed communication that is loosely coupled, reliable, and asynchronous. GlassFish Server is a modular, lightweight, and extensible Java EE 6 application server built on OSGi. Key features include fast startup time, improved developer productivity, hybrid OSGi/Java EE applications, high availability clustering, centralized administration, and overall ease-of-use."
+set name=pkg.summary value="GlassFish JMS"
+depend fmri=pkg:/glassfish-common type=require
+license 8741fa556feea4ca58ec28abc47de0bf9d5b39a3 chash=28b7cfba8f297b99296afc231955dc90e8d76d47 license="CDDL and GPL v2 with classpath exception" pkg.csize=12394 pkg.size=38052
+dir group=sys mode=0755 owner=root path=glassfish
+dir group=sys mode=0755 owner=root path=glassfish/modules
+dir group=sys mode=0755 owner=root path=glassfish/lib
+file fb4c4d1a86bc7bb3d2aa3a9de7a1cba8b56c3334 chash=0e74aa8337641ba506ee22d88936463d70fcb878 group=sys mode=0664 owner=root path=glassfish/modules/javax.jms.jar pkg.csize=32333 pkg.size=41315
+file 0dd5158721f1edfbdff3b0838f8ea6929469fde1 chash=e0bf26fbfe2c399b26f06663c322383410c7c9ed group=sys mode=0664 owner=root path=glassfish/modules/console-jms-plugin-help.jar pkg.csize=49436 pkg.size=55588
+file 353c41d527462c6b29d78c30796213ad00885243 chash=42459fe673590ad7ad49e4c505ff0b2448d7ca26 group=sys mode=0664 owner=root path=glassfish/modules/jms-admin.jar pkg.csize=91759 pkg.size=98143
+file 47b643522fa2a1d89a8e120014916ef2a15d9da6 chash=550007d815ebb01f77a944de35f974456206ba26 group=sys mode=0664 owner=root path=glassfish/modules/jms-core.jar pkg.csize=58187 pkg.size=61720
+file ce1ac5374778188621f8631fd800884a9bf22708 chash=c8a52105fcd704e0cdd3f14fd1766be1518df20c group=sys mode=0664 owner=root path=glassfish/modules/console-jms-plugin.jar pkg.csize=96348 pkg.size=102777
+file 1fbb559b9a76278de68cb026b24ecef8cb1d5d37 chash=a2deec3472c4b1dfcfb58091741672f14892cb96 group=sys mode=0664 owner=root path=glassfish/modules/connectors-inbound-runtime.jar pkg.csize=25877 pkg.size=28857
+dir group=sys mode=0755 owner=root path=glassfish/lib/install
+dir group=sys mode=0755 owner=root path=glassfish/lib/install/applications
+dir group=sys mode=0755 owner=root path=glassfish/lib/install/applications/jmsra
+file 36a339990beb9209eaba9127fdee80ac9c08fed3 chash=c24e580e4bb40c46b14d2cbf1774d0a141360adb group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/imqbroker.jar pkg.csize=1939070 pkg.size=2092619
+file 3d3dfde6c8c68a1e6673361b60cf1d2992bdc7d0 chash=76cba87780c0e6a0c582fcac49e92bbe6c078e58 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/imqstomp.jar pkg.csize=95456 pkg.size=105223
+file f0582e748e8052ae39bb59e4ddf4bf35925a8fe1 chash=4c6b7eb00064e4122d864119ee00d6e590137b3b group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/imqjmsra.jar pkg.csize=1394260 pkg.size=1523278
+file 357ce4ed293bdc8f421874870d04b1d035a0b8db chash=8e78ea3ff40c26a4092b2d5acf77e0f87f9e5449 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/fscontext.jar pkg.csize=90497 pkg.size=99926
+file f6b1a0fc230519b88bc05a22717c61d23ca2cb58 chash=eeaeba6788007560a3fc764897a02985f321bb98 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/imqjmsbridge.jar pkg.csize=177011 pkg.size=195721
+file 1150e77e308f51f8017e5e161c1374e11b631c84 chash=5b39b3fb08a8272dc1138b42f3d72cc6b351670b group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/imqjmx.jar pkg.csize=44615 pkg.size=53622
+dir group=sys mode=0755 owner=root path=glassfish/lib/install/applications/jmsra/META-INF
+file d3982ebbc307bb7b1709f25cbf21ef1e64d3197d chash=fe8263ced30f26922f0f7b7b397c1fb8f5647ee1 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/META-INF/MANIFEST.MF pkg.csize=289 pkg.size=514
+file 7f7cb7841813422d799c2b5a9314517486c2b908 chash=48cc0a94bc7d76a19c9315170f32c6d24a7209f0 group=sys mode=0664 owner=root path=glassfish/lib/install/applications/jmsra/META-INF/ra.xml pkg.csize=1989 pkg.size=12825
+set name=publisher value=stable.glassfish.org

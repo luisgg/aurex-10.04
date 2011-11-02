@@ -1,0 +1,25 @@
+Source: glassfish
+Section: universe/libs
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+Homepage: http://www.bisigi-project.org/
+
+Package: glassfish-server
+Architecture: all
+Depends: sun-java6-jdk, ${misc:Depends}
+Conflicts: glassfish-activation, glassfish-appserv, glassfish-javaee, glassfish-jmac-api, glassfish-mail, glassfish-toplink-essentials
+Description: Open source Java EE 5 Application Server
+ GlassFish Server Open Source Edition is the production-ready
+ application server supporting the Java Platform, Enterprise Edition 6
+ (Java EE 6) standard. Full clustering and centralized administration
+ combined with multiple developer-friendly features improve overall
+ productivity while reducing cost.
+ .
+ GlassFish Server 3.1.1 is the successor of the earlier 3.0.x releases,
+ offering a modular runtime based OSGi now with fully-featured clustering.
+ GlassFish Server 3.1.1 is also the fastest open source application server
+ offering advanced features such as application versioning, application-scoped
+ resources, and great development tool support from NetBeans 7.0.1, Eclipse
+ and other popular IDEs. 
