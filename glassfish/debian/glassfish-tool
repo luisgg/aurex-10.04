@@ -16,7 +16,7 @@ test_root(){
 # main
 
 GLASSFISH_ACTIVATION=/var/lib/glassfish/glassfish-activation-done
-GLASSFISH_HOME=/usr/share/glassfish/bin
+GLASSFISH_HOME=/usr/share/glassfish
 
 test_root
 
