@@ -3,4 +3,4 @@ glassfish/*		/usr/share/glassfish/glassfish
 javadb/*		/usr/share/glassfish/javadb
 mq/*			/usr/share/glassfish/mq
 pkg/*			/usr/share/glassfish/pkg
-debian/glassfish-tool	/ur/sbin
+debian/glassfish-tool	/usr/sbin
