@@ -71,6 +71,8 @@ Task-Metapackage: aurex-desktop
 
 = networking =
  * aurex-openvpn-nm
+= remote access =
+ * xnest
 
 = other =
  * nautilus-gksu
