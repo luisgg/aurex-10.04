@@ -71,7 +71,7 @@ ii  libfribidi0                     0.19.2-1
 ii  libgcc1                         1:4.4.3-4ubuntu5
 ii  libgcrypt11                     1.4.4-5ubuntu2
 ii  libgdbm3                        1.8.3-9
-ii  libglib2.0-0                    2.24.1-0ubuntu1
+ii  libglib2.0-0                    2.26.1-0ubuntu1~lucid0~tetet0+aurex1
 ii  libgnutls26                     2.8.5-2
 ii  libgpg-error0                   1.6-1ubuntu2
 ii  libgpm2                         1.20.4-3.2ubuntu2
@@ -163,7 +163,7 @@ ii  sysvinit-utils                  2.87dsf-4ubuntu17.4
 ii  tar                             1.22-2ubuntu1
 ii  tasksel                         2.73ubuntu26
 ii  tasksel-data                    2.73ubuntu26
-ii  tzdata                          2011m-0ubuntu0.10.04
+ii  tzdata                          2011n-0ubuntu0.10.04
 ii  ubuntu-keyring                  2010.11.09
 ii  ubuntu-minimal                  1.197
 ii  ucf                             3.0025
