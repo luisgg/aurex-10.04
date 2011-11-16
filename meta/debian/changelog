@@ -1,3 +1,20 @@
+aurex-meta (1.197~aurex10.04.30) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added libgdu-aurex to aurex-supported
+  * Added libglib2.0-bin to aurex-supported
+  * Added libgpod-cil to aurex-supported
+  * Added libgpod-cil-dev to aurex-supported
+  * Added libimobiledevice2 to aurex-supported
+  * Added libimobiledevice2-dbg to aurex-supported
+  * Added pulseaudio-equalizer to aurex-desktop-recommends
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added xnest to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 16 Nov 2011 23:43:07 +0100
+
 aurex-meta (1.197~aurex10.04.29) lucid; urgency=low
 
   * Refreshed dependencies
