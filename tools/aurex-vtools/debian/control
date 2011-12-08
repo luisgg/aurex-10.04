@@ -1,0 +1,13 @@
+Source: aurex-vtools
+Section: admin
+Priority: optional
+Maintainer: Sandra Villanueva Gavino <savilga@gmail.com>, Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Standards-Version: 3.8.4
+Build-Depends: debhelper (>= 7.0.50~)
+
+Package: aurex-vtools
+Architecture: all
+Depends: ${misc:Depends}, libvirt-bin
+Description: tools to manage virtual machines
+ This package installs some tools to manage virtual
+ machines using virsh

@@ -34,11 +34,87 @@ vt_get_disk_images(){
 	$VIRSH dumpxml "$VM_NAME" |sed -ne "/<source file=/s%^.*'\(.*\)'.*$%\1%p"
 }
 
-vt_freeze_images(){
-	TIMESTAMP="$(date "+%F_%H%M")"
-	
-	VM_DISK="$1"
-	
-	qemu-img -b 
+vt_verify_domain_status(){
+	OLD_LANG="$LANG"
+	export LANG=C
+	rc=0
+	$VIRSH domstate "$1" |grep -q "^shut off" || rc=1
+	export LANG=$OLD_LANG
+	return $rc
 }
 
+vt_stop_domain(){
+	VM_NAME="$1"
+	$VIRSH shutdown "$VM_NAME"
+	MAX_WAIT=5
+	i=0
+	while ! vt_verify_domain_status "$VM_NAME" && [  $i -le $MAX_WAIT ] ; do
+		sleep 1
+		i=$(($i + 1))
+	done
+	vt_verify_domain_status "$VM_NAME" || return 1
+	return 0
+}
+
+vt_start_domain(){
+	$VIRSH start "$VM_NAME"
+}
+		
+
+vt_freeze_images(){
+	VM_NAME="$1"
+	CURRENT_PATH="$(pwd)"
+	TIMESTAMP="$(date "+%F_%H%M")"
+	for VM_DISK in $(vt_get_disk_images) ; do
+		DISK_IMG_PATH="$(dirname "$VM_DISK")"
+		DISK_IMG_FILENAME="$(basename "$VM_DISK")"
+		DISK_IMG_NAME="${DISK_IMG_FILENAME%.*}"
+		DISK_IMG_EXT="${DISK_IMG_FILENAME##*.}"
+		NEW_DISK_IMG_NAME="${DISK_IMG_NAME}-${TIMESTAMP}.${DISK_IMG_EXT}"
+		cd "$DISK_IMG_PATH"
+		mv "$DISK_IMG_FILENAME" "$NEW_DISK_IMG_NAME"
+		qemu-img create -b "$NEW_DISK_IMG_NAME" -f qcow2 "$DISK_IMG_FILENAME"
+		DISK_IMG_LIST="$DISK_IMG_LIST $DISK_IMG_PATH/$NEW_DISK_IMG_NAME"
+	done
+	cd "$CURRENT_PATH"
+}
+
+die(){
+	echo "$1" >&2
+	exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") VMACHINE_NAME [BACKUP_DIR]"
+}
+# main
+
+# do some tests
+
+[ $(id -u) -eq 0 ] || die "You must be root, my friend"
+[ "$1" ] || usage
+DEF_BACKUP_DIR="/tmp"
+# DEF_BACKUP_DIR="/srv/data/backup"
+
+VM_NAME"$1"
+shift
+BACKUP_DIR="$1"
+[ "$BACKUP_DIR" ] || BACKUP_DIR="$DEF_BACKUP_DIR"
+
+DISK_IMG_LIST=""
+vt_stop_domain "$VM_NAME" || die "Unable to stop domain: $VM_NAME"
+vt_freeze_images "$VM_NAME" || die "Error creating new disk images for domain: $VM_NAME" 
+vt_start_domain "$VM_NAME" || die "Error starting domain: $VM_NAME"
+[ "$DISK_IMG_LIST" ] || die "No disk images to copy"
+
+echo "Copying disk image files: $DISK_IMG_LIST"
+cp $DISK_IMG_LIST $BACKUP_DIR || die "Error copying disk images"
+cat << EOF
+Backup completed.
+Disk images:  $DISK_IMG_LIST
+have been successfully copyed to $BACKUP_DIR
+"All your backup are belong to us"
+EOF
+
+
+exit 0
