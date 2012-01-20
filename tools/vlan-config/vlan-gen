@@ -1,0 +1,35 @@
+#!/bin/sh
+
+gen_vlan(){
+	cat << EOF
+create vlan vlan$VTAG tag $VTAG
+config vlan vlan$VTAG add tagged $FLOOR_PORT
+config vlan vlan$VTAG add tagged $MIRROR_PORT
+config vlan vlan$VTAG add tagged $PF_PORT
+EOF
+}
+
+list_vlans(){
+	for FLOOR_NUMBER in $FLOOR_LIST ; do
+		VTAG_BASE=$(($FLOOR_NUMBER * 100))
+		vcount=1
+		while [ $vcount -le $VCOUNT_MAX ] ; do
+			VTAG=$(($VTAG_BASE + $vcount ))
+			FLOOR_PORT=$(($FLOOR_BASE_PORT + $FLOOR_NUMBER))
+			gen_vlan
+			vcount=$(($vcount + 1))
+		done
+	done
+}
+
+FLOOR_LIST="1 2 3 4 5"
+FLOOR_BASE_PORT=10
+VCOUNT_MAX=22
+MIRROR_PORT=16
+PF_PORT=6
+CFG_TEMPLATE="dlink.template"
+TMP_FILE="$(tempfile)"
+list_vlans > "$TMP_FILE"
+#sed -e "/^.*_@_VLAN_DEFINITION_@_.*$/r$TMP_FILE;/^.*_@_VLAN_DEFINITION_@_.*/s%_@_VLAN_DEFINITION_@_%AUTOMAGICALLY GENERATED VLAN LIST%" $CFG_TEMPLATE
+sed -e "/_@_VLAN_DEFINITION_@_/r$TMP_FILE" "$CFG_TEMPLATE" |sed  -e "/_@_VLAN_DEFINITION_@_/s%_@_VLAN_DEFINITION_@_%AUTOMAGICALLY GENERATED VLAN LIST%"
+rm "$TMP_FILE"
