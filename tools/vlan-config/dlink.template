@@ -478,7 +478,7 @@ config loopdetect ports 18 state disable
 
 # IP
 
-config ipif System vlan default ipaddress 10.90.90.90/8 state enable clear_description
+config ipif System vlan default ipaddress 192.168.200.10/24 state enable clear_description
 enable telnet 23
 enable web 80
 disable autoconfig
