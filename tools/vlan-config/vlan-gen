@@ -3,9 +3,7 @@
 gen_vlan(){
 	cat << EOF
 create vlan vlan$VTAG tag $VTAG
-config vlan vlan$VTAG add tagged $FLOOR_PORT
-config vlan vlan$VTAG add tagged $MIRROR_PORT
-config vlan vlan$VTAG add tagged $PF_PORT
+config vlan vlan$VTAG add tagged 1-16
 EOF
 }
 

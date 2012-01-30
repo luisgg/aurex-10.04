@@ -216,8 +216,10 @@ config loopdetect ports 18 state disable
 # MIRROR
 
 enable mirror
-config mirror port 1 add source ports 2-3 rx
-config mirror port 1 add source ports 2-3 tx
+config mirror port 1 add source ports 9-10 rx
+config mirror port 1 add source ports 9-10 tx
+config mirror port 2 add source ports 9-10 rx
+config mirror port 2 add source ports 9-10 tx
 
 # BANDWIDTH
 
