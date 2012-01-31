@@ -1,0 +1,8 @@
+# Printer number, if not 0
+P910ND_NUM="_@_P910ND_NUM_@_"
+# Additional daemon arguments, see man 8 p910nd
+#P910ND_OPTS="-f /dev/hp1010"
+
+
+# Debian specific (set to 1 to enable start by default)
+P910ND_START=0

@@ -1,0 +1,12 @@
+Source: p910nd-multiport
+Section: multiverse/web
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+
+Package: p910nd-multiport
+Architecture: all
+Depends: p910nd-multiport
+Description: multiport init scripts for p910nd printer daemon
+ The package provides multiport functionallity to p910nd server
