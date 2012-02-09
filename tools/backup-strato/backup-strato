@@ -1,0 +1,97 @@
+#!/bin/sh
+# --------
+# File:		backup-strato
+# Description:	simple script to backup/synchronize web pages and mysql
+# Authors:	Luis Garcia Gisbert <luisgg@gmail.com>
+#		Sandra Villanueva Gavino <savilga@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+# --------
+# Functions
+# --------
+
+die(){
+	$LOGGER_CMD "ERROR: $1"
+	$LOGGER_CMD "BACKUP ABORTED"
+	exit 1
+}
+
+mysql_dump(){
+	mkdir -p "$1/mysql"
+	ssh ${SSH_USER}@${SSH_HOST} $MYSQLDUMP_CMD > "$1/mysql/mysql.dump" || return 1
+	return 0
+}
+
+web_backup(){
+	mkdir -p "$1/$WEB_LOCAL_DIR"
+	if [ -d "$BACKUP_BASE_DIR/$LAST_BACKUP/$WEB_LOCAL_DIR" ] ; then
+		# copy last backup to current dir
+		rsync -rlpt "$BACKUP_BASE_DIR/$LAST_BACKUP/$WEB_LOCAL_DIR/" "$1/$WEB_LOCAL_DIR/" || return 1
+	fi
+	rsync -rlpt ${SSH_USER}@${SSH_HOST}:$WEB_REMOTE_DIR/ "$1/$WEB_LOCAL_DIR/" || return 1
+	return 0
+}
+
+update_last_link(){
+	( cd "$BACKUP_BASE_DIR" ; rm -f "$LAST_BACKUP" ; ln -s "$TIMESTAMP" "$LAST_BACKUP" ; )
+	return 0
+}
+
+
+# --------
+# vars
+# --------
+SSH_HOST="ssh.strato.de"
+SSH_USER="ausiasmarch.es"
+MYSQLDUMP_CMD="mysqldump --opt -h rdbms"
+LOGGER_CMD="logger -t backup-strato -s"
+BACKUP_BASE_DIR="$HOME/backup-strato"
+LAST_BACKUP="LAST-BACKUP"
+
+WEB_REMOTE_DIR="faltas"
+WEB_LOCAL_DIR="faltas"
+
+# --------
+# main
+# --------
+
+$LOGGER_CMD "BACKUP STARTED"
+
+# source credentials file
+CR_FILE="$HOME/.mysqldump.strato"
+[ -r "$CR_FILE" ] || die "$CR_FILE not found"
+. $CR_FILE
+
+# verify required variables
+if [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASS" ] || [ -z "$MYSQL_DB" ] ; then
+	die "Verify required variables"
+fi
+
+MYSQLDUMP_CMD="$MYSQLDUMP_CMD -u $MYSQL_USER -p$MYSQL_PASS $MYSQL_DB"
+
+# do the backup
+TIMESTAMP="$(date "+%Y-%m-%d_%H%M%S")"
+BACKUP_DIR="$BACKUP_BASE_DIR/$TIMESTAMP"
+mkdir -p "$BACKUP_DIR"
+
+mysql_dump "$BACKUP_DIR" || die "mysql backup FAILED"
+web_backup "$BACKUP_DIR" || die "web backup FAILED"
+
+update_last_link "$BACKUP_DIR"
+
+$LOGGER_CMD "BACKUP COMPLETED"
+
