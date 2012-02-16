@@ -1,0 +1,13 @@
+Source: wbackup
+Section: admin
+Priority: optional
+Maintainer: Sandra Villanueva Gavino <savilga@gmail.com>, Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Standards-Version: 3.8.4
+Build-Depends: debhelper (>= 7.0.50~)
+
+Package: wbackup
+Architecture: all
+Depends: ${misc:Depends}, rsync
+Description: simple rsync based backup system
+ wbackup makes incremental remote filesystem and MySQL backups
+ The package provides an easy method to do backups of remote websites
