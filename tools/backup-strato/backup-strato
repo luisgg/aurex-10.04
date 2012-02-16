@@ -62,8 +62,8 @@ LOGGER_CMD="logger -t backup-strato -s"
 BACKUP_BASE_DIR="$HOME/backup-strato"
 LAST_BACKUP="LAST-BACKUP"
 
-WEB_REMOTE_DIR="faltas"
-WEB_LOCAL_DIR="faltas"
+WEB_REMOTE_DIR="portal"
+WEB_LOCAL_DIR="portal"
 
 # --------
 # main
