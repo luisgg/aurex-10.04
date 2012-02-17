@@ -1,0 +1,11 @@
+#!/bin/sh
+if [ "$1" = "purge" ] ; then
+	if which deluser >/dev/null 2>&1; then
+		deluser --quiet wbackup > /dev/null || true
+	fi
+fi
+
+#DEBHELPER#
+
+exit 0
+
