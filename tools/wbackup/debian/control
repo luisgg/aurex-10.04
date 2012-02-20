@@ -7,7 +7,7 @@ Build-Depends: debhelper (>= 7.0.50~)
 
 Package: wbackup
 Architecture: all
-Depends: ${misc:Depends}, rsync
+Depends: ${misc:Depends}, rsync, openssh-client
 Description: simple rsync based backup system
  wbackup makes incremental remote filesystem and MySQL backups
  The package provides an easy method to do backups of remote websites

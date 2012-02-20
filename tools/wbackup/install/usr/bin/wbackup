@@ -56,8 +56,9 @@ update_last_link(){
 # vars
 # --------
 
-CFG_DIR="/etc/wbackup"
-WB_CONF="$CFG_DIR/sites.d"
+COMMON_FILE="/usr/share/wbackup/wbackup-common"
+[ -r "$COMMON_FILE" ] || die "Unable to read $COMMON_FILE"
+. $COMMON_FILE
 
 # --------
 # main
@@ -72,7 +73,6 @@ for WB_SITE in $WB_SITES ; do
 	BACKUP_NAME="$(basename "$WB_SITE" ".conf" )"
 	WEB_REMOTE_DIR=""
 	WEB_LOCAL_DIR=""
-	WB_BASE_DIR="/var/wbackup"
 	LAST_BACKUP="LAST-BACKUP"
 	
 	# set a common defaul to for MYSQL_HOST

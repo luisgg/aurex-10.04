@@ -1,0 +1,177 @@
+#!/bin/bash
+# --------
+# File:		wb-setup
+# Description:	Generate wbackup configurations
+# Authors:	Luis Garcia Gisbert <luisgg@gmail.com>
+#		Sandra Villanueva Gavino <savilga@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along 
+# with this program; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+# --------
+# Functions
+# --------
+
+die(){
+	echo "ERROR: $1" >&2
+	exit 1
+}
+
+usage(){
+	echo "Usage: $(basename "$0") {add|del|disable|enable} CONFIG_NAME [webhost=HOST \
+webuser=USER sqlhost=HOST sqluser=USER sqldbname=DBNAME webdir=PATH ]" >&2
+	exit 1
+}
+
+conf_test(){
+	[ "$CONF_NAME" ] || return 1
+	[ -s "$WB_CONF/$CONF_NAME.conf$1" ] || return 1
+	return 0
+}
+
+conf_del(){
+	rm -f "$WB_CONF/$CONF_NAME.conf"
+}
+
+conf_disable(){
+	mv -f "$WB_CONF/$CONF_NAME.conf" "$WB_CONF/$CONF_NAME.conf.DISABLE"
+}
+
+conf_enable(){
+	mv -f "$WB_CONF/$CONF_NAME.conf.DISABLE" "$WB_CONF/$CONF_NAME.conf"
+}
+
+conf_write0(){
+cat << EOF
+BACKUP_NAME="$CONF_NAME"
+SSH_HOST="$SSH_HOST"
+SSH_USER="$SSH_USER"
+MYSQL_HOST="$MYSQL_HOST"
+MYSQL_USER="$MYSQL_USER"
+MYSQL_DB="$MYSQL_DB"
+WEB_REMOTE_DIR="$WEB_REMOTE_DIR"
+EOF
+}
+
+conf_write_screen(){
+conf_write0
+echo MYSQL_PASS=\"***\"
+}
+
+conf_write(){
+conf_write0
+echo MYSQL_PASS=\"$MYSQL_PASS\"
+}
+
+
+conf_add(){
+	while [ "$1" ] ; do
+		case "$1" in
+			webhost=*)
+				SSH_HOST="${1#*=}"
+				;;
+			webuser=*)
+				SSH_USER="${1#*=}"
+				;;
+			sqlhost=*)
+				MYSQL_HOST="${1#*=}"
+				;;
+			sqluser=*)
+				MYSQL_USER="${1#*=}"
+				;;
+			sqldbname=*)
+				MYSQL_DB="${1#*=}"
+				;;
+			webdir=*)
+				WEB_REMOTE_DIR="${1#*=}"
+				;;
+		esac
+		shift
+	done
+	while [ -z "$SSH_HOST" ] ; do
+		read -p "Enter webhost name: " SSH_HOST
+	done
+	while [ -z "$SSH_USER" ] ; do
+		read -p "Enter webuser name: " SSH_USER
+	done
+	if [ "$MYSQL_USER" ] || [ "$MYSQL_DB" ] ; then
+		while [ -z "$MYSQL_USER" ] ; do
+			read -p "Enter  mysql username: " MYSQL_USER
+		done
+		while [ -z "$MYSQL_PASS" ] ; do
+			read -sp "Enter password for mysql user $MYSQL_USER: " MYSQL_PASS
+		done
+		while [ -z "$MYSQL_DB" ] ; do
+			read -p "Enter  mysql database name: " MYSQL_DB
+		done
+	fi
+	echo "Current configuration is:"
+	conf_write_screen
+	echo "Write configuration file \"$WB_CONF/$CONF_NAME.conf\" (y/n)?"
+	read a
+	if [ "$a" = "y" ] || [ "$a" = "Y" ]; then
+		if ssh-copy-id -i /var/wbackup/.ssh/id_dsa $SSH_USER@$SSH_HOST ; then
+			copy_id_store "$CONF_NAME"
+			conf_write > "$WB_CONF/$CONF_NAME.conf"
+	else
+		die "Unable to copy public key to $SSH_USER@$SSH_HOST. Configuration aborted"
+	fi
+			
+}
+
+# --------
+# vars
+# --------
+
+COMMON_FILE="/usr/share/wbackup/wbackup-common"
+[ -r "$COMMON_FILE" ] || die "Unable to read $COMMON_FILE"
+. $COMMON_FILE
+
+public SSH_HOST SSH_USER MYSQL_HOST MYSQL_USER MYSQL_DB WEB_REMOTE_DIR MYSQL_PASS
+
+# --------
+# main
+# --------
+
+[ $# -gt 2 ] || usage
+
+ACTION="$1"
+shift
+CONF_NAME="$1"
+shift
+case "$ACTION" in
+	add)
+		! conf_test || usage
+		conf_add "$@"
+		;;
+	del)
+		conf_test || usage
+		conf_del
+		;;
+	enable)
+		conf_test ".DISABLE" || usage
+		conf_enable
+		;;
+	disable)
+		conf_test || usage
+		conf_disable
+		;;
+	*)
+		usage
+		;;
+
+esac
+
+exit 0
