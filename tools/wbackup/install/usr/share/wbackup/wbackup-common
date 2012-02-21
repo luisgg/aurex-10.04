@@ -1,3 +1,14 @@
 CFG_DIR="/etc/wbackup"
 WB_CONF="$CFG_DIR/sites.d"
 WB_BASE_DIR="/var/wbackup"
+WB_COPY_ID_DIR="$WB_BASE_DIR/.copy-id"
+
+copy_id_store(){
+	mkdir -p "$WB_COPY_ID_DIR"
+	touch "$WB_COPY_ID_DIR/$1"
+}
+
+copy_id_test(){
+	[ -e "$WB_COPY_ID_DIR/$1" ] || return 1
+	return 0
+}

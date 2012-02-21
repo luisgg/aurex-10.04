@@ -89,17 +89,17 @@ for WB_SITE in $WB_SITES ; do
 	LOGGER_CMD="logger -t wbackup-${BACKUP_NAME} -s"
 	BACKUP_BASE_DIR="$WB_BASE_DIR/wbackup-${BACKUP_NAME}"
 
-
-
 	$LOGGER_CMD "BACKUP STARTED"
-
-
 
 	MYSQLDUMP_CMD="$MYSQLDUMP_CMD -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASS $MYSQL_DB"
 
 	# do the backup
 	TIMESTAMP="$(date "+%Y-%m-%d_%H%M%S")"
 	BACKUP_DIR="$BACKUP_BASE_DIR/$TIMESTAMP"
+
+	# test if the public key was copyed to remote host
+	copy_id_test || die "Public key was not copied to remote host. May be you need to run wb-setup script ..."
+
 	mkdir -p "$BACKUP_DIR"
 
 	# verify required variables
@@ -108,6 +108,7 @@ for WB_SITE in $WB_SITES ; do
 	else
 		mysql_dump "$BACKUP_DIR" || die "mysql backup FAILED"
 	fi
+	[ "$WEB_LOCAL_DIR" ] || WEB_LOCAL_DIR="$WEB_REMOTE_DIR"
 	if [ -z "$WEB_REMOTE_DIR" ] || [ -z "$WEB_LOCAL_DIR" ] ; then
 		$LOGGER_CMD "Skipping web backup (no variables found)"
 	else

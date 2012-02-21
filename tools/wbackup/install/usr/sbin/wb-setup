@@ -112,6 +112,7 @@ conf_add(){
 		done
 		while [ -z "$MYSQL_PASS" ] ; do
 			read -sp "Enter password for mysql user $MYSQL_USER: " MYSQL_PASS
+			echo ""
 		done
 		while [ -z "$MYSQL_DB" ] ; do
 			read -p "Enter  mysql database name: " MYSQL_DB
@@ -125,8 +126,11 @@ conf_add(){
 		if ssh-copy-id -i /var/wbackup/.ssh/id_dsa $SSH_USER@$SSH_HOST ; then
 			copy_id_store "$CONF_NAME"
 			conf_write > "$WB_CONF/$CONF_NAME.conf"
-	else
-		die "Unable to copy public key to $SSH_USER@$SSH_HOST. Configuration aborted"
+			chmod 600 "$WB_CONF/$CONF_NAME.conf"
+			chown wbackup:www-data "$WB_CONF/$CONF_NAME.conf"
+		else
+			die "Unable to copy public key to $SSH_USER@$SSH_HOST. Configuration aborted"
+		fi
 	fi
 			
 }
@@ -139,13 +143,14 @@ COMMON_FILE="/usr/share/wbackup/wbackup-common"
 [ -r "$COMMON_FILE" ] || die "Unable to read $COMMON_FILE"
 . $COMMON_FILE
 
-public SSH_HOST SSH_USER MYSQL_HOST MYSQL_USER MYSQL_DB WEB_REMOTE_DIR MYSQL_PASS
+declare SSH_HOST SSH_USER MYSQL_HOST MYSQL_USER MYSQL_DB WEB_REMOTE_DIR MYSQL_PASS
 
 # --------
 # main
 # --------
 
-[ $# -gt 2 ] || usage
+[ $# -ge 2 ] || usage
+[ $(id -u) -eq 0 ] || die "You must be root, my friend"
 
 ACTION="$1"
 shift

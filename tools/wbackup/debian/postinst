@@ -4,8 +4,12 @@ case "$1" in
     configure)
 	# add wbackup user 
 	if ! getent passwd wbackup >/dev/null; then
-                adduser --quiet --system --home /var/wbackup --ingroup www-data wbackup
+                adduser --quiet --system --home /var/wbackup --shell /bin/sh --ingroup www-data wbackup
+		mkdir -p /var/wbackup/.ssh
+		chown wbackup:www-data /var/wbackup/.ssh
+		chmod 700 /var/wbackup/.ssh
 		ssh-keygen -t dsa -q -f /var/wbackup/.ssh/id_dsa -N ""
+		chown wbackup:www-data  /var/wbackup/.ssh/id_dsa
         fi
 
 	;;
