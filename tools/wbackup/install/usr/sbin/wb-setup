@@ -125,7 +125,7 @@ conf_add(){
 	read a
 	if [ "$a" = "y" ] || [ "$a" = "Y" ]; then
 		SSH_COPY_CMD="ssh-copy-id -i /var/wbackup/.ssh/id_dsa $SSH_USER@$SSH_HOST"
-		if su -c "$SSH_COPY_CMD" wbackup ; then
+		if copy_id_test "$CONF_NAME" || su -c "$SSH_COPY_CMD" wbackup ; then
 			copy_id_store "$CONF_NAME"
 			conf_write > "$WB_CONF/$CONF_NAME.conf"
 			chmod 600 "$WB_CONF/$CONF_NAME.conf"
