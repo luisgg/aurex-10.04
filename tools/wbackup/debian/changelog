@@ -1,3 +1,9 @@
+wbackup (0.4) UNRELEASED; urgency=low
+
+  * NOT RELEASED YET
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 28 Feb 2012 02:51:41 +0100
+
 wbackup (0.3) lucid; urgency=low
 
   * Added --link-dest option to rsync to use hard links for unchanged files
