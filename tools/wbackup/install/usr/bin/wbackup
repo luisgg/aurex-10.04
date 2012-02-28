@@ -39,10 +39,13 @@ mysql_dump(){
 web_backup(){
 	mkdir -p "$1/$WEB_LOCAL_DIR"
 	if [ -d "$BACKUP_BASE_DIR/$LAST_BACKUP/$WEB_LOCAL_DIR" ] ; then
-		# copy last backup to current dir
-		rsync -rlpt "$BACKUP_BASE_DIR/$LAST_BACKUP/$WEB_LOCAL_DIR/" "$1/$WEB_LOCAL_DIR/" || return 1
+		# get canonical name of "LAST_BACKUP" dir
+		LAST_COPY="$(readlink -f "$BACKUP_BASE_DIR/$LAST_BACKUP/$WEB_LOCAL_DIR/")"
+		# do the rsyn with hard links of unchanged files
+		rsync -rlpt --link-dest="$LAST_COPY" ${SSH_USER}@${SSH_HOST}:$WEB_REMOTE_DIR/ "$1/$WEB_LOCAL_DIR/" || return 1
+	else	
+		rsync -rlpt ${SSH_USER}@${SSH_HOST}:$WEB_REMOTE_DIR/ "$1/$WEB_LOCAL_DIR/" || return 1
 	fi
-	rsync -rlpt ${SSH_USER}@${SSH_HOST}:$WEB_REMOTE_DIR/ "$1/$WEB_LOCAL_DIR/" || return 1
 	return 0
 }
 
