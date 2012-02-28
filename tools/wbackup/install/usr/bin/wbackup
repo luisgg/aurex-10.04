@@ -106,7 +106,12 @@ for WB_SITE in $WB_SITES ; do
 	if [ -z "$MYSQL_USER" ] || [ -z "$MYSQL_PASS" ] || [ -z "$MYSQL_DB" ] || [ -z "$MYSQL_HOST" ] ; then
 		$LOGGER_CMD "Skipping mysql backup (no variables found)"
 	else
-		mysql_dump "$BACKUP_DIR" || die "mysql backup FAILED"
+		$LOGGER_CMD "Starting mysql backup"
+		if mysql_dump "$BACKUP_DIR" ; then
+			$LOGGER_CMD "Succesfully mysql backup"
+		else
+			$LOGGER_CMD "mysql backup finished with some errors"
+		fi
 	fi
 	[ "$WEB_LOCAL_DIR" ] || WEB_LOCAL_DIR="$WEB_REMOTE_DIR"
 	if [ -z "$WEB_REMOTE_DIR" ] || [ -z "$WEB_LOCAL_DIR" ] ; then

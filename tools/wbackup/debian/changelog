@@ -1,4 +1,10 @@
-wbackup (0.1) UNRELEASED; urgency=low
+wbackup (0.2) lucid; urgency=low
+
+  * Don't stop backup in case of mysql errors
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 28 Feb 2012 01:44:53 +0100
+
+wbackup (0.1) lucid; urgency=low
 
   * Initial release.
 
