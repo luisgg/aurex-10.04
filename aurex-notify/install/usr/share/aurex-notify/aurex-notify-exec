@@ -1,8 +1,8 @@
 #!/bin/sh
 # -------
-# File:        session-cmd-exec
-# Description: session-cmd backend
-# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+# File:        aurex-notify-exec
+# Description: aurex-notify backend
+# Author:      Luis Garcia Gisbert <luisgg@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,12 +21,12 @@
 
 
 set -e
-ICON_FILE="/usr/share/lliurex/pixmaps/lliurex-default.png"
+ICON_FILE="/usr/share/pixmaps/aurex/aurex-logo.svg"
 LOGOUT_TIMEOUT=20
-MESSAGE_CMD="notify-send -u normal -t $(($LOGOUT_TIMEOUT * 1000)) -i $ICON_FILE LliureX"
+MESSAGE_CMD="notify-send -u normal -t $(($LOGOUT_TIMEOUT * 1000)) -i $ICON_FILE aurex"
 LOGOUT_MESSAGE="Su sesión se cerrará en $LOGOUT_TIMEOUT segundos"
 
-DEFAULT_OPTIONS="/etc/default/session-cmd"
+DEFAULT_OPTIONS="/etc/default/aurex-notify"
 [ ! -r "$DEFAULT_OPTIONS" ] || . ${DEFAULT_OPTIONS}
 
 message(){
@@ -40,16 +40,16 @@ case $1 in
          message "$*"
       fi
       ;;
-   LOGOUT)
-      message "$LOGOUT_MESSAGE"
-      sleep $LOGOUT_TIMEOUT
-      kdesktop=`ps -C kdesktop`
-      if [ $? -eq 0 -a -f /usr/bin/dcop ];then
-          dcop ksmserver default logout 0 -1 -1
-      else
-          gnome-session-save --kill --silent
-      fi
-      ;;
+#   LOGOUT)
+#      message "$LOGOUT_MESSAGE"
+#      sleep $LOGOUT_TIMEOUT
+#      kdesktop=`ps -C kdesktop`
+#      if [ $? -eq 0 -a -f /usr/bin/dcop ];then
+#          dcop ksmserver default logout 0 -1 -1
+#      else
+#          gnome-session-save --kill --silent
+#      fi
+#      ;;
    OPEN)
       shift
       if [ "$1" ] ; then

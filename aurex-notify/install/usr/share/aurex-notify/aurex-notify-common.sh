@@ -1,7 +1,7 @@
 # -------
-# File:        session-cmd-common.sh
-# Description: common functions for session-cmd scripts
-# Author:      Luis Garcia Gisbert <garcia_luigis@gva.es>
+# File:        aurex-notify-common.sh
+# Description: common functions for aurex-notify
+# Author:      Luis Garcia Gisbert <luisgg@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 # 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
 # --------
 
-UNIX_SOCKET_DIR="/tmp/session-cmd"
+UNIX_SOCKET_DIR="/tmp/aurex-notify"
 
 socket_basename(){
    echo "$(id -un)"
@@ -29,7 +29,7 @@ create_socket(){
    i=0
    MAX_TRY=99
    while [ $i -lt $MAX_TRY ] ; do
-      UNIX_SOCKET="${UNIX_SOCKET_DIR}-$(socket_basename)/$(socket_basename)$-{i}"
+      UNIX_SOCKET="${UNIX_SOCKET_DIR}-$(socket_basename)/$(socket_basename)$-${i}"
       [ -S "${UNIX_SOCKET}.sock" ] || break
       if [ -r "${UNIX_SOCKET}.pid" ] ; then
          kill -9 "$(cat "${UNIX_SOCKET}.pid")" >/dev/null 2>/dev/null || true
