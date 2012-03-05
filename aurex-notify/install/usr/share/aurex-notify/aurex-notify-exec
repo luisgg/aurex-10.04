@@ -21,7 +21,8 @@
 
 
 set -e
-ICON_FILE="/usr/share/pixmaps/aurex/aurex-logo.svg"
+#ICON_FILE="/usr/share/pixmaps/aurex/aurex-logo.svg"
+ICON_FILE="distributor-logo"
 LOGOUT_TIMEOUT=20
 MESSAGE_CMD="notify-send -u normal -t $(($LOGOUT_TIMEOUT * 1000)) -i $ICON_FILE aurex"
 LOGOUT_MESSAGE="Su sesión se cerrará en $LOGOUT_TIMEOUT segundos"
