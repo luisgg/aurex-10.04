@@ -1,9 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
-Name=Session Cmd
-Comment=Session cmd user agent
-Exec=/usr/share/session-cmd/session-cmd-script
+Name=aurex notify
+Comment=aurex session user agent
+Exec=/usr/share/aurex-notify/aurex-notify-script
 Terminal=false
 Type=Application
 Categories=
-OnlyShowIn=GNOME;XFCE;
