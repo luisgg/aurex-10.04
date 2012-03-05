@@ -1,0 +1,12 @@
+session-cmd (0.2) unstable; urgency=low
+
+  * Fix kde logout
+  * Fix permission denied with socket creation and not list all sockets in thin clients actions 
+
+ -- Ignacio Vidal <vidal_joshur@gva.es>  Mon, 19 Nov 2007 10:18:11 +0100
+
+session-cmd (0.1) unstable; urgency=low
+
+  * First release.
+
+ -- Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>  Fri, 16 Nov 2007 10:42:28 +0100
