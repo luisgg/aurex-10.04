@@ -24,7 +24,7 @@ set -e
 #ICON_FILE="/usr/share/pixmaps/aurex/aurex-logo.svg"
 ICON_FILE="distributor-logo"
 LOGOUT_TIMEOUT=20
-MESSAGE_CMD="notify-send -u normal -t $(($LOGOUT_TIMEOUT * 1000)) -i $ICON_FILE aurex"
+MESSAGE_CMD="notify-send -u normal -t $(($LOGOUT_TIMEOUT * 1000)) -i $ICON_FILE 'aurex-notify'"
 LOGOUT_MESSAGE="Su sesión se cerrará en $LOGOUT_TIMEOUT segundos"
 
 DEFAULT_OPTIONS="/etc/default/aurex-notify"
@@ -51,6 +51,24 @@ case $1 in
 #          gnome-session-save --kill --silent
 #      fi
 #      ;;
+   ASK)
+      shift
+      case "$1" in
+         "--regexp=*")
+            REGEXP="${1#--regexp=}"
+            shift
+            ;;
+      esac
+      VALIDR=""
+      while [ -z "$VALIDR" ] ; do
+         ( sleep 1; wmctrl -v -a "aurex-notify" -b add,modal,above ; ) &
+         R="$({ echo -n "--text=$*"; echo -n "\0000" ; } |xargs -0 zenity  --entry --title "aurex-notify" --window-icon=distributor-logo)"
+         if [ -z "$REGEXP" ] || echo "$R" |grep -q "$REGEXP" ; then
+            VALIDR=Y
+         fi
+      done
+      echo "$R"
+      ;;
    OPEN)
       shift
       if [ "$1" ] ; then

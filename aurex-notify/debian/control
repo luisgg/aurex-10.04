@@ -8,7 +8,7 @@ Standards-Version: 3.8.4
 
 Package: aurex-notify
 Architecture: all
-Depends: netpipes, libnotify-bin, libgnome2-0, zenity
+Depends: netpipes, libnotify-bin, libgnome2-0, zenity, wmctrl
 Description: user session agent
  aurex-notify creates a unix-domain socket to comunicate with a very simple user agent.
  This program is installed in the Sessions Startup Programs of the GNOME Desktop system,
