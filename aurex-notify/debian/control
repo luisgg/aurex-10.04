@@ -1,16 +1,16 @@
-Source: session-cmd
+Source: aurex-notify
 Section: misc
 Priority: optional
-Maintainer: Equipo LliureX <lliurex@cult.gva.es>
-Uploaders: Luis Antonio Garcia Gisbert <garcia_luigis@gva.es>, Elvira Mifsud Talon <mifsud_elv@gva.es>, Pablo Marquez Soler <marquez_pab@gva.es>, Fco Javier Lopez Perez <lopez_frajav@gva.es>, Victor Sevilla Marquina <sevilla_vic@gva.es>, Miguel Gea Milvaques <gea_mig@gva.es>, Ramon Onrubia Perez <onrubia_ram@gva.es>, Rafa Chavarria Bonilla <chavarria_raf@gva.es>, Ignacio Vidal <vidal_joshur@gva.es>
-Build-Depends: cdbs, debhelper (>= 4.2)
-Standards-Version: 3.7.2
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Uploaders: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
 
-Package: session-cmd
+Package: aurex-notify
 Architecture: all
 Depends: netpipes, libnotify-bin, libgnome2-0
 Description: user session agent
- session-cmd creates a unix-domain socket to comunicate with a very simple user agent.
+ aurex-notify creates a unix-domain socket to comunicate with a very simple user agent.
  This program is installed in the Sessions Startup Programs of the GNOME Desktop system,
  and acts like a user space daemon that and allows the execution of a limited set of
  commands in the user graphical environment.

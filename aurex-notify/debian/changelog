@@ -1,3 +1,9 @@
+aurex-notify (0.1) lucid; urgency=low
+
+  * Package updated and renamed to aurex-notify
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Mon, 05 Mar 2012 02:42:18 +0100
+
 session-cmd (0.2) unstable; urgency=low
 
   * Fix kde logout
