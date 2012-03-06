@@ -31,8 +31,11 @@ usage(){
 
 [ $# -ge 2 ] || usage
 [ "$2" ] || usage
-PPD_FILE="/etc/cups/ppd/$2"
+
+PPD_BASEFILE="${2##*/}"
+PPD_FILE="/etc/cups/ppd/$PPD_BASEFILE"
 [ -r "$PPD_FILE" ] || die "Unable to read $PPD_FILE"
+
 USERCODE_REG="^\(\*DefaultUserCode: \)\(.*\)$"
 NEWCODE="None"
 case "$1" in
