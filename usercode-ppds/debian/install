@@ -1,1 +1,2 @@
-ppd/*	/usr/share/ppd/
+install/*	/
+ppd/*		/usr/share/ppd/

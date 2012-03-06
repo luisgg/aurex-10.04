@@ -1,0 +1,14 @@
+Source: usercode-ppds
+Section: misc
+Priority: optional
+Maintainer: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Uploaders: Luis Antonio Garcia Gisbert <luisgg@gmail.com>
+Build-Depends: debhelper (>= 7.0)
+Standards-Version: 3.8.4
+
+Package: usercode-ppds
+Architecture: all
+Depends: openprinting-ppds-extra, aurex-notify, ghostscript
+Description: ppds with usercode prompt
+ the package installs some slightly modified ppds and the required stuff to
+ prompt for the UserCode in every print job.
