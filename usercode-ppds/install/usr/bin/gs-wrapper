@@ -1,0 +1,4 @@
+#!/bin/sh
+LOG_FILE="/tmp/gs-wrapper.log"
+date -R >> $LOG_FILE
+
