@@ -6,11 +6,12 @@ date -R >> "$LOG_FILE"
 echo "$0 $@" >> "$LOG_FILE"
 set >> "$LOG_FILE"
 
-USER_IS_UNDER_MY_CONTROL="$(ps -ax | grep "^[[:blank:]]*$PPID[[:blank:]]")"
+#USER_IS_UNDER_MY_CONTROL="$(ps -ax | grep "^[[:blank:]]*$PPID[[:blank:]]")"
 
-echo "Te tengo ladron $USER_IS_UNDER_MY_CONTROL">> "$LOG_FILE"
+#echo "Te tengo ladron $USER_IS_UNDER_MY_CONTROL">> "$LOG_FILE"
+ASKUSER="$(ps -p "$PPID" -o ruser=)"
 
-USERCODE=$(aurex-notify -u depinf ASK "UserCode")
+USERCODE=$(aurex-notify -u "$ASKUSER" ASK "UserCode")
 
 echo "$USERCODE" >> "$LOG_FILE"
 
