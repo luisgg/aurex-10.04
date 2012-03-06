@@ -21,7 +21,11 @@
 UNIX_SOCKET_DIR="/tmp/aurex-notify"
 
 socket_basename(){
-   echo "$(id -un)"
+   if [ "$SOCKET_BASENAME" ] ; then
+	echo "$SOCKET_BASENAME" 
+   else
+      echo "$(id -un)"
+   fi
 }
 
 create_socket(){

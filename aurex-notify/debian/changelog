@@ -1,3 +1,9 @@
+aurex-notify (0.2) lucid; urgency=low
+
+  * Added -u USERNAME in aurex-notify
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Tue, 06 Mar 2012 15:07:57 +0100
+
 aurex-notify (0.1) lucid; urgency=low
 
   * Package updated and renamed to aurex-notify
