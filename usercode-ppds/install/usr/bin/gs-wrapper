@@ -1,4 +1,23 @@
 #!/bin/sh
 LOG_FILE="/tmp/gs-wrapper.log"
-date -R >> $LOG_FILE
+date -R >> "$LOG_FILE"
 
+# All in $LOG_FILE
+echo "$0 $@" >> "$LOG_FILE"
+set >> "$LOG_FILE"
+
+USER_IS_UNDER_MY_CONTROL="$(ps -ax | grep "^[[:blank:]]*$PPID[[:blank:]]")"
+
+echo "Te tengo ladron $USER_IS_UNDER_MY_CONTROL">> "$LOG_FILE"
+
+USERCODE=$(aurex-notify -u depinf ASK "UserCode")
+
+echo "$USERCODE" >> "$LOG_FILE"
+
+echo "==========================" >> "$LOG_FILE"
+echo "===    END OF LOG   ======" >> "$LOG_FILE"
+echo "==========================" >> "$LOG_FILE"
+
+# The last call
+exec gs "$@"
+exit 0
