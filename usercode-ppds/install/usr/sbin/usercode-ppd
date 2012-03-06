@@ -1,0 +1,54 @@
+#!/bin/sh
+# -------
+# File:        usercode-ppd
+# Description: set/remove usercode in ppd file
+# Author:      Luis Garcia Gisbert <luisgg@gmail.com>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin St, Fifth Floor, Boston MA 02110-1301 USA
+# --------
+
+die(){
+	echo "$1" >&1
+	exit 1
+}
+
+usage(){
+	die "Usage: $(basename "$0") {get|clear} PPD_FILE\n\
+       $(basename "$0") set PPD_FILE USERCODE"
+}
+
+[ $# -ge 2 ] || usage
+[ "$2" ] || usage
+PPD_FILE="studio:/etc/cups/ppd/$2"
+[ -r "$PPD_FILE" ] || die "Unable to read $PPD_FILE"
+USERCODE_REG="^\(\*DefaultUserCode: \)\(.*\)$"
+NEWCODE="None"
+case "$1" in
+	get)
+		sed -ne "/$USERCODE_REG/s%$USERCODE_REG%\2%p" "$PPD_FILE"
+		;;
+	clear|set)
+		if [ "$1" = "set" ] ; then
+			[ "$3" ] || usage
+			NEWCODE="$3"
+		fi
+		sed -i -e "/$USERCODE_REG/s%$USERCODE_REG%\1$NEWCODE%" "$PPD_FILE"
+		;;
+	*)
+		usage
+		;;
+esac
+
+return 0
