@@ -31,7 +31,7 @@ usage(){
 
 [ $# -ge 2 ] || usage
 [ "$2" ] || usage
-PPD_FILE="studio:/etc/cups/ppd/$2"
+PPD_FILE="/etc/cups/ppd/$2"
 [ -r "$PPD_FILE" ] || die "Unable to read $PPD_FILE"
 USERCODE_REG="^\(\*DefaultUserCode: \)\(.*\)$"
 NEWCODE="None"

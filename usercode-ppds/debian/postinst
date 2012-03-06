@@ -1,0 +1,4 @@
+#!/bin/sh
+
+chmod 0440 /etc/sudoers.d/usercode-ppd || true
+#DEBHELPER#
