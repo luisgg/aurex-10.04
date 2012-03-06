@@ -26,7 +26,7 @@ LIB_FILE="/usr/share/aurex-notify/aurex-notify-common.sh"
 DATA="$@"
 if [ "$1" ] ; then
    for SOCKET in $(list_sockets) ; do
-      hose localhost "$SOCKET" --unix --out sh -c "echo $DATA" 2>/dev/null || true
+      echo "$DATA" |hose localhost "$SOCKET" --unix --slave 2>/dev/null || true
    done
 fi
 exit 0

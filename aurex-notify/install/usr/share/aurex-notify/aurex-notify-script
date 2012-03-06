@@ -26,7 +26,7 @@ EXEC_SCRIPT="/usr/share/aurex-notify/aurex-notify-exec"
 
 UNIX_SOCKET="$(create_socket)" || exit 0
 rm -f "${UNIX_SOCKET}.sock" "${UNIX_SOCKET}.pid"
-faucet "${UNIX_SOCKET}.sock" --unix --daemon --pidfile "${UNIX_SOCKET}.pid" --in xargs ${EXEC_SCRIPT}
+faucet "${UNIX_SOCKET}.sock" --unix --daemon --pidfile "${UNIX_SOCKET}.pid" --in --out xargs ${EXEC_SCRIPT}
 chmod  600 "${UNIX_SOCKET}.pid"
 chmod  666 "${UNIX_SOCKET}.sock"
 exit 0
