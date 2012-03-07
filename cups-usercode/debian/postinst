@@ -1,4 +1,12 @@
 #!/bin/sh
 
 chmod 0440 /etc/sudoers.d/usercode-ppd || true
+DIVERT_LIST="/usr/bin/foomatic-rip"
+for f in $DIVERT_LIST ; do
+	if [ ! -e "$f.diverted" ] && [ -r "$f" ] && [ -r "$f.wrapper" ]; then
+		dpkg-divert --package cups-usercode --rename --quiet --add --divert ${f}.diverted ${f} || true
+		ln -fs "${f}.wrapper" "$f"
+	fi
+done
+
 #DEBHELPER#

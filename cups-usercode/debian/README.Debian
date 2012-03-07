@@ -1,0 +1,4 @@
+To enable UserCode prompt in some printer add a Custom Job Option CUPS_USERCODE=anything ... and enjoy.
+Currently, only Ricoh Aficio printers are supported.
+Please report bugs to <luisgg@gmail.com>.
+

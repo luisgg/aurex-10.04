@@ -1,0 +1,10 @@
+#!/bin/sh
+DIVERT_LIST="/usr/bin/foomatic-rip"
+
+for f in $DIVERT_LIST ; do
+        if [ -e "$f.diverted" ] ; then
+		rm -f "$f"
+                dpkg-divert --package cups-usercode --rename --quiet --remove ${f} || true
+        fi
+done
+
