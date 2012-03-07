@@ -8,7 +8,7 @@ Standards-Version: 3.8.4
 
 Package: cups-usercode
 Architecture: all
-Depends: openprinting-ppds-extra, aurex-notify, ghostscript
+Depends: openprinting-ppds-extra, aurex-notify, foomatic-filters
 Replaces: usercode-ppds
 Conflicts: usercode-ppds
 Provides: usercode-ppds
