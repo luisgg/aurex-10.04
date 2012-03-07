@@ -1,3 +1,9 @@
+cups-usercode (0.2) lucid; urgency=low
+
+  * Package renamed to cups-usercode
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Wed, 07 Mar 2012 17:05:25 +0100
+
 usercode-ppds (0.1) unstable; urgency=low
 
   * First release.
