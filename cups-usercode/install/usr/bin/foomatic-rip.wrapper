@@ -5,21 +5,22 @@
 if echo "$*" |tr " " "\n" |grep -q "^CUPS_USERCODE=" ; then
 	CUPS_USERCODE="Y"
 fi
+DEBUG=""
+LOG_FILE="/tmp/foomatic-rip-wrapper.log"
+
+[ -z "$DEBUG" ] || date -R >> "$LOG_FILE"
+
+# All in $LOG_FILE
+[ -z "$DEBUG" ] || echo "$0 $@" >> "$LOG_FILE"
+[ -z "$DEBUG" ] || set >> "$LOG_FILE"
+
+ASKUSER="$2"
+
+[ -z "$DEBUG" ] || echo $ASKUSER >> "$LOG_FILE"
+[ -z "$DEBUG" ] || echo $CUPS_USERCODE >> "$LOG_FILE"
+
 if [ "$CUPS_USERCODE" ] ; then
-	DEBUG=""
-	LOG_FILE="/tmp/foomatic-rip-wrapper.log"
-
-	[ -z "$DEBUG" ] || date -R >> "$LOG_FILE"
-
-	# All in $LOG_FILE
-	[ -z "$DEBUG" ] || echo "$0 $@" >> "$LOG_FILE"
-	[ -z "$DEBUG" ] || set >> "$LOG_FILE"
-
-	ASKUSER="$2"
-
-	[ -z "$DEBUG" ] || echo $ASKUSER >> "$LOG_FILE"
-
-	[ -z "$ASKUSER" -o -z ] || USERCODE="$(aurex-notify -u "$ASKUSER" ASK "--regexp=[0-9][0-9][0-9][0-9]" "Codigo de Profesor (cuatro digitos)")"
+	[ -z "$ASKUSER" ] || USERCODE="$(aurex-notify -u "$ASKUSER" ASK "--regexp=[0-9][0-9][0-9][0-9]" "Codigo de Profesor (cuatro digitos)")"
 
 	[ -z "$PPD" ] || PPDFILE="$(basename "$PPD")"
 
@@ -27,15 +28,15 @@ if [ "$CUPS_USERCODE" ] ; then
 	[ -z "$DEBUG" ] || echo "$PPDFILE" >> "$LOG_FILE"
 
 	[ -z "$PPDFILE" -o -z "$USERCODE" ] || sudo usercode-ppd set "$PPDFILE" "$USERCODE"
+fi
 
 	[ -z "$DEBUG" ] || echo "==========================" >> "$LOG_FILE"
 	[ -z "$DEBUG" ] || echo "===    END OF LOG   ======" >> "$LOG_FILE"
 	[ -z "$DEBUG" ] || echo "==========================" >> "$LOG_FILE"
-fi
 # The last call
 rc=0
 foomatic-rip.diverted "$@" || rc=$?
 
-# [ -z "$PPDFILE" -o -z "$CUPS_USERCODE" ] || sudo usercode-ppd clear "$PPDFILE"
+[ -z "$CUPS_USERCODE" -o -z "$PPDFILE" -o -z "$CUPS_USERCODE" ] || sudo usercode-ppd clear "$PPDFILE"
 
 exit $rc
