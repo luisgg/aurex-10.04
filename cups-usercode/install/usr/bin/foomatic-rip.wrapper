@@ -34,7 +34,7 @@ if [ "$CUPS_USERCODE" ] ; then
 fi
 # The last call
 rc=0
-foomatic-rip "$@" || rc=$?
+foomatic-rip.diverted "$@" || rc=$?
 
 # [ -z "$PPDFILE" -o -z "$CUPS_USERCODE" ] || sudo usercode-ppd clear "$PPDFILE"
 
