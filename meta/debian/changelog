@@ -1,3 +1,27 @@
+aurex-meta (1.197~aurex10.04.32) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added sun-java6-jre to aurex-desktop-recommends
+  * Added sun-java6-plugin to aurex-desktop-recommends
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Sat, 10 Mar 2012 16:22:03 +0100
+
+aurex-meta (1.197~aurex10.04.31) lucid; urgency=low
+
+  * Refreshed dependencies
+  * Added smbclient to aurex-desktop
+  * Added unzip to aurex-desktop
+  * Added zip to aurex-desktop
+  * Removed libreoffice-l10n-common from aurex-desktop-recommends
+  * Removed libreoffice-style-andromeda from aurex-supported
+  * Removed sun-java6-jre from aurex-desktop-recommends
+  * Removed sun-java6-plugin from aurex-desktop-recommends
+
+ -- Luis Antonio Garcia Gisbert <luisgg@gmail.com>  Sat, 10 Mar 2012 16:04:12 +0100
+
 aurex-meta (1.197~aurex10.04.30) lucid; urgency=low
 
   * Refreshed dependencies
