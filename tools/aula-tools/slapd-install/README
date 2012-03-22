@@ -1,0 +1,4 @@
+Paquetes: slapd ldap-utils ldap-account-manager ldap-account-manager-lamdaemon
+Hemos seguido +/- la guia en :
+https://help.ubuntu.com/10.04/serverguide/C/openldap-server.html
+cambiando el base dn y el password, of course

@@ -1,0 +1,16 @@
+# Create top-level object in domain
+dn: dc=ausiasmarch,dc=net
+objectClass: top
+objectClass: dcObject
+objectclass: organization
+o: CIPFP Ausias March
+dc: ausiasmarch
+description: LDAP Directory of CIPFP Ausias March
+
+# Admin user.
+dn: cn=admin,dc=ausiasmarch,dc=net
+objectClass: simpleSecurityObject
+objectClass: organizationalRole
+cn: admin
+description: LDAP administrator
+userPassword: secret
