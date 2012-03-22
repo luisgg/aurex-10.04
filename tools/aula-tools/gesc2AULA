@@ -1,0 +1,482 @@
+#!/usr/bin/perl -w
+
+use XML::Simple;
+use Getopt::Std;
+
+=pod
+
+=head1 NAME
+
+gesc2llwat - Herramienta para la conversión de formatos de Gescen a Lliurex-lwat.
+
+=head1 SYNOPSIS
+
+Uso: gesc2llwat -f <fichero> [-d <directorio>|-t|-g <listagrupos>|-l|-h|-i]
+
+OPCIONES: -h esta ayuda.
+
+EJEMPLOS: 
+
+=item *
+
+gesc2llwat -f llxgesc.xml -d /tmp
+
+=item *
+
+gesc2llwat -f llxgesc.xml -t
+
+=item *
+
+gesc2llwat -f llxgesc.xml -d /tmp -g 1ESOA,1ESOB
+
+=item *
+
+gesc2llwat -f llxgesc.xml -l 
+
+=item *
+
+gesc2llwat -f llxgesc.xml -i
+
+=item *
+
+gesc2llwat -h
+
+
+=head1 DESCRIPTION
+
+Herramienta para la conversión del fichero exportado del gescen
+llxgesc.xml a ficheros compatibles con el formato lliurex-lwat.
+Genera un fichero groups.llwat con los grupos y users.llwat con los 
+usuarios, que deben ser importados en ese orden en lliurex-lwat.
+
+OPCIONES 
+
+=item *
+
+[-d <directorio>] especifica el directorio donde se crearán los ficheros llwat
+
+=item *
+
+[-t] Realiza un test sobre el fichero pasado para validar su correción (1) o no (0).
+
+=item *
+
+[-g] Especifica una lista de grupos que seran tenidos en cuenta a la hora de generar
+     los ficheros.Esta lista debe contener grupos separados por ','. 
+     Ejemplo:    1ESOA,1ESOB
+
+=item *
+
+[-l] Genera un listado con todos los grupos del fichero.
+
+=item *
+
+[-i] El programa se ejecuta de forma interactiva
+
+=item *
+
+[-h] Muestra la ayuda.
+
+=back
+
+=head1 METHODS
+
+=head2 trim 
+
+Borra los espacios en blanco comenzando por el principio y por el final 
+
+=cut
+
+sub trim($)
+{
+        my $string = shift;
+        $string =~ s/^\s+//;
+        $string =~ s/\s+$//;
+        return $string;
+}
+
+
+=head2 groupsGescXml 
+
+Crea un hash con los grupos del fichero xml
+
+=cut
+
+sub groupsGescXml($)
+{
+        my $resp = shift;
+        $hash = {};
+        foreach my $grups ( @{$resp->{grups}} )
+        {
+            foreach my $grup ( @{$grups->{grup}} )
+            {
+                my $codi  =  $grup->{codi}[0];
+                my $nom  =  $grup->{nom}[0];
+                $codi=trim($codi);
+                $nom=trim($nom);
+                $hash->{$codi} = $nom;
+            }
+        }
+        return $hash;
+}
+
+=head2 muestraGrupos 
+
+Muestra por pantalla los grupos formateados por columnas
+
+=cut
+
+sub muestraGrupos($)
+{
+        $hash = shift;
+        $col = shift;
+
+        my $i=0;
+        foreach $key (sort keys % $hash)
+        {
+                my $value = $hash{$key};
+                $i++;
+                if ($i % $col==0)
+		{
+			print "$key\n";
+		}
+                else
+		{
+                        print "$key\t";
+		}
+	}
+}
+
+=head2 filtraGrupos 
+
+Crea un hash a partir de los hash pasados como parámetros
+   
+
+=cut
+
+sub filtraGrupos 
+{
+        my ($hash1, $hash2) = @_;
+        my $hash3 = {};
+        foreach my $key (keys % $hash1)
+        {
+                if ((%$hash2 gt 0) && exists $hash2->{$key})
+		{
+        	        $hash3->{$key} = $hash2->{$key};
+		}
+                if (%$hash2 le 0)
+		{
+                	$hash3->{$key} = $hash1->{$key};
+		}
+        }
+        return $hash3;
+}
+
+=head2 validateDirectory 
+
+Crea una ruta valida sin barra al final del directorio
+
+=cut
+sub validateDirectory 
+{
+        my $fpath=shift;
+        if ($fpath ne "/")
+	{
+        	$fpath=~s/\/$//;
+	}
+        return $fpath;
+}
+
+=head2 createGroupsFile 
+
+Genera el fichero con los grupos en formato Lliurex-llwat
+   
+
+=cut
+
+sub createGroupsFile($)
+{
+        $hash = shift;
+        open(GROUPS, ">$groupsFile");
+        while ( my ($clave, $valor) = each(%$hash) )
+	{
+        	print GROUPS "$clave;$valor\n";
+	}
+        close(GROUPS);
+}
+
+=head2 createUsersFile 
+
+Genera el fichero con los usuarios en formato Lliurex-llwat
+   
+
+=cut
+sub createUsersFile($) 
+{
+        my ($xml, $finalGroups) = @_;
+        open(USUARIOS, ">$usersFile");
+        foreach my $alumnes ( @{$xml->{alumnes}} )
+        {
+                foreach my $alumne ( @{$alumnes->{alumne}} )
+                {
+                        my $nom  =  $alumne->{nom}[0];
+                        my $cognoms  =  $alumne->{cognoms}[0];
+                        my $grup  =  $alumne->{grup}[0];
+			my $numeroExpedient =  $alumne->{numeroExpedient}[0];
+			$numeroExpedient =~ s/ //;
+
+                        if (exists $finalGroups->{$grup})
+			{
+                        	print USUARIOS "$numeroExpedient;$templateAlum;$nom $cognoms;;;$grup;$profileAlum;$nom;$cognoms\n";
+			}
+		}
+        }
+        foreach my $professors ( @{$xml->{professors}} )
+        {
+                foreach my $professor ( @{$professors->{professor}} )
+                {
+                        my $nom  =  $professor->{nom}[0];
+                        my $cognoms  =  $professor->{cognoms}[0];
+			my $nif = $professor->{nif}[0];
+			$nif=trim($nif);
+                        print USUARIOS "$nif;$templateProf;$nom $cognoms;;;;$profileProf;$nom;$cognoms\n";
+                }
+        }
+        close(USUARIOS);
+}
+=head2 menu 
+
+Pide si se quieren procesar todos los grupos o una lista de ellos,
+es la forma interactiva
+   
+
+=cut
+
+sub menu($)
+{
+        $hashGroups=shift;
+        print "\n\nLos grupos existentes son: \n\n";
+
+        &muestraGrupos($hashGroups,5);
+
+        my $salir=0;
+        #Preguntamos si queremos importar todos o parte de ellos
+        while ( !$salir )
+        {
+                print "\n\nDesea incluir todos los grupos: [Si/No] ?\n";
+                $allgroups = <STDIN> ;
+
+                if ($allgroups=~/si/i)
+                {
+                        print "\nSeran procesados todos los grupos.\n\n";
+                        $salir=1
+                }
+
+                if ($allgroups=~/no/i)
+                {
+                        print "\nIntroduzca una lista de grupos separados por ',' :\t";
+                        my $groupslist = <STDIN> ;
+                        my @grupos = split(',', trim($groupslist));
+                        foreach $x (@grupos)
+                        {
+                                $x=trim($x);
+                                if (!exists $hashGroups->{$x})
+				{
+                                        print  "\nEl grupo $x no existe,no sera procesado.\n\n";
+				}
+                                else
+				{
+                                        $hashGroupsFilter->{$x} = $hashGroups->{$x};
+				}
+                        }
+                        $salir=1
+                }
+        }
+        $directorio="";
+        while ( !(-d $directorio) )
+        {
+                print "\n\nIntroduzca el directorio de destino: \t";
+                $directorio = <STDIN> ;
+                chomp($directorio);
+                $directorio=validateDirectory($directorio);
+                #print "$directorio\n";
+                if (-d $directorio)
+                {
+                        $groupsFile=$directorio.'/'.$groupsFile;
+                        $usersFile=$directorio.'/'.$usersFile;
+                }
+                else
+		{
+                        print "Directorio inexistente\n";
+		}
+        }
+}
+
+=head2 help 
+
+Muestra la ayuda del programa
+   
+
+=cut
+sub help
+{
+        print "\nConvierte el fichero del Gescen en ficheros compatibles con lliurex-lwat.
+        Uso: gesc2llwat -f <fichero> [-d <directorio>|-t|-g <listagrupos>|-l|-h|-i]
+
+        EJEMPLOS: 
+                  gesc2llwat -f llxgesc.xml -d /tmp
+                  gesc2llwat -f llxgesc.xml -t
+                  gesc2llwat -f llxgesc.xml -d /tmp -g 1ESOA,1ESOB
+                  gesc2llwat -f llxgesc.xml -l 
+                  gesc2llwat -f llxgesc.xml -i
+                  gesc2llwat -h
+
+        OPCIONES: 
+
+        [-d <directorio>] Especifica el directorio donde van los ficheros llwat
+
+        [-t] Realiza un test sobre el fichero pasado para validar si es correcto (1) o no (0).
+
+        [-g] Especifica una lista de grupos que seran tenidos en cuenta a la hora de generar
+             los ficheros.Esta lista debe contener grupos separados por ','. 
+             Ejemplo:    1ESOA,1ESOB
+
+        [-l] Genera un listado con todos los grupos del fichero.
+
+        [-i] El programa se ejecuta de forma interactiva
+
+        [-h] Muestra la ayuda.
+        \n";
+        exit;
+}
+
+
+
+####################
+# Programa Principal
+####################
+
+$groupsFile='groups.llwat'; #Nombre del fichero donde se crean los grupos
+$usersFile='users.llwat';   #Nombre del fichero donde se crean los usuarios
+$templateAlum='Alumnos';    #Template llwat con el que se crean los alumnos
+$profileAlum='student';     #Sabayon profile asignado a los alumnos
+$templateProf='Profesores'; #Template llwat con el que se crean los profesores
+$profileProf='teacher';     #Sabayon profile asignado a los profesores
+
+
+use vars qw($opt_f $opt_d $opt_t $opt_g $opt_l $opt_h $opt_i);
+getopts("f:d:tg:lhi")||die "ERROR: Opcion no valida. -h para ayuda.\n";
+&help if (($opt_h) || !($opt_f));
+
+# carga del xml
+my $xml= eval{XMLin( $opt_f, forcearray => 1)};
+
+#Controlamos las distintas fuentes de error a la hora de parsear el fichero del Gescen.
+if ($@)
+{
+        if ($opt_t)
+        {
+                print "0";
+                exit;
+        }
+        else
+        {
+                print("Fichero no valido.\n");
+                exit;
+        }
+}
+else
+{
+        if ($opt_t )
+        {
+                if ($xml->{codi})
+                {
+                        print "1";
+                        exit;
+                }
+                else
+                {
+                        print "0";
+                        exit;
+                }
+        }
+        else
+        {
+                if (!($xml->{codi}))
+                {
+                        print "Formato de fichero incorrecto.\n";
+                        exit;
+                }
+        }
+}
+
+#Cargamos en un hash los grupos del fichero
+$hashGroups =groupsGescXml($xml);
+
+#Hash para filtrar grupos
+$hashGroupsFilter = {};
+
+
+if ($opt_l)
+{
+        printf("listar grupos");
+        &muestraGrupos($hashGroups,1000);
+}
+elsif (($opt_d && $opt_g) ||($opt_d))
+{
+        #Comprobamos que el directorio exista
+        if (-d $opt_d)
+        {
+                chomp($opt_d);
+                $opt_d=validateDirectory($opt_d);
+                $groupsFile=$opt_d.'/'.$groupsFile;
+                $usersFile=$opt_d.'/'.$usersFile;
+                if ($opt_g)
+                {
+                        my @grupos = split(',', trim($opt_g));
+                        foreach $x (@grupos)
+                        {
+                                $x=trim($x);
+                                if (!exists $hashGroups->{$x})
+				{
+                                        print  "\nEl grupo $x no existe,no sera procesado.\n\n";
+				}
+                                else
+				{
+                                        $hashGroupsFilter->{$x} = $hashGroups->{$x};
+				}
+                        }
+                }
+		#Creamos un unico hash con los grupos filtrados
+                my $finalGroups=filtraGrupos($hashGroups,$hashGroupsFilter);
+
+                #Creamos el fichero de grupos
+                &createGroupsFile($finalGroups);
+
+                #Creamos el fichero de usuarios
+                &createUsersFile($xml,$finalGroups);
+        }
+        else
+	{
+                print "Directorio inexistente.\n";
+	}
+}
+elsif ($opt_i)
+{
+        #mostramos el menu interactivo
+        &menu($hashGroups);
+        #Creamos un unico hash con los grupos filtrados
+        my $finalGroups=filtraGrupos($hashGroups,$hashGroupsFilter);
+
+        #Creamos el fichero de grupos
+        &createGroupsFile($finalGroups);
+
+        #Creamos el fichero de usuarios
+        &createUsersFile($xml,$finalGroups);
+}
+else
+{
+        # mal uso
+        &help;
+}
+
