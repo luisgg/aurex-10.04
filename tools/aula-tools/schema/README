@@ -1,2 +1,21 @@
 lis.schema: extracted from debian-edu-config v 1.423 (lenny)
 lis.ldif: generated as described in http://lists.debian.org/debian-user-spanish/2011/08/msg00132.html
+custom OIDS:
+GVA owns the  OID 1.3.6.1.4.1.8149. (responsible person is Joaquín Galeano <galeano_joa@gva.es>)
+1.3.6.1.4.1.8149.20 is reserved for LliureX
+Currently (2012/03/24) LliureX is using
+   OID tree 1.3.6.1.4.1.8149.20.1 for custom attributetype's (from 1.3.6.1.4.1.8149.20.1.1 to 1.3.6.1.4.1.8149.20.1.6) and
+   OID tree 1.3.6.1.4.1.8149.20.2 for custom objectclasses (from 1.3.6.1.4.1.8149.20.2.1 to 1.3.6.1.4.1.8149.20.2.3)
+
+svn: https://svn.lliurex.net/leia/llx-admin/trunk/llxcfg-ldap/cpkgs/ldap-server/templates/etc/ldap/schema/lliurex.schema
+
+
+TODO: get a private use OID tree from IANA or at least, current LliureX developers, perhaps 1.3.6.1.4.1.8149.9999.
+The intended usage is
+
+objectclass     ( 1.3.6.1.4.1.8149.9999.2.1
+	NAME 'aux-description'
+	DESC 'Object class '
+	AUXILIARY
+	MAY ( description )
+)
