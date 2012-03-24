@@ -1,0 +1,209 @@
+##
+## lis.schema
+##
+## A schema for managing the students, classes and teachers
+## in the Skolelinux project (http://www.skolelinux.no)
+##
+
+# Depends on core.schema, cosine.schema and nis.schema
+
+
+# The OID Base is 1.3.6.1.4.1.8990.42
+# The tree is split in two, .1 for attributes and .2 for objectclasses
+
+##
+##  Attributes
+##
+
+# LiS.1.1  emailAlias
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.1 NAME 'emailAlias'
+	DESC     'Valid email aliases, local part only'
+	SYNTAX    1.3.6.1.4.1.1466.115.121.1.26
+	EQUALITY  caseIgnoreIA5Match )
+
+# LiS.1.2  dateOfBirth
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.2 NAME 'dateOfBirth'
+	DESC     'Date of birth, accurate to the day'
+	SYNTAX    1.3.6.1.4.1.1466.115.121.1.24
+	EQUALITY  generalizedTimeMatch
+	SINGLE-VALUE )
+
+# LiS.1.3  kinship
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.3 NAME 'kinship'
+	DESC     'Name for type of family or custodian relationship'
+	SYNTAX    1.3.6.1.4.1.1466.115.121.1.26
+	EQUALITY  caseIgnoreIA5Match )
+
+# LiS.1.4  kin
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.4 NAME 'kin'
+	DESC     'Reference to person with kinship role'
+	SYNTAX    1.3.6.1.4.1.1466.115.121.1.12
+	EQUALITY  distinguishedNameMatch )
+
+# LiS.1.6  teacher
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.6 NAME 'teacher'
+	DESC     'Reference to person with teacher role'
+	SYNTAX    1.3.6.1.4.1.1466.115.121.1.12
+	EQUALITY  distinguishedNameMatch )
+
+# LiS.1.7  student
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.7 NAME 'student'
+	DESC     'Reference to person with student role'
+	SYNTAX   1.3.6.1.4.1.1466.115.121.1.12
+	EQUALITY distinguishedNameMatch )
+
+
+
+# LiS.1.8  timeAndPlace
+#
+# The attributes value is a text string which should follow the format
+#
+#  timeAndPlace ::= <time-spec> " " <place>
+#  time-spec    ::= <weeks> " " <day-of-week> " " <time> "-" <time>
+#  weeks        ::= "-" <number> | <number> | <number> "%" <number>
+#  number       ::= <digit> | <digit> <number>
+#  digit        ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+#  day-of-week  ::=  "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun"
+#  time         ::= <hhmm> | <hhmmss>
+#  hhmm         ::= <digit> <digit> ":" <digit> <digit>
+#  hhmmss       ::= <hhmm> ":" <digit> <digit>
+#  place        ::= (any string)
+#
+# An alternative way of writing the syntax is:
+#  "[-D|D[%D]] (mon|tue|...) HH:MM[:SS]-HH:MM[:SS] Name-of-place"
+#
+#  "2 mon" means the second Monday of every month
+#  "-1 mon" means the last Monday of every month
+#  "2%4 mon" means on Mondays every forth week (week 2, 6, 10 and so on)
+#
+# The time should be specified in 24h format.  All times are local.
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.8 NAME 'timeAndPlace'
+	SYNTAX   1.3.6.1.4.1.1466.115.121.1.26
+	EQUALITY caseIgnoreIA5Match )
+
+# LiS.1.9  groupType
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.9 NAME 'groupType'
+	DESC     'Description of type of group at hand'
+	EQUALITY caseExactIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 
+	SINGLE-VALUE )
+
+# LiS.1.10  ageGroup
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.10 NAME 'ageGroup'
+	DESC     'The age group a person or group is affiliated with'
+	EQUALITY caseExactIA5Match
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+# LiS.1.11  capability
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.11 NAME 'capability'
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+# LiS.1.12  writeableBy
+#
+attributetype ( 1.3.6.1.4.1.8990.42.1.12 NAME 'writeableBy'
+	EQUALITY caseExactIA5Match
+	SUBSTR caseExactIA5SubstringsMatch
+	SYNTAX 1.3.6.1.4.1.1466.115.121.1.26 )
+
+##
+##  Objectclasses
+##
+
+# LiS.2.1  lisSchool
+#
+#  associatedDomain: The email domain which should be used for this
+#                    school, if different from the hierarchical domain
+#                    name assigned to this school.
+#  cn:               Alternative names for this school.
+#
+objectclass ( 1.3.6.1.4.1.8990.42.2.1 NAME 'lisSchool'
+	SUP top
+	AUXILIARY
+	MAY (associatedDomain $ cn ))
+
+
+# LiS.2.2  lisPerson
+#
+#  owner:            Main teacher for student (has write access to this
+#                    object).
+#  dateOfBirth:      Self-explanatory.
+#  uniqueIdentifier: SSN or similar identifier which is unique beyond
+#                    this directory.
+#  emailAlias:       Valid email addresses.  The user's preferred email
+#                    address is rfc822Mailbox if present (from
+#                    inetOrgPerson), or else his/her uid (from
+#                    posixAccount).
+#
+objectclass ( 1.3.6.1.4.1.8990.42.2.2 NAME 'lisPerson'
+	SUP top
+	AUXILIARY
+	MAY ( owner $ dateOfBirth $ emailAlias $ uniqueIdentifier ) )
+
+# LiS.2.3  lisKinship
+#
+objectclass ( 1.3.6.1.4.1.8990.42.2.3 NAME 'lisKinship'
+	SUP top
+	STRUCTURAL
+	MUST ( kinship $ kin ) )
+
+# LiS.2.4  lisClass
+#
+#  cn:            Name of class.
+#  owner:         Teacher(s) responsible for this class (has write
+#                 access).
+#  teacher:       The personel who teach in this class.
+#  student:       Students who attend this class.
+#  timeAndPlace:  Where and when.
+#
+objectclass ( 1.3.6.1.4.1.8990.42.2.4 NAME 'lisClass'
+	SUP top
+	STRUCTURAL
+	MUST ( cn )
+	MAY ( owner $ teacher $ student $ timeAndPlace ) )
+
+# LiS.2.4  lisGroup
+#  this completes the posixGroup with data for the groupType
+#  cn:            Name of class.
+#  owner:         Teacher(s) responsible for this class (has write
+#                 access).
+#  teacher:       The personel who teach in this class.
+#  student:       Students who attend this class.
+#  timeAndPlace:  Where and when.
+#
+
+objectclass ( 1.3.6.1.4.1.8990.42.2.5 NAME 'lisGroup'
+	SUP top
+	AUXILIARY
+	MAY ( groupType $ ageGroup ) )
+
+
+# LiS.2.6 lisLdapCapabilities
+# 
+objectclass ( 1.3.6.1.4.1.8990.42.2.6 NAME 'lisLdapCapabilities' 
+	SUP top STRUCTURAL
+	DESC 'Descriptions of LDAP directory structure'
+	MUST ( cn )
+	MAY ( capability ) )
+
+# LiS.2.7 lisAclGroup
+objectclass ( 1.3.6.1.4.1.8990.42.2.7 NAME 'lisAclGroup' 
+        SUP ( posixGroup $ groupOfNames) STRUCTURAL
+	DESC 'hybrid group to allow atomic updates of ACLs and posixGroup')
+
+# LiS.2.8 
+objectclass ( 1.3.6.1.4.1.8990.42.2.8 NAME 'lisAclHelper' 
+        SUP top AUXILIARY
+	DESC 'utility objectclass to allow for filtering of users'
+	MAY ( writeableBy ) )
