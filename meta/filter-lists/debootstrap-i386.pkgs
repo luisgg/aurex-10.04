@@ -1,6 +1,6 @@
 ii  adduser                         3.112ubuntu1
-ii  apt                             0.7.25.3ubuntu9.10
-ii  apt-utils                       0.7.25.3ubuntu9.10
+ii  apt                             0.7.25.3ubuntu9.11
+ii  apt-utils                       0.7.25.3ubuntu9.11
 ii  aptitude                        0.4.11.11-1ubuntu10lucid1
 ii  base-files                      5.0.0ubuntu20.10.04.5
 ii  base-passwd                     3.5.22
@@ -13,7 +13,7 @@ ii  console-setup                   1.34ubuntu15
 ii  console-terminus                4.30-2
 ii  coreutils                       7.4-2ubuntu3
 ii  cpio                            2.10-1ubuntu2
-ii  cron                            3.0pl1-106ubuntu5
+ii  cron                            3.0pl1-106ubuntu6
 ii  dash                            0.5.5.1-3ubuntu2
 ii  debconf                         1.5.28ubuntu4
 ii  debconf-i18n                    1.5.28ubuntu4
@@ -29,7 +29,7 @@ ii  e2fsprogs                       1.41.11-1ubuntu2.1
 ii  eject                           2.1.5+deb1+cvs20081104-7
 ii  file                            5.03-5ubuntu1
 ii  findutils                       4.4.2-1ubuntu1
-ii  gcc-4.4-base                    4.4.3-4ubuntu5
+ii  gcc-4.4-base                    4.4.3-4ubuntu5.1
 ii  gnupg                           1.4.10-2ubuntu1
 ii  gnupg-curl                      1.4.10-2ubuntu1
 ii  gpgv                            1.4.10-2ubuntu1
@@ -68,11 +68,11 @@ ii  libdrm-radeon1                  2.4.18-1ubuntu3
 ii  libdrm2                         2.4.18-1ubuntu3
 ii  libept0                         0.5.30
 ii  libfribidi0                     0.19.2-1
-ii  libgcc1                         1:4.4.3-4ubuntu5
+ii  libgcc1                         1:4.4.3-4ubuntu5.1
 ii  libgcrypt11                     1.4.4-5ubuntu2
 ii  libgdbm3                        1.8.3-9
 ii  libglib2.0-0                    2.26.1-0ubuntu1~lucid0~tetet0+aurex1
-ii  libgnutls26                     2.8.5-2
+ii  libgnutls26                     2.8.5-2ubuntu0.1
 ii  libgpg-error0                   1.6-1ubuntu2
 ii  libgpm2                         1.20.4-3.2ubuntu2
 ii  libgssapi-krb5-2                1.8.1+dfsg-2ubuntu0.10
@@ -98,7 +98,7 @@ ii  libpam0g                        1.1.1-2ubuntu5.4
 ii  libparse-debianchangelog-perl   1.1.1-2ubuntu2
 ii  libpcre3                        7.8-3build1
 ii  libplymouth2                    0.8.2-2ubuntu2.2
-ii  libpng12-0                      1.2.42-1ubuntu2.3
+ii  libpng12-0                      1.2.42-1ubuntu2.5
 ii  libpopt0                        1.15-1
 ii  libreadline6                    6.1-1
 ii  libsasl2-2                      2.1.23.dfsg1-5ubuntu1
@@ -109,10 +109,10 @@ ii  libsigc++-2.0-0c2a              2.2.4.2-1
 ii  libslang2                       2.2.2-2ubuntu1
 ii  libsqlite3-0                    3.6.22-1
 ii  libss2                          1.41.11-1ubuntu2.1
-ii  libssl0.9.8                     0.9.8k-7ubuntu8.8
-ii  libstdc++6                      4.4.3-4ubuntu5
+ii  libssl0.9.8                     0.9.8k-7ubuntu8.13
+ii  libstdc++6                      4.4.3-4ubuntu5.1
 ii  libsub-name-perl                0.04-1build1
-ii  libtasn1-3                      2.4-1
+ii  libtasn1-3                      2.4-1ubuntu0.1
 ii  libtext-charwidth-perl          0.04-6
 ii  libtext-iconv-perl              1.7-2
 ii  libtext-wrapi18n-perl           0.06-7
@@ -141,7 +141,7 @@ ii  net-tools                       1.60-23ubuntu2
 ii  netbase                         4.35ubuntu3
 ii  netcat-openbsd                  1.89-3ubuntu2
 ii  ntpdate                         1:4.2.4p8+dfsg-1ubuntu2.1
-ii  openssl                         0.9.8k-7ubuntu8.8
+ii  openssl                         0.9.8k-7ubuntu8.13
 ii  passwd                          1:4.1.4.2-1ubuntu2.2
 ii  perl                            5.10.1-8ubuntu2.1
 ii  perl-base                       5.10.1-8ubuntu2.1
@@ -157,7 +157,7 @@ ii  readline-common                 6.1-1
 ii  rsyslog                         4.2.0-2ubuntu8.1
 ii  sed                             4.2.1-6
 ii  sensible-utils                  0.0.1ubuntu3
-ii  sudo                            1.7.2p1-1ubuntu5.3
+ii  sudo                            1.7.2p1-1ubuntu5.4
 ii  sysv-rc                         2.87dsf-4ubuntu17.5
 ii  sysvinit-utils                  2.87dsf-4ubuntu17.5
 ii  tar                             1.22-2ubuntu1

@@ -39,6 +39,7 @@ bsdutils
 byobu
 bzip2
 ca-certificates
+ca-certificates-java
 cabextract
 capplets-data
 checkbox
@@ -56,6 +57,8 @@ compiz-plugins
 compizconfig-backend-gconf
 consolekit
 coreutils
+cpp-4.4
+cron
 cups
 cups-bsd
 cups-client
@@ -134,12 +137,16 @@ flashplugin-installer
 flashplugin-nonfree
 foomatic-filters
 fuse-utils
+g++-4.4
 gcalctool
+gcc-4.4
+gcc-4.4-base
 gcj-4.4-base
 gcj-4.4-jre-lib
 gdebi
 gdebi-core
 gdm
+gdm-guest-session
 gedit
 gedit-common
 ghostscript
@@ -176,6 +183,7 @@ hplip
 hplip-data
 hunspell-en-ca
 hunspell-fr
+ia32-libs
 icedtea-6-jre-cacao
 icedtea6-plugin
 icoutils
@@ -216,6 +224,8 @@ language-selector-common
 ldap-utils
 lftp
 lib32bz2-1.0
+lib32gcc1
+lib32stdc++6
 libapache2-mod-php5
 libapparmor-perl
 libapparmor1
@@ -289,6 +299,7 @@ libfreetype6-dev
 libfuse2
 libgail-common
 libgail18
+libgcc1
 libgcj10
 libgcr0
 libgdata-common
@@ -297,6 +308,7 @@ libgdata1.2-1
 libgdata6
 libgdict-1.0-6
 libgdiplus
+libgfortran3
 libgksu2-0
 libgl1-mesa-dri
 libgl1-mesa-glx
@@ -307,6 +319,9 @@ libgnome-keyring0
 libgnome-window-settings1
 libgnomekbd-common
 libgnomekbd4
+libgnutls-dev
+libgnutls26
+libgomp1
 libgp11-0
 libgs8
 libgssapi-krb5-2
@@ -365,7 +380,6 @@ libpangomm-1.4-1
 libparted0debian1
 libpcsclite1
 libperl5.10
-libphonon4
 libplymouth2
 libpng12-0
 libpng12-dev
@@ -378,16 +392,8 @@ libpostproc51
 libpq5
 libpurple-bin
 libpurple0
-libqt4-dbus
-libqt4-designer
 libqt4-network
 libqt4-opengl
-libqt4-script
-libqt4-sql
-libqt4-sql-mysql
-libqt4-webkit
-libqt4-xml
-libqt4-xmlpatterns
 libqtcore4
 libqtgui4
 librsvg2-2
@@ -403,10 +409,14 @@ libsoup-gnome2.4-1
 libsoup2.4-1
 libss2
 libssl0.9.8
+libstdc++6
+libstdc++6-4.4-dev
 libswscale0
 libt1-5
 libtag1-vanilla
 libtag1c2a
+libtasn1-3
+libtasn1-3-dev
 libtiff4
 libudev0
 libupower-glib1
@@ -429,8 +439,8 @@ libxml2-dev
 libxml2-utils
 light-themes
 linux-firmware
-linux-headers-2.6.32-39
-linux-headers-2.6.32-39-generic
+linux-headers-2.6.32-41
+linux-headers-2.6.32-41-generic
 linux-headers-2.6.35-32
 linux-headers-2.6.35-32-generic
 linux-headers-2.6.35-32-server
@@ -440,7 +450,7 @@ linux-headers-generic-lts-backport-maverick
 linux-headers-server-lts-backport-maverick
 linux-headers-virtual-lts-backport-maverick
 linux-image
-linux-image-2.6.32-39-generic
+linux-image-2.6.32-41-generic
 linux-image-2.6.35-32-generic
 linux-image-2.6.35-32-server
 linux-image-2.6.35-32-virtual
@@ -453,6 +463,7 @@ login
 logrotate
 man-db
 media-player-info
+memcached
 metacity
 metacity-common
 mktemp
@@ -477,6 +488,7 @@ nfs-common
 nspluginwrapper
 ntp
 ntpdate
+nvidia-173-modaliases
 nvidia-96-modaliases
 obexd-client
 openjdk-6-jre
@@ -593,7 +605,6 @@ ubiquity
 ubiquity-casper
 ubiquity-frontend-debconf
 ubiquity-ubuntu-artwork
-ubufox
 ubuntu-system-service
 ubuntuone-client
 ubuntuone-client-gnome
@@ -614,6 +625,7 @@ util-linux
 uuid-runtime
 vinagre
 vino
+virt-viewer
 vlc
 vlc-data
 vlc-nox
@@ -621,6 +633,7 @@ vlc-plugin-pulse
 vsftpd
 w3m
 wget
+wpasupplicant
 x11-common
 x11-xserver-utils
 xdg-utils
@@ -650,7 +663,6 @@ apport-symptoms
 apt-xapian-index
 archivemail
 arj
-arora
 aspell
 aspell-en
 auth-client-config
@@ -677,7 +689,6 @@ bsdmainutils
 build-essential
 busybox-initramfs
 busybox-static
-ca-certificates-java
 catdoc
 cdparanoia
 cli-common
@@ -691,9 +702,7 @@ console-terminus
 couchdb-bin
 cpio
 cpp
-cpp-4.4
 cpu-checker
-cron
 cryptsetup
 dansguardian
 dash
@@ -752,19 +761,15 @@ freetds-common
 friendly-recovery
 ftp
 g++
-g++-4.4
 gamin
 gawk
 gbrainy
 gcc
-gcc-4.4
-gcc-4.4-base
 gconf-defaults-service
 gconf-editor
 gconf2
 gconf2-common
 gdb
-gdm-guest-session
 genisoimage
 geoip-database
 gettext
@@ -878,10 +883,8 @@ ldap-auth-config
 less
 lha
 lib32asound2
-lib32gcc1
 lib32ncurses5
 lib32nss-mdns
-lib32stdc++6
 lib32v4l-0
 lib32z1
 liba52-0.7.4
@@ -1064,7 +1067,6 @@ libgadu3
 libgail-gnome-module
 libgamin0
 libgc1c2
-libgcc1
 libgcj-bc
 libgcj-common
 libgconf2-4
@@ -1076,7 +1078,6 @@ libgd2-noxpm
 libgd2-xpm
 libgdbm3
 libgeoip1
-libgfortran3
 libgif4
 libgio-fam
 libglade2-0
@@ -1110,9 +1111,6 @@ libgnomeui-common
 libgnomevfs2-0
 libgnomevfs2-common
 libgnomevfs2-extra
-libgnutls-dev
-libgnutls26
-libgomp1
 libgoocanvas-common
 libgoocanvas3
 libgpg-error-dev
@@ -1400,8 +1398,6 @@ libspeexdsp1
 libsqlite0
 libsqlite3-0
 libstartup-notification0
-libstdc++6
-libstdc++6-4.4-dev
 libstring-shellquote-perl
 libsub-name-perl
 libsybdb5
@@ -1413,8 +1409,6 @@ libsysfs2
 libtalloc2
 libtar
 libtask-weaken-perl
-libtasn1-3
-libtasn1-3-dev
 libtdb1
 libtelepathy-farsight0
 libtelepathy-glib0
@@ -1561,7 +1555,6 @@ manpages
 manpages-dev
 mawk
 mc
-memcached
 memtest86+
 mime-support
 min12xxw
@@ -1599,7 +1592,6 @@ notify-osd
 notify-osd-icons
 ntfs-3g
 ntfsprogs
-nvidia-173-modaliases
 nvidia-common
 nvidia-settings
 obex-data-server
@@ -1822,7 +1814,6 @@ vim
 vim-common
 vim-runtime
 vim-tiny
-virt-viewer
 vlan
 vpb-driver-source
 wamerican
@@ -1838,7 +1829,6 @@ witalian
 wngerman
 wodim
 wogerman
-wpasupplicant
 wspanish
 wswiss
 wwwconfig-common
@@ -2035,6 +2025,8 @@ fonts-opensymbol
 java-common
 libarchive-zip-perl
 libcmis-0.2-0
+libexttextcat-data
+libexttextcat0
 libgraphite2-2.0.0
 libhunspell-1.3-0
 libhyphen0
@@ -2086,7 +2078,6 @@ pulseaudio-equalizer
 # -> http://ppa.launchpad.net/tiheum/equinox/ubuntu/ lucid
 faenza-icon-theme
 # -> http://ppa.launchpad.net/ubuntu-wine/ppa/ubuntu/ lucid
-ia32-libs
 ttf-symbol-replacement
 ttf-symbol-replacement-wine1.3
 wine
