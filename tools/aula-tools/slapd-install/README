@@ -2,3 +2,11 @@ Paquetes: slapd ldap-utils ldap-account-manager ldap-account-manager-lamdaemon
 Hemos seguido +/- la guia en :
 https://help.ubuntu.com/10.04/serverguide/C/openldap-server.html
 cambiando el base dn y el password, of course
+
+
+para añadir una segunda base de datos
+https://help.ubuntu.com/community/OpenLDAPServer
+seccion: Creating a DIT with the RTC System
+
+para añadir el esquema de samba:
+https://help.ubuntu.com/10.04/serverguide/samba-ldap.html
