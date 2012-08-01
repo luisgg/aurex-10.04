@@ -1,0 +1,35 @@
+#!/bin/sh
+VLAN_LIST=""
+VLANS_EXTRA="1010"
+
+MAX_FLOORS=5
+MAX_PORTS=22
+
+FLOOR=1
+VLAN_LIST="$VLANS_EXTRA"
+while [ $FLOOR -le $MAX_FLOORS ] ; do
+        VLAN_PORT=1
+        while [ $VLAN_PORT -le $MAX_PORTS ] ; do
+                VLAN_LIST="$VLAN_LIST ${FLOOR}$(printf "%02d" $VLAN_PORT)"
+                VLAN_PORT=$(($VLAN_PORT + 1))
+        done
+        FLOOR=$(($FLOOR + 1))
+done
+
+echo "<vlans>"
+for VLAN in $VLAN_LIST ; do
+DESC_SEARCH="${VLAN}_"
+DESC="$(grep "^$DESC_SEARCH" vlans-desc.txt)"
+[ "$DESC" ] || DESC="VLAN$VLAN" 
+cat << EOF
+	<vlan>
+		<if>lagg0</if>
+		<tag>$VLAN</tag>
+		<descr>$DESC</descr>
+		<vlanif>lagg0_vlan${VLAN}</vlanif>
+	</vlan>
+EOF
+done
+echo "</vlans>"
+#		<descr><![CDATA[VLAN${VLAN}]]></descr>
+# 

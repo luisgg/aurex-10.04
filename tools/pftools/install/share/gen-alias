@@ -1,0 +1,30 @@
+#!/bin/sh
+VLAN_LIST=""
+VLANS_EXTRA="1010"
+
+MAX_FLOORS=5
+MAX_PORTS=22
+
+FLOOR=1
+VLAN_LIST="$VLANS_EXTRA"
+while [ $FLOOR -le $MAX_FLOORS ] ; do
+        VLAN_PORT=1
+        while [ $VLAN_PORT -le $MAX_PORTS ] ; do
+                VLAN_LIST="$VLAN_LIST ${FLOOR}$(printf "%02d" $VLAN_PORT)"
+                VLAN_PORT=$(($VLAN_PORT + 1))
+        done
+        FLOOR=$(($FLOOR + 1))
+done
+OPT_NUMBER=3
+for VLAN in $VLAN_LIST ; do
+	# get the 2 last digits
+	LAST_DIGITS="$(echo $VLAN |sed -e "s%^.*\([[:digit:]][[:digit:]]\)%\1%")"
+	# get  first digits (1 or 2)
+	FIRST_DIGITS="${VLAN%$LAST_DIGITS}"
+	# remove leading 0 (if any) of LAST_DIGITS
+	LAST_DIGITS="${LAST_DIGITS#0}"
+	printf "10.$FIRST_DIGITS.$LAST_DIGITS.222 "
+done
+
+
+

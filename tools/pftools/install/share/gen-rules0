@@ -1,0 +1,131 @@
+#!/bin/sh
+cat << EOF
+<filter>
+        <rule>
+                <type>pass</type>
+                <descr><![CDATA[Default allow LAN to any rule]]></descr>
+                <interface>lan</interface>
+                <source>
+                        <network>lan</network>
+                </source>
+                <destination>
+                        <any/>
+                </destination>
+        </rule>
+
+EOF
+
+OPT_IFACE=3
+while [ $OPT_IFACE -le 113 ] ; do
+	INTERFACE="opt$OPT_IFACE"
+	cat << EOF
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>$INTERFACE</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<network>${INTERFACE}ip</network>
+		</destination>
+		<descr><![CDATA[$INTERFACE -&gt; pf]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>$INTERFACE</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<address>ALL_VLANs</address>
+		</source>
+		<destination>
+			<address>Alias_Fotocopiadora</address>
+		</destination>
+		<descr>$INTERFACE -&gt; Print server</descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>$INTERFACE</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_DMZ</address>
+		</destination>
+		<descr>$INTERFACE -&gt; DMZ</descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>block</type>
+		<interface>$INTERFACE</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_LAN_Internas</address>
+		</destination>
+		<descr>$INTERFACE -&gt; LAN_Inter</descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>$INTERFACE</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<any/>
+		</destination>
+		<descr><![CDATA[$INTERFACE -&gt; Rest of the world]]></descr>
+	</rule>
+EOF
+	OPT_IFACE=$(($OPT_IFACE +1))
+done
+
+echo "</filter>"

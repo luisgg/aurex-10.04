@@ -1,0 +1,99 @@
+#!/bin/sh
+VLAN_LIST=""
+VLANS_EXTRA="1010 320 322"
+VLANS_BLACKLIST="305"
+MAX_FLOORS=5
+MAX_PORTS=22
+
+FLOOR=1
+VLAN_LIST="$VLANS_EXTRA"
+while [ $FLOOR -le $MAX_FLOORS ] ; do
+        VLAN_PORT=1
+        while [ $VLAN_PORT -le $MAX_PORTS ] ; do
+		NEW_VLAN="${FLOOR}$(printf "%02d" $VLAN_PORT)"
+		# avoid duplicates
+		if ! echo " $VLANS_EXTRA $VLANS_BLACKLIST "  |grep -q " $NEW_VLAN " ; then
+                	VLAN_LIST="$VLAN_LIST ${FLOOR}$(printf "%02d" $VLAN_PORT)"
+		fi
+		VLAN_PORT=$(($VLAN_PORT + 1))
+        done
+        FLOOR=$(($FLOOR + 1))
+done
+cat << EOF
+<interfaces>
+	<wan>
+		<enable/>
+		<if>em0</if>
+		<descr><![CDATA[WAN]]></descr>
+		<ipaddr>192.168.0.22</ipaddr>
+		<subnet>24</subnet>
+		<gateway>WANGW</gateway>
+		<spoofmac/>
+	</wan>
+	<lan>
+		<enable/>
+		<if>lagg0_vlan305</if>
+		<ipaddr>10.3.5.222</ipaddr>
+		<subnet>24</subnet>
+		<media/>
+		<mediaopt/>
+		<descr><![CDATA[LAN]]></descr>
+	</lan>
+	<opt1>
+		<descr><![CDATA[WAN_ADSL]]></descr>
+		<if>le0</if>
+		<enable/>
+		<spoofmac/>
+		<ipaddr>80.35.176.222</ipaddr>
+		<subnet>24</subnet>
+		<gateway>WAN_ADSLGW</gateway>
+	</opt1>
+	<opt2>
+		<descr><![CDATA[BACKBONE]]></descr>
+		<if>lagg0</if>
+		<enable/>
+		<spoofmac/>
+		<ipaddr>192.168.200.222</ipaddr>
+		<subnet>24</subnet>
+	</opt2>
+EOF
+OPT_NUMBER=3
+for VLAN in $VLAN_LIST ; do
+	DESC_SEARCH="${VLAN}_"
+	DESC="$(grep "^$DESC_SEARCH" vlans-desc.txt)"
+	[ "$DESC" ] || DESC="$VLAN"
+
+	# get the 2 last digits
+	LAST_DIGITS="$(echo $VLAN |sed -e "s%^.*\([[:digit:]][[:digit:]]\)%\1%")"
+	# get  first digits (1 or 2)
+	FIRST_DIGITS="${VLAN%$LAST_DIGITS}"
+	# remove leading 0 (if any) of LAST_DIGITS
+	LAST_DIGITS="${LAST_DIGITS#0}"
+
+cat << EOF
+	<opt$OPT_NUMBER>
+		<descr><![CDATA[X${DESC}]]></descr>
+		<if>lagg0_vlan$VLAN</if>
+		<enable/>
+		<spoofmac/>
+		<ipaddr>10.$FIRST_DIGITS.$LAST_DIGITS.222</ipaddr>
+		<subnet>24</subnet>
+	</opt$OPT_NUMBER>
+EOF
+	OPT_NUMBER=$(($OPT_NUMBER + 1))
+done
+# jurassic iface
+cat << EOF
+	<opt$OPT_NUMBER>
+		<descr><![CDATA[JurassicLan]]></descr>
+		<if>le1</if>
+		<enable/>
+		<spoofmac/>
+		<ipaddr>192.168.100.222</ipaddr>
+		<subnet>24</subnet>
+	</opt$OPT_NUMBER>
+EOF
+echo "</interfaces>"
+
+
+

@@ -1,0 +1,83 @@
+#!/bin/sh
+OPT_BLACKLIST="opt1 opt3"
+INTERFACES_FILE="interfaces-new.xml"
+FIRST_IP=100
+LAST_IP=199
+OPT_LIST="$(sed -ne "/<opt/{s%^.*<%%;s%>.*$%%;p}" "$INTERFACES_FILE")"
+
+get_opt_from_vlan(){
+	VTAG="$1"
+	OPT_IFACE="$(sed -ne "\%<if>lagg0_vlan${VTAG}</if>%,\%/opt%{\%/opt%{s%^.*/%%;s%>.*$%%;p}}" "$INTERFACES_FILE")"
+	echo $OPT_IFACE
+}
+
+get_ip_from_opt(){
+	sed -ne "\%<$OPT_IFACE>%,\%</ipaddr>%{/<ipaddr>/{s%^.*<ipaddr>\([^\.]*\.[^\.]*\.[^\.]*\.\).*$%\1%;;p}}" "$INTERFACES_FILE"
+}
+
+get_opt_desc(){
+	sed -ne "\%<$OPT_IFACE>%,\%</descr>%{/<descr>/p}" "$INTERFACES_FILE"
+}
+
+cat << EOF
+<dhcpd>
+	<lan>
+		<range>
+			<from>10.3.5.$FIRST_IP</from>
+			<to>10.3.5.$LAST_IP</to>
+		</range>
+		<defaultleasetime/>
+		<maxleasetime/>
+		<netmask/>
+		<failover_peerip/>
+		<winsserver>10.10.0.254</winsserver>
+		<dnsserver>10.3.5.1</dnsserver>
+		<gateway>10.3.5.1</gateway>
+		<domain/>
+		<domainsearchlist/>
+		<enable/>
+		<ddnsdomain/>
+		<tftp/>
+		<ldap/>
+		<next-server/>
+		<filename/>
+		<rootpath/>
+		<numberoptions/>
+	</lan>
+EOF
+for OPT_IFACE in $OPT_LIST ; do
+	if ! echo " $OPT_BLACKLIST " |grep -q " $OPT_IFACE " ; then
+		if get_opt_desc |tr "[:upper:]_" "[:lower:] " |grep -q "sin usar" ; then
+			ENABLE=""
+		else
+			ENABLE="<enable/>"
+		fi
+		IP_PREFIX="$(get_ip_from_opt)"
+		cat <<EOF
+	<${OPT_IFACE}>
+		<range>
+			<from>${IP_PREFIX}${FIRST_IP}</from>
+			<to>${IP_PREFIX}${LAST_IP}</to>
+		</range>
+		<defaultleasetime/>
+		<maxleasetime/>
+		<netmask/>
+		<failover_peerip/>
+		<winsserver>10.10.0.254</winsserver>
+		<dnsserver>${IP_PREFIX}1</dnsserver>
+		<gateway>${IP_PREFIX}1</gateway>
+		<domain/>
+		<domainsearchlist/>
+		${ENABLE}
+		<ddnsdomain/>
+		<tftp/>
+		<ldap/>
+		<next-server/>
+		<filename/>
+		<rootpath/>
+		<numberoptions/>
+	</${OPT_IFACE}>
+EOF
+	fi
+done
+echo "</dhcpd>"

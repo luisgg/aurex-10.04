@@ -1,0 +1,279 @@
+#!/bin/sh
+cat << EOF
+<filter>
+	<rule>
+		<type>pass</type>
+		<descr><![CDATA[all -&gt; pfsense interfaces]]></descr>
+		<interface>lan</interface>
+		<source>
+			<network>lan</network>
+		</source>
+		<destination>
+			<address>pfIfaces</address>
+		</destination>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>AccesoSecretaria</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>pfIfaces</address>
+		</destination>
+		<descr><![CDATA[all -&gt; pfsense interfaces]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>AccesoSecretaria</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_DMZ_SRVLAN</address>
+		</destination>
+		<descr><![CDATA[all -&gt; DMZ + SRV_LAN]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>AccesoSecretaria</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_Fotocopiadora</address>
+		</destination>
+		<descr><![CDATA[all -&gt; Fotocopiadoras]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>AccesoSecretaria</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<network>opt11</network>
+		</destination>
+		<descr><![CDATA[Jefatura/Direccion -&gt; Secretaria]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>block</type>
+		<interface>AccesoSecretaria</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_LAN_Internas</address>
+		</destination>
+		<descr><![CDATA[Block -&gt; LAN_Inter]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>AccesoSecretaria</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<any/>
+		</destination>
+		<descr><![CDATA[ENABLE -&gt; Rest of the world]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>STDLanIfaces</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>pfIfaces</address>
+		</destination>
+		<descr><![CDATA[all -&gt; pfsense interfaces]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>STDLanIfaces</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_DMZ_SRVLAN</address>
+		</destination>
+		<descr><![CDATA[all -&gt; DMZ + SRV_LAN]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>STDLanIfaces</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_Fotocopiadora</address>
+		</destination>
+		<descr><![CDATA[all -&gt; Fotocopiadoras]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>block</type>
+		<interface>STDLanIfaces</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<address>Alias_LAN_Internas</address>
+		</destination>
+		<descr><![CDATA[Block -&gt; LAN_Inter]]></descr>
+	</rule>
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>STDLanIfaces</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<any/>
+		</destination>
+		<descr><![CDATA[ENABLE -&gt; Rest of the world]]></descr>
+	</rule>
+
+EOF
+
+OPT_IFACE=3
+NUM_IFACES="$(sed -ne "/<opt/{s%^.*<%%;s%>.*$%%;s%opt%%;p}" interfaces-new.xml  |sort -nr |head -1)"
+while [ $OPT_IFACE -le $NUM_IFACES ] ; do
+	INTERFACE="opt$OPT_IFACE"
+	cat << EOF
+	<rule>
+		<id/>
+		<type>pass</type>
+		<interface>$INTERFACE</interface>
+		<tag/>
+		<tagged/>
+		<max/>
+		<max-src-nodes/>
+		<max-src-conn/>
+		<max-src-states/>
+		<statetimeout/>
+		<statetype>keep state</statetype>
+		<os/>
+		<source>
+			<any/>
+		</source>
+		<destination>
+			<network>${INTERFACE}ip</network>
+		</destination>
+		<descr><![CDATA[$INTERFACE -&gt; pf]]></descr>
+	</rule>
+EOF
+	OPT_IFACE=$(($OPT_IFACE +1))
+done
+
+echo "</filter>"

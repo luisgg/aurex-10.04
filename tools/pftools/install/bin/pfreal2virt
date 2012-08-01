@@ -1,0 +1,46 @@
+#!/bin/sh
+# convert real config to virtual
+
+usage(){
+	echo "Usage: $(basename "$0") REALXMLFILE" >&2
+	exit 1
+}
+
+REAL_CONF="$1"
+[ "$REAL_CONF" -a -r "$REAL_CONF" ] || usage
+
+VM_CONF="${REAL_CONF%.xml}-VM.xml"
+cp "$REAL_CONF" "$VM_CONF"
+
+# change IP addres from .1 to .232
+MAX_FLOORS=5
+MAX_PORTS=22
+FLOORNUM=1
+IP_LIST="192\.168\.200 192\.168\.100 10\.10\.0"
+while [ $FLOORNUM -le $MAX_FLOORS ] ; do
+	PORTNUM=1
+	while [ $PORTNUM -le $MAX_PORTS ] ; do
+		IP_LIST="$IP_LIST 10\.$FLOORNUM\.$PORTNUM"
+		PORTNUM=$(($PORTNUM + 1))
+	done
+	FLOORNUM=$(($FLOORNUM + 1 ))
+done
+for IP_NUM in $IP_LIST ; do
+	sed -i -e "s%$IP_NUM\.1\([^[:digit:]]\)%$IP_NUM.232\1%g" "$VM_CONF"
+	printf "."
+done
+# change WAN IP addres
+sed -i -e "s%<ipaddr>192.168.0.222</ipaddr>%<ipaddr>192.168.0.22</ipaddr>%g" "$VM_CONF"
+printf "."
+
+# change le0, le1 interfaces
+for i in 0 1 ; do
+	VM_IFACE="le$i"
+	REAL_IFACE="msk$i"
+	sed -i -e "s%<if>$REAL_IFACE</if>%<if>$VM_IFACE</if>%g" "$VM_CONF"
+	printf "."
+done
+
+echo "done"
+echo "file: $VM_CONF created"
+
