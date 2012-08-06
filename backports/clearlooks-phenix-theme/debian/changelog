@@ -1,0 +1,5 @@
+clearlooks-phenix-theme (2.0.5-1) unstable; urgency=low
+
+  * Initial packaging (Closes: #666242).
+
+ -- Andrew O. Shadura <bugzilla@tut.by>  Tue, 26 Jun 2012 23:49:11 +0200
