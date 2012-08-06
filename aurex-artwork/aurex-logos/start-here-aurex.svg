@@ -13,8 +13,8 @@
    width="96"
    height="96"
    id="svg3001"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="aurex-distributor.svg">
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="start-here-aurex.svg">
   <metadata
      id="metadata7860">
     <rdf:RDF>
@@ -35,16 +35,16 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="640"
-     inkscape:window-height="483"
+     inkscape:window-width="1024"
+     inkscape:window-height="689"
      id="namedview7858"
      showgrid="false"
-     inkscape:zoom="1.2685914"
+     inkscape:zoom="3.5881183"
      inkscape:cx="26.189331"
-     inkscape:cy="46.693177"
+     inkscape:cy="35.991189"
      inkscape:window-x="0"
      inkscape:window-y="25"
-     inkscape:window-maximized="0"
+     inkscape:window-maximized="1"
      inkscape:current-layer="svg3001" />
   <defs
      id="defs3003">
@@ -68,21 +68,21 @@
     </linearGradient>
   </defs>
   <g
-     id="layer1"
-     transform="matrix(0.16292238,0,0,0.16292238,-9.0228328,-38.733714)">
+     id="g4414">
     <g
-       transform="matrix(15.818736,0,0,14.223255,9985.4332,-9390.9196)"
+       transform="matrix(2.5772261,0,0,2.3172866,1617.8277,-1568.7247)"
        id="flowRoot3714-6-5-9-0-8-45-8"
-       style="font-size:40px;font-style:normal;font-weight:normal;fill:#afab4c;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans">
+       style="font-size:40px;font-style:normal;font-weight:normal;fill:#7ba7b5;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans">
       <path
          d="m -606.05859,689.40512 c -0.84637,2e-5 -1.26955,0.94403 -1.26953,2.83203 l 0,13.39844 c 1.23696,0 2.47394,-0.67708 3.71093,-2.03125 1.10675,-1.21093 1.66014,-3.26822 1.66016,-6.17187 -2e-5,-2.70832 -0.55992,-4.79165 -1.67969,-6.25 -0.91147,-1.18488 -1.71877,-1.77733 -2.42187,-1.77735 m 0,-3.0664 c 1.82289,2e-5 3.56117,0.85939 5.21484,2.57812 1.78383,1.83596 2.67576,4.6745 2.67578,8.51563 -2e-5,3.52865 -0.89195,6.34115 -2.67578,8.4375 -1.67971,1.97916 -3.84116,2.96875 -6.48437,2.96875 l 0,7.85156 -3.57422,0 0,-7.83203 c -2.59116,0 -4.75912,-0.9961 -6.50391,-2.98828 -1.77084,-2.03125 -2.65625,-4.83724 -2.65625,-8.41797 0,-3.72395 0.88541,-6.53644 2.65625,-8.4375 1.32812,-1.41925 3.07291,-2.31118 5.23438,-2.67578 l 0,3.18359 c -0.85939,0.2995 -1.66668,0.95705 -2.42188,1.97266 -1.1198,1.49741 -1.67969,3.48308 -1.67969,5.95703 0,2.63021 0.55989,4.69401 1.67969,6.1914 1.0026,1.34115 2.23306,2.01173 3.69141,2.01172 l 0,-13.41797 c -2e-5,-3.93227 1.61457,-5.89841 4.84375,-5.89843"
          id="path3414"
-         style="fill:#afab4c" />
+         style="fill:#7ba7b5;fill-opacity:1"
+         inkscape:connector-curvature="0" />
     </g>
     <path
-       d="m 303.04577,729.11334 a 343.45187,343.45187 0 1 1 -686.90375,0 343.45187,343.45187 0 1 1 686.90375,0 z"
-       transform="matrix(0.72871442,0,0,0.72871442,379.44451,1.04678)"
+       d="m 88.775943,48.000002 a 40.775943,40.775943 0 0 1 -81.5518856,0 40.775943,40.775943 0 1 1 81.5518856,0 z"
        id="path4228-9-9-7-8-3-9-36"
-       style="fill:none;stroke:#afab4c;stroke-width:69.12093353;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+       style="fill:none;stroke:#7ba7b5;stroke-width:8.20630646000000041;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;fill-opacity:1"
+       inkscape:connector-curvature="0" />
   </g>
 </svg>
